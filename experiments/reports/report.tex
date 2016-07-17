@@ -1,0 +1,139 @@
+\documentclass[nofonts]{ctexart}
+%\usepackage[colorlinks, linkcolor=black,CJKbookmarks]{hyperref}
+\usepackage[colorlinks,linkcolor=black]{hyperref}
+\usepackage{graphicx}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{tikz}
+
+\newcommand\figureformat{}
+\newcommand\tableformat{}
+\newcommand\partformat{}
+
+\setCJKfamilyfont{songti}{NSimSun}
+\setCJKfamilyfont{fangsong}{STFangsong}
+\setCJKfamilyfont{heiti}{WenQuanYi Zen Hei}
+\setCJKfamilyfont{kaiti}{AR PL UKai CN}
+\setCJKfamilyfont{xinwei}{STXinwei}
+\setCJKfamilyfont{lishu}{LiSu}
+\setCJKmainfont[BoldFont={WenQuanYi Zen Hei},ItalicFont={STFangsong}]{NSimSun}
+\setCJKsansfont{WenQuanYi Zen Hei}
+\setCJKmonofont{AR PL UKai CN}
+\newcommand*{\song}{\CJKfamily{songti}}
+\newcommand*{\fs}{\CJKfamily{fangsong}}
+\newcommand*{\hei}{\CJKfamily{heiti}}  
+\newcommand*{\kai}{\CJKfamily{kaiti}}  
+\newcommand*{\wei}{\CJKfamily{xinwei}} 
+\newcommand*{\lishu}{\CJKfamily{lishu}}
+\newcommand*{\cy}{\CJKfamily{caiyun}}  
+
+\CTEXsetup[titleformat=\hei,format={\raggedright \zihao{3}}]{section}
+
+\begin{document}
+
+\title{
+\lishu \LARGE 嵌入式系统实验 \\
+	实验报告要求 \\\  \\
+	--------------------------
+}
+\date{\today}
+\maketitle
+
+\large
+
+\setlength{\parindent}{2em}
+
+\section{基本要求}
+  实验报告是对实验者对实验过程的总结和思考。实验报告应建立在对实验原理准确
+理解的基础上。报告中反映的实验过程应真实可信，有据可查，
+{\color{red}不得伪造和臆测}。引用的数据、结论应注明来源，避免成段地引用他人
+文字(包括实验讲义)。如有必要，请用自己的语言重新组织、归纳。
+{\color{red}严禁抄袭}。
+
+
+   由于学校教务部门要求期末上交所有实验报告，而收缴的报告今后不会有任何人再
+关注。考虑到实验报告是同学们的心血，为便于学校对教学的规($w\acute{u}$)范
+($li\acute{a}o$)管理，
+本课程报告一律以电子版 pdf 格式提交，可以通过邮箱、面交、QQ等任何你认为
+方便的方式提交。我收到报告后会一一回复确认，批阅后会以同样的方式发还。期末时
+由我个人负责归档电子版上交教务，同学们的报告自行保管。
+
+   之所以建议采用 pdf 格式，原因有三：
+
+\begin{enumerate}
+  \item pdf 可以确保上交的报告不会被我恶意篡改
+  \item pdf 不会因阅读器以及阅读器的版本导致文档变形
+  \item pdf 格式是开放的，有多款免费、开源阅读器，支持所有操作系统
+\end{enumerate}
+
+   对于没有个人计算机的同学，实验中心机房的文档编辑软件完全可以满足要求。
+确有喜欢手书报告的同学，报告批阅意见交流后，原版不退，期末上交教务，请理解。
+
+本学期实验，实验报告的正文内容不要超过A4篇幅的12页。程序清单不算篇幅，可以放进
+附录，但流程图计入篇幅。报告不要求完整的程序清单。正文中只需引用你认为有意义
+的代码片段。
+
+\section{内容要求}
+   实验报告内容一般包括下面几个部分：
+\begin{enumerate}
+  \item 实验目的
+
+  实验目的应明确、集中。一般每个实验的目的不宜超过三个，用词可以比较笼统。
+  \item 实验原理/实验介绍
+
+    概述性文字，不要占用过大篇幅，特别是对工程类实验。
+  \item 实验内容/实验过程
+
+    这是实验报告的重点之一。要有完整的实验方案，比较详细的实验过程(但忌流水账
+式的文字)。包括实验中碰到的问题，产生问题的原因，解决问题的方法等等。这部分
+反映实验者的工作努力。他人通过这部分的叙述应能够重复出你的实验。
+
+  \item 实验结果及讨论
+
+  这部分也是实验报告的重点，体现实验者对实验的思考。
+
+  任何实验都应该有明确的结果。本课程对实验结果的正确性不做要求(也就是说，实验
+做得对不对，在我们这门课里没有意义)，但报告中要反映出因果关系。对于明显与预期
+  不符的结果，建议进行充分的讨论和研究。
+
+  \item 扩展空间、建议、抱怨及其他
+
+  实验做完之后，是否有意犹未尽之感，有什么收获，对后人有哪些建议。。。
+  (这部分不是一般科学论文的要求，我们也不做要求。有说就说，忌言不由衷)
+
+  \item 参考资料/参考文献
+
+    引用/参考到的网上资源也请在这里列出，尽管网上资源有时效性。通过这种
+	方式表示对他人成果的尊重，这也是科学素养的一部分。
+\end{enumerate}
+
+   除第一个实验基本上是重复性实验外，后面的实验应以{\color{red}研究型}、
+{\color{red}创新型}为主。这两点是实验报告优等评分的必要条件(说明一下，
+实验报告成绩不是最终课程成绩，有些话不好明说，你懂的。。。)。每人可以根据自己
+的兴趣和能力从{\color{red}任意点}切入，或者对已学过的知识进行深化，或者
+借助实验平台进行不同于常人的尝试，都是值得鼓励的行为。如果不打算在这门课上
+太多花太多精力，只要完成基本要求也可以接受，对研究性、创新性不做强制要求。
+
+
+   附件“嵌入式Qt/Embedded抑制”提供一个实验报告的样板，供参考。我对这篇报告的
+评价大概是85分。我自认为实验内容已表述清楚，参考这个报告基本能重复出实验结果
+(因为这不是嵌入式实验的第一个实验，所以省去了对实验平台、开发平台及开发方法
+ 的介绍过)。但报告没有深度，也缺乏创新。
+
+\section{格式和文风}
+   本课程对报告的文采没有特别要求，嬉笑怒骂皆成文章，只要能把问题说清楚即可，
+但不提倡言语粗俗。此外建议对科学概念，用词应力求准确。
+
+   格式虽没有统一的要求，不计入评分标准，但也请力求规范。
+
+   对于上交的报告，我不会未经报告人同意以任何形式发布在公开场合。但考虑到
+这两种情况: 1. 教务部门会保留有同学们上交的电子版; 2. 本课程被列入翻转课堂
+计划。请同学们自己权衡相关风险和利益。如有特别要求，可以在报告中加上版权声明、
+引用声明或者加上水印，防止滥用。
+
+
+
+\end{document}
+

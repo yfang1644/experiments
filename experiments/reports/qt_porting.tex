@@ -1,0 +1,249 @@
+\documentclass[nofonts]{ctexart}
+%\usepackage[colorlinks, linkcolor=black,CJKbookmarks]{hyperref}
+\usepackage[colorlinks,linkcolor=black]{hyperref}
+\usepackage{graphicx}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{tikz}
+
+\newcommand\figureformat{}
+\newcommand\tableformat{}
+\newcommand\partformat{}
+
+\setCJKfamilyfont{songti}{NSimSun}
+\setCJKfamilyfont{fangsong}{STFangsong}
+\setCJKfamilyfont{heiti}{WenQuanYi Zen Hei}
+\setCJKfamilyfont{kaiti}{AR PL UKai CN}
+\setCJKfamilyfont{xinwei}{STXinwei}
+\setCJKfamilyfont{lishu}{LiSu}
+\setCJKmainfont[BoldFont={WenQuanYi Zen Hei},ItalicFont={STFangsong}]{NSimSun}
+\setCJKsansfont{WenQuanYi Zen Hei}
+\setCJKmonofont{AR PL UKai CN}
+\newcommand*{\song}{\CJKfamily{songti}}
+\newcommand*{\fs}{\CJKfamily{fangsong}}
+\newcommand*{\hei}{\CJKfamily{heiti}}  
+\newcommand*{\kai}{\CJKfamily{kaiti}}  
+\newcommand*{\wei}{\CJKfamily{xinwei}} 
+\newcommand*{\lishu}{\CJKfamily{lishu}}
+\newcommand*{\cy}{\CJKfamily{caiyun}}  
+
+\CTEXsetup[titleformat=\hei,format={\raggedright \zihao{3}}]{section}
+
+\DeclareUnicodeCharacter{25A1}{\b}
+
+\begin{document}
+\sloppy
+\renewcommand\contentsname{目录}
+\title{
+\begin{flushleft}
+\hei \hskip 3cm \small 实验报告\\ \ \\
+\end{flushleft}
+\lishu \LARGE 在嵌入式系统PXA270上移植 \\
+	Qt/Embedded\footnote{本文档成型于2010年10月,亿道嵌入式实验系统平台EEliod}
+\\
+\rule[10pt]{.6\textwidth}{2pt}
+}
+\author{方元\\ \ \small 南京大学电子学院}
+\date{\today}
+\maketitle
+
+\setlength{\parindent}{2em}
+
+\begin{center} \begin{minipage}[t]{.8\textwidth}
+\kai\baselineskip=4pt
+\setlength\parindent{2em}\Large
+\abstract{图形用户接口为嵌入式系统提供友好的人机交互界面。本实验基于PXA270
+实验平台，讨论Qt的移植问题。(30--50字)}\\
+{\hei 关键词：GUI、QTOPIA、PXA270}
+\end{minipage}
+\end{center}
+
+{\hei 实验目的：}
+\begin{itemize}\itemsep=-2pt
+  \item 了解图形用户接口在嵌入式系统中的地位
+  \item 掌握Qt/Embedded移植的方法
+\end{itemize}\vskip 1cm
+
+\tableofcontents\vskip 1cm
+
+\baselineskip=16pt
+\section{概述}
+\subsection{什么是GUI}
+   $\square \square \square \square $ (以下略去123字)\vskip 5cm
+\subsection{Qt介绍}
+	Trolltech 公司开源软件。目前最新版本 Qt4.5\footnote{2010年10月},
+有专业版和免费版。本实验移植嵌入式Qt-2.3.7和桌面环境 Qtopia-1.7.0。
+	$\square\square\square$
+(以下略去321字)
+\vskip 5cm
+
+\subsection{软件环境}
+	本实验基于以下软件：
+\begin{itemize}\itemsep=-4pt
+  \item tslib-1.3, 触摸屏库和应用软件，\textbf{应用部分主要由触摸屏校准和测试构成。}
+  \item tmake-1.11, Qt编译脚本，用于生成 Makefile 文件。本实验暂没用到。
+  \item qt-x11-2.3.2, (以下简称Qt2) X11环境的Qt，供主机平台使用的Qt环境，包括
+  \begin{enumerate}
+	\item designer, 图形用户界面GUI设计环境,主要用于开发基于Qt的应用软件
+	\item qvfb, Qt- virtual framebuffer, 主机平台的仿真环境
+	\item uic, moc, Qt 代码转换器
+  \end{enumerate}
+  \item qt-embedded-2.3.7,(以下简称 QTE)嵌入式Qt,供目标平台使用的应用软件包
+  \item qtopia-free-1.7.0,(以下简称 QPE) Qt桌面环境
+  \item 主机编译器 gcc, version 4.3.2
+  \item 交叉编译器 arm-linux-gcc, version 3.3.2
+\end{itemize}
+\section{软件编译}
+\subsection{准备工作}
+	下载(获取)源代码。将其解压至个人目录的一个专用目录$\sim$work下。
+tar.bz2软件包用 tar jxvf 解压，tar.gz 包用 tar zxvf 解压。解压后分别构成以下
+几个目录：\footnote{严格地说，还应包括针对特定硬件平台的补丁}
+\begin{itemize}\itemsep=-4pt
+  \item tslib
+  \item tmake-1.11
+  \item qt-2.3.2
+  \item qt-embedded-2.3.7
+  \item qtopia-free-1.7.0
+\end{itemize}
+	在编译过程中需要设定以下几个环境变量：
+\begin{itemize}\itemsep=-4pt
+  \item QTEDIR, 始终指向 qt-embedded-2.3.7 目录
+  \item QPEDIR, 始终指向 qtopia-free-1.7.0 目录
+  \item QTDIR, 在编译 qt-x11 时指向 qt-2.3.2, 编译 QTE 和 QPE 时指向
+		qt-embedded-2.3.7.
+  \item TMAKEDIR, 开发Qt环境软件时指向 tmake-1.11(本实验暂未用到)
+  \item PATH,首先，在进行交叉编译时需要包含交叉编译器的路径；其次，编译Qt的
+		每一阶段都需要包含当前的 \$QTDIR/bin 路径。
+  \item LD\_LIBRARY\_PATH, 共享库链接路径，应包含现阶段\$QTDIR/lib路径。
+\end{itemize}
+\subsection{编译过程}
+	下面按顺序对以上涉及到的软件进行编译。
+\subsubsection{触摸屏库}
+	触摸屏是嵌入式系统典型的人机接口设备。使用方便，成本低廉。。。。。
+我们通常所说的``触摸屏''实际上由两部分组成：显示屏和触摸板。这里要编译的主要
+是针对触摸板的。但它又不能绝对地跟显示屏无关，因为触摸板的坐标需要跟显示屏
+对应。
+
+	通过以下三个步骤完成编译：
+\begin{enumerate}\itemsep=-4pt
+  \item ./autogen.sh,自动生成configure 命令，供下一步使用
+  \item ./configure -{}-host=arm-linux，根据-{}-host选项，生成
+		使用交叉编译器的 Makefile。如果再指定-{}-prefix=install\_path, 
+可以随后用 make install 将成品安装在 install\_path 目录。
+  \item make
+\end{enumerate}
+	许多从源码编译的软件都需要 configure 配置 Makefile。configure 会自动检查
+开发环境是否符合编译条件，并安排合理的编译选项。。。。。。。
+
+	编译时出现一个错误，原因在链接命令的选项 --rpath 要求绝对路径。把相应的
+Makefile略作修改(--rpath \`{}cd \$(PLUGIN\_DIR) \&\& pwd\`{}) 重新编译正常
+通过，生成若干.so 文件。把它们复制到\$QTEDIR/lib目录。这些共享库在编译QTE时
+要用到，系统运行时作为动态链接也需要用到。\footnote{使用-{}-cache-file选项，
+config.cache内容为``ac\_cv\_func\_malloc\_0\_nonnull=yes''，该错误不出现}
+
+	运行 make install 时还会生成触摸屏校准和测试程序。初次编译时缺少这一步，
+导致目标机 Linux 系统启动后不出现触摸屏校准界面。
+\subsubsection{主机Qt环境}
+	Qt2是一个相对独立的软件，使用x86编译器编译。即使不做ARM平台的Qt移植，它也
+是PC机的重要应用软件。著名的KDE桌面环境采用的就是 Qt 库。这里编译Qt2的目的是
+为了用它开发Qt源程序，如，designer 是用于界面设计的，uic 是将 designer 设计
+的界面文件转成c语言格式。。。。
+
+	有些PC机可能已经安装了Qt，但通常版本都比较高，对Qt2支持不好。移植QTE2
+版本需要预先配置好Qt2。
+
+	Qt2 配置命令：
+
+	./configure -no-xft
+
+	用 ./configure -{}-help 可以列出该软件支持的配置选项。配置Qt2的选项
+没有特殊要求。如果不是为主机使用，原则上越简单越好，因为最终只需要生成格式
+转换工具而不是用于桌面。
+
+	编译过程中出现一个错误，include/qvaluestack.h -- 57行。从网上查到这是一个
+非常典型的问题。原因是 c++ 模板定义中没有默认类成员变量和成员函数规则，必须
+用 this-$>$ 显式地指明(不同版本的编译器对语法要求导致)。类似``错误''还有很多，
+修改也很容易，只需要加上``this''指针即可。
+
+	将编译生成的 uic 复制到 \$QTEDIR/bin，其他暂时未用到。
+\subsubsection{嵌入式Qt环境}
+	QTE编译，打补丁。。。。。(为什么要打补丁，补丁的内容)
+
+	配置命令：
+
+	./configure -xplatform linux-arm-g++ -qconfig qpe
+
+	编译命令：
+
+	make sub-src
+
+	错误 include/qwindowsystem\_qws.h:229: error: 'QWSInputMethod' has not been declared。在该文件前面加上两类声明：class QWSInputMethod;
+ class QWSGestureMethod;
+
+\vskip 10cm
+\subsubsection{Qt桌面环境}
+	在 \$QPEDIR 下面设置 ./configure -xplatform linux-arm-g++，并运行make。
+注意使用前面生成的 uic，将其路径设在\$PATH 环境的最前面。
+
+	(uuid\footnote{uuid:Universal Unique IDentifier}问题:
+	下载e2fsprogs,编译生成 libuuid。或者在链接qpe时去掉-luuid)。
+\vskip 6cm
+\section{Qt安装}
+\subsection{整理编译结果}
+	将前面QPE编译后生成的 bin、etc、lib、plugins、i18n、apps、pics目录统一归
+到一个目录qpe下面。这些目录各自内容如下：
+\begin{itemize}\itemsep=-4pt
+  \item bin---可执行程序
+  \item etc---QPE配置文件
+  \item lib---QPE和QTE库，字体，libqte.so和字体文件从QTE复制过来
+  \item i18n---多语言支持
+  \item apps---桌面配置文件
+  \item pics---图片
+  \item plugins---插件，包括各个执行程序的动态链接库
+\end{itemize}
+\subsection{系统重构}
+	重新构造内核，选中Framebuffer支持，Framebuffer中选中Qtopia的GUI、触摸屏
+支持。
+
+	重新构造文件系统，将qpe整体迁移到 /usr目录下，为QPE创建一个脚本文件qpe.sh，
+内容如下：\\
+...\\ ...\\ ...\\
+
+并在启动脚本中增加启动qpe.sh的条目。
+
+	用mkfs.jffs2制作文件系统。
+
+	mkfs.jffs2 -o rootqt.img ......
+
+	重构文件系统不是必须的。为方便起见，可以用原有文件系统通过NFS调试，
+逐渐添加和修改Qt配置。
+
+\section{实验结果和分析}
+	下载内核和文件系统，烧写Flash，启动。不成功！若干问题及排查按顺序整理如下。
+每次手工执行qpe.sh启动QPE：
+\begin{enumerate}
+  \item 若干库无法链接(libjpeg、libcrypt、libgcc、libdl)\\
+	从交叉编译工具目录下复制这些库到 /lib 目录
+  \item 提示'could not read calibration /etc/pointercal'\\
+	qpe.sh脚本文件中看到，在启动qpe之前有一项 ts\_calibrate 程序，用来校准
+	触摸屏。由此得知触摸屏校准文件是 /etc/pointercal，格式未知。随便建立一个
+	文件，让系统跳过这一步。
+  \item 触摸屏设备打不开\\
+	看来是驱动没有编译进内核。查看内核源码 ~drivers/misc/ucb1x00\_ts.c~已编译。
+	注释掉脚本中的 MOUSE\_PROTO，改用鼠标协议。
+  \item 再次启动QPE，终于出现桌面的第一个画面
+\begin{center}
+  \includegraphics[width=8cm]{First.png}\end{center}
+  \item 换鼠标协议，用 USB 鼠标\\
+	export QWS\_MOUSE\_PROTO=USB:/dev/input/mice
+	
+	成功启动到Linux的Qtopia桌面。
+\end{enumerate}
+	Qtopia桌面由四个板块构成：应用、游戏、文档、设置。。。。
+\section{实验小结}本实验是□□□(以下略去8个字)\vskip 3cm
+\section{参考文献}
+
+\end{document}
+

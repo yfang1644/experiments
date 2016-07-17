@@ -1,0 +1,417 @@
+\documentclass[nofonts]{ctexart}
+\usepackage{indentfirst}                % 每章、节首段缩进
+\usepackage[CJKbookmarks,               % 中文书签
+            colorlinks=true,            % 允许彩色链接
+            linkcolor=magenta]{hyperref}% 超链接包
+\usepackage{graphicx, subfigure, multicol, multirow, fancyhdr}
+\usepackage{listings}
+\usepackage[a4paper,left=2cm,right=2cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{fontspec}
+\usepackage{longtable}
+\usepackage{tikz}
+\usepackage{amsfonts}
+
+\setCJKfamilyfont{caiyun}{STCaiyun}
+\setCJKfamilyfont{songti}{AR PL SungtiL GB}
+\setCJKfamilyfont{fangsong}{STFangsong}
+\setCJKfamilyfont{heiti}{WenQuanYi Zen Hei}
+\setCJKfamilyfont{kaiti}{AR PL UKai CN}
+\setCJKfamilyfont{xinwei}{STXinwei}
+\setCJKfamilyfont{lishu}{LiSu}
+\setCJKmainfont[BoldFont={WenQuanYi Zen Hei}, ItalicFont={STFangsong}]{AR PL SungtiL GB}
+\setCJKsansfont{WenQuanYi Zen Hei}
+\setCJKmonofont{AR PL UKai CN}
+
+\newcommand*{\song}{\CJKfamily{songti}}   % 宋体
+\newcommand*{\fs}{\CJKfamily{fangsong}}   % 仿宋
+\newcommand*{\hei}{\CJKfamily{heiti}}     % 黑体
+\newcommand*{\kai}{\CJKfamily{kaiti}}     % 楷书
+\newcommand*{\wei}{\CJKfamily{xinwei}}    % 新魏
+\newcommand*{\lishu}{\CJKfamily{lishu}}   % 隶书
+\newcommand*{\cy}{\CJKfamily{caiyun}}     % 彩云
+
+\CTEXsetup[name={第,章}]{section}
+\CTEXsetup[format={\raggedright}]{section}
+\CTEXsetup[nameformat={\Large \hei}]{section}
+\CTEXsetup[titleformat={\Large \hei}]{section}
+%\CTEXsetup[aftername={\vskip 3ex}]{section}
+\CTEXsetup[format+={\Large}]{section}
+
+\setlength{\parindent}{2em}             % 缩进2个字母M的宽度
+\title{Raspberry Pi2 开发基础}
+\date{2015年6月29日}
+
+\begin{document}
+\lstset{language=C++}
+\lstset{extendedchars=false}
+%\lstset{keywordstyle=\fontfamily{phv}\fontseries{b}\fontshape{n}\selectfont}
+\lstset{numbers=none}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+\section{准备工作}
+\begin{enumerate}
+  \item 安装交叉编译器 arm-linux-gcc
+  \item 格式化 TF 卡。
+
+  将 TF 卡分区。第一个分区用 VFAT 格式化，作为boot分区;第二个分区用 inode 文件
+系统格式化(ext2fs,ext3fs,ext4fs, reiserfs,btrfs,jffs2 等等,要求内核支持)，
+准备作为 Linux 系统的根文件系统。
+
+\begin{verbatim}
+  mkfs.vfat /dev/mmcblk0p1
+  mkfs.ext4 /dev/mmcblk0p2
+\end{verbatim}
+
+把 bootloader 的文件和内核镜像 zImage 复制到第一个分区。bootloader 的
+配置文件 config.txt 中 ``kernel=zImage''用来指导 bootloader 加载内核,
+cmdline.txt 用来向内核传递启动参数。
+\end{enumerate}
+
+\section{内核编译}
+内核编译的步骤
+\begin{enumerate}
+  \item 配置好编译器，设定可执行程序路径(arm-linux-gcc的路径加入 PATH);
+  \item 设定待编译内核的处理器架构环境变量 export ARCH=arm;
+  \item 下载内核源码，解压，进入源码主目录;
+  \item arch/arm/configs 下面有很多平台预设的缺省配置，如果可用，
+  执行``make foo\_defconfig''，可以把对应的配置文件 foo\_defconfig 复制到
+  源码主目录 .config。否则，继续下一步;
+  \item ``make menuconfig'',配置内核功能;
+  \item ``make''编译内核，如无错误，会在 arch/arm/boot 目录下生成 zImage。
+\end{enumerate}
+
+
+\section{根文件系统制作}
+\subsection{编译 busybox}
+  busybox 集成了 Linux 的基本操作命令，从基本的目录操作文件操作(cd, ls, rm,
+  mkdir, rmdir, more...)到常用的网络服务(ifconfig, ftp/fptd, telnet/telnetd)。
+
+\begin{enumerate}
+  \item 下载 busybox, 解压，进入busybox
+  \item make menuconfig, 配置选项，根据需要精简。
+  \item make, make install, 缺省安装后在 \_install 目录下生成 bin, sbin,
+    usr/bin, usr/sbin。
+\end{enumerate}
+
+\subsection{完善目录结构}
+  在 \_install 目录下创建空目录 etc, lib, dev, mnt, proc, root, home。
+
+  etc 目录存放系统配置文件：
+\begin{enumerate}
+  \item 创建并编辑 etc/inittab，它是系统1号进程``init''的脚本
+
+  \begin{verbatim}
+  # /etc/inittab
+  ::sysinit:/etc/init.d/rcS
+  ::askfirst:-/bin/sh
+  ::once:/usr/sbin/telnetd -l /bin/login
+  tty0::respawn:/sbin/getty 115200 tty0
+  ::ctrlaltdel:/sbin/reboot
+  ::shutdown:/bin/umount -a -r
+  \end{verbatim}
+
+  它指导 init 做下面的事情:
+  \begin{itemize}
+    \item 执行 /etc/init.d/rcS (此文件下面建立)
+	\item 控制台使用 /bin/sh
+	\item 启动 telnet 服务(telnet daemon)，调用登录命令 /bin/login
+	\item 在终端 tty0 上出现登录界面
+	\item CTRL+ALT+DEL组合键执行 reboot 命令
+	\item 关机时卸载所有文件系统
+  \end{itemize}
+  \item 创建并编辑文件 etc/rc
+
+  \begin{verbatim}
+  #!/bin/sh
+  hostname RaspBerryPi2
+  mount -t proc proc /proc
+  cat /etc/motd
+  ifconfig eth0 192.168.1.121
+  mount -t sysfs sysfs /sys
+  mkdir /dev/pts
+  mount -t devpts devpts /dev/pts
+  \end{verbatim}
+
+  设置可执行权限属性``chmod +x rc''，做一个符合链接到 etc/init.d/rcS
+
+  ln -s rc init.d/rcS (先要建 init.d 目录)
+
+	此文件被 init 通过 inittab 脚本调用，完成下面的工作:
+  \begin{itemize}
+    \item 设置主机名
+	\item 挂载虚拟文件系统 proc, sysfs devpts。/dev/pts 用于 telnet 服务。
+    \item 配置网络接口 (ifconfig)
+	\item 其他的初始化任务 (例如 打印 motd--Message Of ToDay)
+  \end{itemize}
+  \item 为了打印 motd ,需要在 etc目录下创建文件 motd
+  \begin{verbatim}
+  ====================
+    Welcome to
+      Raspberry PI2
+  ====================
+  \end{verbatim}
+\end{enumerate}
+
+   为了实现远程登录，需要给系统添加帐号。管理帐号的配置文件 passwd 和 group
+   也要放在 etc 目录下。passwd 形式如下：
+   \begin{verbatim}
+   root::0:0:root:/root:/bin/sh
+   user::1000:1000:user:/home/user:/bin/sh
+   \end{verbatim}
+
+   group 形式如下:
+   \begin{verbatim}
+   root::0:
+   \end{verbatim}
+
+   lib 目录存放库文件：
+\begin{enumerate}
+  \item 把交叉编译器路径下的一些共享库(动态链接库)及其符号链接复制到 lib 或者
+     usr/lib 目录。重要的库有下面几个
+
+     ld-2.13.so, libc-2.13.so, libm-2.13.so
+
+     libgcc\_s.so.1, libstdc++.so.6.0.16
+
+  \begin{verbatim}
+  ln –s ld-2.13.so ld-linux.so.3
+  ln –s libc-2.13.so libc.so.6
+  ln –s libm-2.13.so libm.so.6
+
+  ln -s libgcc_s.so.1 libgcc_s.so
+  ln -s libstdc++.so.6.0.16 libstdc++.so.6
+  ln -s libstdc++.so.6.0.16 libstdc++.so
+  \end{verbatim}
+\end{enumerate}
+
+   如果内核配置了支持 devtmpfs (Device Drivers--Generic Driver Options)，
+     且bootloader 传递给内核的参数中包含了 devtmpfs.mount=1，则只需要留一个空的
+	 dev 目录。否则，需要在 dev 目录下创建几个设备文件:
+
+  \begin{verbatim}
+  mknod console c 5 1
+  mknod null c 1 3
+  mknod zero c 1 5
+  \end{verbatim}
+
+\subsection{制作根文件系统}
+  将以上完成的目录复制到 TF 卡第二个分区的根目录下面。在 cmdline.txt 中用
+  ``root=/dev/mmcblk0p2 rw rootfstype=ext4'' 告诉内核在哪里加载根文件系统。
+
+
+\section{通过frame buffer 操作图形设备}
+frame buffer 是一种内存映射机制，把物理设备的内存映射到用户空间。通常用于
+图形设备。下面是一个例子：
+
+\begin{lstlisting}[caption={[清单]fbinit.c},label=fb]{}
+#include <stdio.h>
+#include <linux/fb.h>
+#include <strings.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+
+int fd;
+void *fbp;
+struct fb_var_screeninfo vinfo;
+struct fb_fix_screeninfo finfo;
+void fb_init(void)
+{
+    unsigned fbsize;
+    unsigned int x, y, color;
+
+    fd = open("/dev/fb0", O_RDWR);
+    ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
+    ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
+    printf("x = %d, y = %d\n", vinfo.xres, vinfo.yres);
+    printf("bits = %d\n", vinfo.bits_per_pixel);
+
+    fbsize = vinfo.yres*finfo.line_length;
+    fbp =(char *)mmap(NULL, fbsize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+
+    if(vinfo.bits_per_pixel == 32) {
+        x = 200, y = 200;
+        color = 0x00FF0080;
+       	*(unsigned int *)(fbp + y*finfo.line_length + x) = color;
+    } else if(vinfo.bits_per_pixel == 24) {
+        ...
+    }
+}
+\end{lstlisting}
+
+frame buffer的设备文件是 /dev/fb0。ioctl 函数用来获取显示器的规格(分辨率，
+每像素的比特数等等)。32位的显示是R8,G8,B8,A8，24位的显示是 R8,G8,B8，
+16位显示通常是 R5,G6,B5，也可能是R5,G5,B5,A1，更早的时候还有8位的显示模式。
+
+mmap() 返回的指针就是显示缓存的线性地址空间。如需要在屏幕坐标(x,y)处画一个
+点，只需要在这个内存空间对应的地址上填入相应的颜色配比就可以了。
+
+\section{Linux 设备驱动}
+\subsection{设备驱动程序的结构}
+\begin{lstlisting}[caption={[清单]gpio.c},label=gpio]{}
+#include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/fs.h>
+#include <asm/io.h>
+#include <linux/init.h>
+#include <asm/uaccess.h>
+
+#define    GPFSEL0   0x3f200000   /* function select register */
+#define    GPSET0    0x3f20001c   /* bit set */
+#define    GPCLR0    0x3f200028   /* bit clear */
+#define    GPLEV0    0x3f200034   /* level holder register */
+
+volatile int *gpio_fsel;
+volatile int *gpio_clr;
+volatile int *gpio_set;
+volatile int *gpio_level;
+
+ssize_t gpio_read(struct file *fp, char *buff, size_t n, loff_t *f){
+    int val, i;
+    val = *gpio_level;
+    i = copy_to_user(buff, &val, 4);
+    return 4;
+}
+
+ssize_t gpio_write(struct file *fp, const char *buff, size_t n, loff_t *f){
+    int val, i;
+    i = copy_from_user(&val, buff, 4);
+    printk("write %d\n", val);
+    val = val & 4;
+    if (val)
+        *gpio_set = val;
+    else
+        *gpio_clr = (~val & 4);
+    return 4;
+}
+
+int gpio_open(struct inode *node, struct file *fp){
+    int var = *gpio_fsel;
+    var &= ~(7<<6);
+    var |= (1<<6);             /* set GPIO2 as output (001) */
+    printk("GPFSEL = %x\n", var);
+    *gpio_fsel = var;
+    return 0;
+}
+
+int gpio_close(struct inode *node, struct file *fp){
+    return 0;
+}
+
+struct file_operations gpio ={
+    read: gpio_read,
+    write: gpio_write,
+    open: gpio_open,
+    release: gpio_close,
+};
+
+int init_module(){
+    int n;
+    n = register_chrdev(123, "gpiogpio", &gpio);
+    if(n==0) {
+        printk("device registered\n");
+
+        gpio_fsel  = ioremap(GPFSEL0, 4);
+        gpio_set   = ioremap(GPSET0, 4);
+        gpio_clr   = ioremap(GPCLR0, 4);
+        gpio_level = ioremap(GPLEV0, 4);
+        return 0;
+    } else
+        return -1;
+}
+
+void cleanup_module(){
+    unregister_chrdev(123, "gpiogpio");
+    iounmap(gpio_fsel);
+    iounmap(gpio_set);
+    iounmap(gpio_clr);
+    iounmap(gpio_level);
+    printk("device removed\n");
+}
+\end{lstlisting}
+
+驱动程序(又称内核模块)和普通用户空间运行的程序有以下不同:
+\begin{enumerate}
+  \item 没有主函数 main()，自己不能独立运行，需要靠OS调用。
+	用户操作层面上有两个函数入口：init\_module()，安装驱动(``insmod gpio.ko'')
+	时被调用; cleanup\_module(), 卸载驱动(``rmmod gpio'')时被调用。
+  \item 运行方式不同。通过内核注册相应功能(简单的设备用 register\_chrdev()
+	函数注册)，等待用户程序调用。
+  \item 运行空间不同。内核模块运行在内核空间，拥有最高特权级。用户程序
+  运行在用户空间，没有对系统硬件的控制权，必须通过内核模块实现功能。
+  用户空间和内核空间的指针也不能混用，必须通过 copy\_to\_user()和
+  copy\_from\_user() 复制存储单元的内容。
+  \item 不能使用用户程序的函数(比如printf)，include 的 head 文件必须是内核
+  源码路径下的文件。
+\end{enumerate}
+
+\subsection{编译设备驱动}
+编译设备驱动必须要在安装了对应版本的内核源码 head files 环境中才能进行。
+
+\lstset{language=make}
+\begin{lstlisting}{}
+# Makefile (!not makefile)
+ifneq ($(KERNELRELEASE),)
+obj-m       := gpio.o
+else
+KDIR        := /home/user/raspberrypi2/linux-3.18.y
+PWD         := $(shell pwd)
+default:
+        $(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+endif
+\end{lstlisting}
+
+KDIR 是内核源码路径，PWD是待编译的驱动程序源码路径(一般是当前路径，用pwd命令
+获取)。编译后生成 gpio.ko，这就是设备驱动程序的二进制代码。
+
+上例中，驱动程序注册了一个字符设备(register\_chrdev)，(主)设备号123，
+设备名称是 ``gpiogpio''，注册的功能在 file\_operations 结构包含的函数组中。
+其中 read, write, open, release 由用户程序的系统调用函数 read, write, open,
+close 调用。
+
+\subsection{设备的使用}
+
+设备文件是用户程序和驱动程序之间的桥梁。创建设备文件用命令:
+
+mknod device c 123 0
+
+上面的命令创建了一个文件 device , 这个文件是字符设备``c''，主设备号123,
+次设备号0。一般设备文件被集中放在 /dev 目录下。
+
+\begin{lstlisting}[caption={[清单]control.c},label=control]{}
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+
+int main()
+{
+    int fd;
+    int val;
+
+    fd = open("/dev/device", O_RDWR);
+
+    for(;;) {
+        val = 4;
+        write(fd, &val, 4);
+        sleep(1);
+        val = 0;
+        write(fd, &val, 4);
+        sleep(1);
+    }
+    return 0;
+}
+\end{lstlisting}
+
+编写驱动程序的原则是，只提供策略，不强加功能。只解决能做什么的问题，而不是
+去具体实施怎么做。
+
+\end{document}
+

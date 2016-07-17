@@ -1,0 +1,11 @@
+2011-08-25:
+ramdisk 加载，修改 /etc/fstab:
+ramdisk_img		/mnt/ramdisk	auto user,noauto,loop 0 0
+
+压缩：gzip ramdisk_img, 生成文件 ramdisk_img.gz (讲义有误)
+mke2fs 在 /sbin
+
+修改 bootloader, 菜单加载 ramdisk
+USB-RS232 converter 支持：
+ pl2303
+ FTDI FT232BM

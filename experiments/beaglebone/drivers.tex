@@ -1,0 +1,96 @@
+\chapter{\tt 嵌入式系统中的I/O接口驱动}
+\section{实验目的}
+\begin{itemize}\itemsep=-3pt
+  \item 学习嵌入式Linux操作系统设备驱动的方法；
+\end{itemize}
+
+\section{接口电路介绍}
+	Linux以模块的形式加载设备类型, 通常一个模块对应一个设备驱动, 因此是可以
+分类的。将模块分成不同的类型并不是一成不变的, 开发人员可以根据实际工作需要
+在一个模块中实现不同的驱动程序。一般情况, 一个设备驱动对应一类设备的模块方式, 
+这样便于多个设备的协调工作, 也利于应用程序的开发和扩展。
+
+	设备驱动程序负责将应用程序如读、写等操作正确无误的传递给相关的硬件, 并使
+硬件能够做出正确反应。因此在编写设备驱动程序时, 必须要了解相应的硬件设备的
+寄存器、IO口及内存的配置参数。
+
+	设备驱动在准备好以后可以编译到内核中, 在系统启动时和内核一起启动, 这种
+方法在嵌入式~Linux~系统中经常被采用。在开发阶段, 设备驱动的动态加载更为普遍。
+开发人员不必在调试过程中频繁启动机器就能完成设备驱动的调试工作。
+
+	嵌入式处理器片内集成了大量的可编程设备接口, 为构成处理器系统带来了极大的
+便利。am335x 实现4组 GPIO模块、每组32只引脚的输入/输出控制功能，它们可用于
+信号的输入/输出、键盘控制以及其他信号捕获中断功能。有些 GPIO 的引脚可能与其他
+功能复用。
+
+	本章实验通过学习 GPIO 对一些设备的控制, 掌握Linux设备驱动的基本方法。
+
+\section{I/O端口地址映射}
+	RISC处理器(如ARM、PowerPC等)通常只实现一个物理地址空间, 外设I/O端口成为
+内存的一部分。此时, CPU可以像访问一个内存单元那样访问外设I/O端口, 而不需要
+设立专门的外设I/O指令。这两者在硬件实现上的差异对于软件来说是完全透明的, 
+驱动程序开发人员可以将存储器映射方式的I/O端口和外设内存统一看作是``I/O内存''
+资源。
+
+	I/O设备的物理地址是已知的, 由硬件设计决定。但是~CPU~通常并没有为这些
+已知的外设I/O内存资源的物理地址预定义虚拟地址范围, 驱动程序不能直接通过物理
+地址访问I/O设备, 而必须通过页表将它们映射到内核虚地址空间, 然后才能根据映射
+所得到的内核虚地址范围, 通过访内指令访问这些I/O设备。~Linux~的内核函数
+~ioremap()~ 用来将I/O设备的物理地址映射到内核虚地址空间。其原型如下：
+
+	void * ioremap(unsigned long phys\_addr, unsigned long size, unsigned long
+flags)
+
+	端口释放时, 应通过函数iounmap()取消ioremap()所做的映射：
+
+	void iounmap(void * addr)
+
+	当I/O设备的物理地址被映射到内核虚拟地址后, 就可以像读写 RAM 那样直接读写
+I/O设备资源了。
+
+\section{LED控制}
+	在mini--USB接口附近，有四个可供用户控制的LED，他们来自GPIO1模块的21$\sim$
+24引脚。我们可以通过下面的方式控制 usr0 LED(GPIO1\_21)：
+
+\normalsize
+\lstset{language=c, escapeinside=``}
+\begin{lstlisting}{}
+#define GPIO1_BASE     0x4804C000
+#define GPIO_OE        (GPIO1_BASE+0x134)
+#define GPIO_IN        (GPIO1_BASE+0x138)
+#define GPIO_OUT       (GPIO1_BASE+0x13C)
+......
+
+  volatile int *pConf    = ioremap(GPIO_OE, 4); `/* 映射方向寄存器地址 */`
+  volatile int *pDataIn  = ioremap(GPIO_IN, 4); `/* 映射输入寄存器地址 */`
+  volatile int *pDataOut = ioremap(GPIO_OUT, 4);`/* 映射输出寄存器地址 */`
+
+  *pConf    &= ~(1<<21);                        `/* 将pin21设为输      */`
+  *pDataOut |=  (1<<21);                        `/* pin21 置高电平，灯灭 */`
+
+  *pDataOut &= ~(1<<21);                        `/* pin21 置低电平，灯亮 */`
+
+......
+\end{lstlisting}
+\large
+
+	为了保证驱动程序的跨平台的可移植性, 建议使用~Linux~中特定的函数来访问
+~I/O~内存资源, 如~readb()、~readw()、~writeb()、~writew()~等。在RISC处理器里, 
+它们实际上就是对存储器读写的重定义：
+
+\begin{verbatim}
+#define readb(addr)  (*(volatile unsigned char *)__io_virt(addr))
+#define readw(addr) (*(volatile unsigned short *)__io_virt(addr))
+#define readl(addr) (*(volatile unsigned int *)__io_virt(addr))
+
+#define writeb(b,addr) (*(volatile unsigned char *)__io_virt(addr) = (b))
+#define writew(b,addr) (*(volatile unsigned short *)__io_virt(addr) = (b))
+#define writel(b,addr) (*(volatile unsigned int *)__io_virt(addr) = (b))
+
+......
+\end{verbatim}
+
+\section{实验内容}
+	BB--black的扩展连接器P8、P9引出了大量的GPIO以及其他可编程功能模块。
+根据硬件接口资料, 完成任意一个设备的基本控制功能(包括驱动程序和用户程序)，
+实现人--机交互以及相关模块的扩展功能。

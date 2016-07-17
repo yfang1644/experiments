@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Creator: fig2dev Version 3.2 Patchlevel 5e -->
+
+<!-- CreationDate: Thu Jul 14 23:31:25 2016 -->
+
+<!-- Magnification: 1.050 -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="8.1in"
+   height="5.8in"
+   viewBox="-1244 1782 9683 7017"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="led4.svg">
+  <metadata
+     id="metadata168">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs166" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview164"
+     showgrid="false"
+     inkscape:zoom="0.45210726"
+     inkscape:cx="364.50002"
+     inkscape:cy="261.00001"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <circle
+     id="circle6"
+     style="fill:#000000;stroke:#000000;stroke-width:8"
+     r="67"
+     cy="3779"
+     cx="944" />
+  <circle
+     id="circle8"
+     style="fill:#000000;stroke:#000000;stroke-width:8"
+     r="67"
+     cy="5149"
+     cx="944" />
+  <circle
+     id="circle10"
+     style="fill:#000000;stroke:#000000;stroke-width:8"
+     r="67"
+     cy="2409"
+     cx="944" />
+  <polyline
+     id="polyline12"
+     style="fill:none;stroke:#0000ff;stroke-width:63;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,2031 2929,2787 " />
+  <polyline
+     id="polyline14"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="141,2409 3779,2409 3921,2220 4062,2551 4251,2220 4393,2551 4535,2220 4629,2409 6094,2409 " />
+  <polyline
+     id="polyline16"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6283,2220 6094,2409 6283,2598 " />
+  <polyline
+     id="polyline18"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6425,2220 6236,2409 6425,2598 " />
+  <polyline
+     id="polyline20"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3023,2125 3265,1883 " />
+  <polygon
+     id="polygon22"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3241,1861 3286,1906 3286,1906 3353,1795 " />
+  <polyline
+     id="polyline24"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3165,2125 3406,1883 " />
+  <polygon
+     id="polygon26"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3383,1861 3427,1906 3427,1906 3495,1795 " />
+  <polyline
+     id="polyline28"
+     style="fill:none;stroke:#0000ff;stroke-width:63;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,3401 2929,4157 " />
+  <polyline
+     id="polyline30"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="944,3779 3779,3779 3921,3590 4062,3921 4251,3590 4393,3921 4535,3590 4629,3779 6094,3779 " />
+  <polyline
+     id="polyline32"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6283,3590 6094,3779 6283,3968 " />
+  <polyline
+     id="polyline34"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6425,3590 6236,3779 6425,3968 " />
+  <polyline
+     id="polyline36"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3023,3496 3265,3253 " />
+  <polygon
+     id="polygon38"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3241,3231 3286,3276 3286,3276 3353,3165 " />
+  <polyline
+     id="polyline40"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3165,3496 3406,3253 " />
+  <polygon
+     id="polygon42"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3383,3231 3427,3276 3427,3276 3495,3165 " />
+  <polyline
+     id="polyline44"
+     style="fill:none;stroke:#0000ff;stroke-width:63;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,4771 2929,5527 " />
+  <polyline
+     id="polyline46"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="944,5149 3779,5149 3921,4960 4062,5291 4251,4960 4393,5291 4535,4960 4629,5149 6094,5149 " />
+  <polyline
+     id="polyline48"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6283,4960 6094,5149 6283,5338 " />
+  <polyline
+     id="polyline50"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6425,4960 6236,5149 6425,5338 " />
+  <polyline
+     id="polyline52"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3023,4866 3265,4623 " />
+  <polygon
+     id="polygon54"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3241,4601 3286,4646 3286,4646 3353,4535 " />
+  <polyline
+     id="polyline56"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3165,4866 3406,4623 " />
+  <polygon
+     id="polygon58"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3383,4601 3427,4646 3427,4646 3495,4535 " />
+  <polyline
+     id="polyline60"
+     style="fill:none;stroke:#0000ff;stroke-width:63;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,6141 2929,6897 " />
+  <polyline
+     id="polyline62"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6283,6330 6094,6519 6283,6708 " />
+  <polyline
+     id="polyline64"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6425,6330 6236,6519 6425,6708 " />
+  <polyline
+     id="polyline66"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3023,6236 3265,5993 " />
+  <polygon
+     id="polygon68"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3241,5971 3286,6016 3286,6016 3353,5905 " />
+  <polyline
+     id="polyline70"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3165,6236 3406,5993 " />
+  <polygon
+     id="polygon72"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3383,5971 3427,6016 3427,6016 3495,5905 " />
+  <polyline
+     id="polyline74"
+     style="fill:none;stroke:#0000ff;stroke-width:63;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,7464 2929,8220 " />
+  <polyline
+     id="polyline76"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3023,7559 3265,7316 " />
+  <polygon
+     id="polygon78"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3241,7294 3286,7339 3286,7339 3353,7228 " />
+  <polyline
+     id="polyline80"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="3165,7559 3406,7316 " />
+  <polygon
+     id="polygon82"
+     style="fill:#000000;stroke:#000000;stroke-width:8;stroke-miterlimit:8"
+     points="3383,7294 3427,7339 3427,7339 3495,7228 " />
+  <polyline
+     id="polyline84"
+     style="fill:none;stroke:#000000;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter"
+     points="141,2125 141,2692 " />
+  <polyline
+     id="polyline86"
+     style="fill:none;stroke:#000000;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter"
+     points="141,7559 141,8125 " />
+  <polyline
+     id="polyline88"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="141,7842 3779,7842 3921,7653 4062,7984 4251,7653 4393,7984 4535,7653 4629,7842 6094,7842 6094,8409 " />
+  <polyline
+     id="polyline90"
+     style="fill:none;stroke:#000000;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter"
+     points="5811,8409 6377,8409 " />
+  <polyline
+     id="polyline92"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="5905,8503 6283,8503 " />
+  <polyline
+     id="polyline94"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="5952,8598 6236,8598 " />
+  <polyline
+     id="polyline96"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6000,8692 6188,8692 " />
+  <polyline
+     id="polyline98"
+     style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6047,8787 6141,8787 " />
+  <polyline
+     id="polyline100"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="944,2409 944,6519 3779,6519 3921,6330 4062,6661 4251,6330 4393,6661 4535,6330 4629,6519 6094,6519 " />
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#ff0000;stroke-width:0.025in"
+     id="text102"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="2409"
+     x="6566"
+     xml:space="preserve">GPJ0_3</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text104"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="2834"
+     x="3070"
+     xml:space="preserve">LED1</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text106"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="2834"
+     x="4251"
+     xml:space="preserve">R2</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text108"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="2078"
+     x="4110"
+     xml:space="preserve">470</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text110"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="2834"
+     x="1748"
+     xml:space="preserve">D22</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#ff0000;stroke-width:0.025in"
+     id="text112"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="3779"
+     x="6566"
+     xml:space="preserve">GPJ0_4</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text114"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="4204"
+     x="3070"
+     xml:space="preserve">LED2</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text116"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="4204"
+     x="4251"
+     xml:space="preserve">R3</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text118"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="3448"
+     x="4110"
+     xml:space="preserve">470</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text120"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="4204"
+     x="1748"
+     xml:space="preserve">D23</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#ff0000;stroke-width:0.025in"
+     id="text122"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="5149"
+     x="6566"
+     xml:space="preserve">GPJ0_5</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text124"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="5574"
+     x="3070"
+     xml:space="preserve">LED3</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text126"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="5574"
+     x="4251"
+     xml:space="preserve">R26</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text128"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="4818"
+     x="4110"
+     xml:space="preserve">470</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text130"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="5574"
+     x="1748"
+     xml:space="preserve">D24</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#ff0000;stroke-width:0.025in"
+     id="text132"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="6519"
+     x="6566"
+     xml:space="preserve">PWMTOUT1</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text134"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="6944"
+     x="3070"
+     xml:space="preserve">LED4</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text136"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="6944"
+     x="4251"
+     xml:space="preserve">R31</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text138"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="6188"
+     x="4110"
+     xml:space="preserve">470</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text140"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="6944"
+     x="1748"
+     xml:space="preserve">D25</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text142"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="8267"
+     x="3070"
+     xml:space="preserve">PWR</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text144"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="8267"
+     x="4251"
+     xml:space="preserve">R41</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text146"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="7511"
+     x="4110"
+     xml:space="preserve">470</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text148"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="8267"
+     x="1748"
+     xml:space="preserve">D26</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text150"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="7984"
+     x="-1228"
+     xml:space="preserve">VDD_5V</text>
+  <text
+     style="font-style:normal;font-weight:bold;font-size:227px;font-family:Helvetica;text-anchor:start;fill:#000000;stroke-width:0.025in"
+     id="text152"
+     font-size="227"
+     font-weight="bold"
+     font-style="normal"
+     y="2503"
+     x="-1133"
+     xml:space="preserve">VDD_IO</text>
+  <polygon
+     id="polygon154"
+     style="fill:#0000ff;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,2409 2362,1984 2362,1984 2362,2834 " />
+  <polygon
+     id="polygon156"
+     style="fill:#0000ff;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,3779 2362,3354 2362,3354 2362,4204 " />
+  <polygon
+     id="polygon158"
+     style="fill:#0000ff;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,5149 2362,4724 2362,4724 2362,5574 " />
+  <polygon
+     id="polygon160"
+     style="fill:#0000ff;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,6519 2362,6094 2362,6094 2362,6944 " />
+  <polygon
+     id="polygon162"
+     style="fill:#0000ff;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2929,7842 2362,7417 2362,7417 2362,8267 " />
+</svg>

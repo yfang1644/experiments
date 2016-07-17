@@ -1,0 +1,310 @@
+\chapter{\tt 嵌入式文件系统的构建}\label{ch-fs}
+
+\section{实验目的}
+\begin{itemize}\itemsep=-3pt
+  \item 了解嵌入式操作系统中文件系统的类型和作用
+  \item 掌握利用 BusyBox 软件制作嵌入式文件系统的方法
+  \item 掌握嵌入式 Linux 文件系统的的挂载过程
+\end{itemize}
+
+\section{Linux 文件系统的类型}
+\subsection{ext 文件系统}
+	ext2fs 是 Linux 2.4 版本的标准文件系统, 它已经取代了扩展文件系统(extfs)。
+extfs 支持的文件最大为 2GB, 支持的最大文件名长度为 255 个字符, 且不支持
+索引节点(包括数据修改时间标记)。ext2fs 取代 extfs 具有以下一些优点：
+\begin{itemize}\itemsep=-3pt
+  \item ext2fs 支持达 4 TB 的内存；
+  \item ext2fs 文件名称最长可以到 1012 个字符；
+  \item 在创建文件系统时, 管理员可以根据需要选择存储逻辑块的大小(通常大小
+		可选择 1024、2048 或 4096 字节)；
+  \item ext2fs 可以实现快速符号链接(类似于 Windows 文件系统的快捷方式), 
+		不需为符号链接分配数据块, 并且可将目标名称直接存储在索引节点(inode)
+		表中。这使文件系统的性能有所提高, 特别在访问速度上。
+\end{itemize}
+	由于 ext2fs 文件系统的稳定性、可靠性和健壮性, 几乎在所有基于 Linux 的
+系统(包括台式机、服务器和工作站, 甚至一些嵌入式设备)上都使用 ext2fs 文件系统。
+
+\subsection{NFS 文件系统}
+	NFS 是一个 RPC service。它由 SUN 公司开发, 于 1984 年推出。NFS 文
+件系统能够使文件实现共享。它的设计是为了在不同的系统之间使用, 所以 NFS 文件
+系统的通信协议设计与操作系统无关。当使用者想使用远端文件时, 只要用``mount''
+命令就可以把远端文件系统挂载在自己的文件系统上, 使远端的文件在使用上和本地
+机器的文件没有区别。NFS 的具体配置可参考第\ref{ch-env}章的网络文件系统 NFS
+的配置。
+
+	Linux 内核可以支持 NFS 的根文件系统。为实现这项功能, 在内核配置中需要选中
+``File Systems $\to$ Network File Systems $\to$  NFS client support  $\to$
+ Root file system on NFS'', 而该选项依赖于``Networking support''中的
+``IP: kernel level autoconfiguration ''。此外，需要在 bootloader 中向内核传递
+NFS 作为根文件系统的信息:
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+	u-boot # setenv rootfs root=/dev/nfs rw nfsroot=<nfs_server_ip>:<nfs_Root_Dir>
+	u-boot # setenv nfsaddrs nfsaddrs=<client_ip>:<nfs_server_ip>:<gateway>:<mask>
+	u-boot # setenv bootargs console=ttyS0,115200 $rootfs $nfsaddrs
+\end{verbatim}
+\end{boxedminipage}
+
+	系统启动后, ``nfs\_Root\_Dir''就成为系统的根目录``/'', 它和下面制作的
+ramdisk 中的根目录结构是相同的。
+
+\subsection{JFFS2 文件系统}
+	JFFS 文件系统是瑞典 Axis 通信公司开发的一种基于 FLASH 的日志文件系统。
+它在设计时充分考虑了 FLASH 的读写特性和电池供电的嵌入式系统的特点。在这类
+系统中, 必需确保在读取文件时如果系统突然掉电, 其文件的可靠性不受到影响。对
+Red Hat 的 Davie Woodhouse 进行改进后, 形成了 JFFS2。JFFS2 克服了 JFFS
+的一些缺点, 使用了基于哈希表的日志节点结构, 大大加快了对节点的操作速度；
+改善了存取策略以提高 FLASH 的抗疲劳性, 同时也优化了碎片整理性能, 增加了数据
+压缩功能。需要注意的是, 当文件系统已满或接近满时, JFFS2 会大大放慢运行速度。
+这是因为垃圾收集的问题。相对于 ext2fs 而言, JFFS2 在嵌入式设备中更受欢迎。
+
+	嵌入式系统中采用 JFFS2 文件系统有以下优点：
+\begin{itemize}\itemsep=-3pt
+  \item 支持数据压缩；
+  \item 提供``损耗平衡''支持；
+  \item 支持多种节点类型；
+  \item 提高了对闪存的利用率, 降低了内存的消耗。
+\end{itemize}
+
+	我们只需要在自己的嵌入式 Linux 中加入 JFFS2 文件系统并做少量的改动, 
+就可以使用 JFFS2 文件系统。通过 JFFS2 文件系统, 可以用 FLASH 存储器来
+保存数据, 将 FLASH 存储器作为系统的硬盘来使用。可以像操作硬盘上的文件一样
+操作 FLASH 芯片上的文件和数据。同时系统运行的参数可以实时保存到 FLASH
+存储器芯片中, 在系统断电后数据不会丢失。
+
+	作为一种 EEPROM, FLASH 可分为 NOR FLASH 和 NAND FLASH 两种主要类型。
+一片没有使用过的 FLASH 存储器, 每一位的值都是逻辑 1。对 FLASH 的写操作
+就是将特定位的逻辑 1 改变为逻辑 0。而擦除就是将逻辑 0 改变为逻辑 1。FLASH
+的数据存储是以块(Block)为单位进行组织, 所以 FLASH 在进行擦除操作时只能
+进行整块擦除。
+
+	FLASH的使用寿命是以擦除次数进行计算的。一般在十万次左右。为了保证 FLASH
+存储芯片的某些块不早于其他块到达其寿命, 有必要在所有块中尽可能地平均分配擦除
+次数, 这就是``损耗平衡''。JFFS2 文件系统是一种``追加式''的文件
+系统-----新的数据总是被追加到上次写入数据的后面。这种``追加式''的结构就自然
+实现了``损耗平衡''。
+
+\subsection{YAFFS2}
+	YAFFS（Yet Another Flash File System）文件系统是专门针对NAND 闪存设计的
+嵌入式文件系统。与 JFFS2 文件系统不同, YAFFS2 主要针对使用 NAND FLASH 的场合
+而设计。NAND FLASH 与 NOR FLASH 在结构上有较大的差别。
+尽管 JFFS2 文件系统也能应用于 NAND FLASH, 但由于它在内存占用和启动时间方面
+针对 NOR FLASH 的特性做了一些取舍, 所以对NAND来说通常并不是最优的方案。
+在嵌入式系统使用的大容量 NAND FLASH中, 更多的采用YAFFS2文件系统。
+
+
+\subsection{Ramdisk}
+	使用内存的一部份空间来模拟一个硬盘分区, 这样构成的文件系统就是ramdisk。
+将 ramdisk 用作根文件系统在嵌入式 Linux 中是一种常用的方法。因为在 ram 上运行, 
+读写速度快；用 gzip 算法进行压缩, 可节省存储空间。但它也有缺点：由于将内存
+的一部分用作 ramdisk, 这部分内存不能再作其他用途；此外系统运行是更新的内容
+无法保存, 系统关机后内容将丢失。
+
+\section{文件系统的制作}
+
+\subsection{BusyBox 介绍}
+	BusyBox 是 Debian GNU/Linux 著名的 Bruce Perens 首先开发, 主要使用在
+Debian 的安装程序中。后来又有许多 Debian 开发者对 BusyBox 贡献力量, 其中
+包括著名的 Linus Torvalds。BusyBox 最终编译成一个叫做 BusyBox 独立执行
+程序, 并且可以根据配置, 执行 ash shell 的功能, 包含几十个小应用程序：
+mini-vi 编辑器、系统不可或缺的 /sbin/init 程序, 以及其他诸如文件操作、
+目录操作、系统配置等等。这些都是一个正常的系统必不可少的。但如果把这些程序
+独立编译的话, 其规模在一个嵌入式系统中难以承受。BusyBox 具有全部这些功能, 
+大小也不过几百 K 左右。而且用户还可以根据自己的需要对 BusyBox 的应用程序功能
+进行剪裁, 使 BusyBox 的规模进一步缩小。
+
+	BusyBox 支持多种体系结构, 它可以静态或动态链接 glibc 或者 uclibc 库, 
+以满足不同的需要。\footnote{BosyBox本身不带glibc/uclibc。用户须自行为系统
+配置这些库并安装在 /lib目录下。没有库支持的基本文件系统只能运行静态链接的
+外部程序}
+
+\subsection{BusyBox 的编译}
+	将下载的 BusyBox 软件包解压缩。进入解压目录, 执行``make menuconfig'', 
+仿照内核配置编译过程：
+\begin{itemize}\itemsep=-3pt
+  \item 在 Build Option 菜单下, 选择静态库编译方式\footnote{如文件系统带有
+		共享库, 也可以采用动态链接方式}, 并设定交叉编译器；
+  \item Installation Options 配置中, 自定义安装路径。编译后的文件系统以这个
+		路径为起点；
+  \item 用户可以根据需要对文件系统的功能选项进行配置, 这样可以减少文件系统的
+		大小, 以节省存储空间。
+\end{itemize}
+	配置完成后便可对 BusyBox 进行编译(make)和安装(make install)。安装完毕, 
+在安装目录下可以看到 bin、sbin 和 usr( usr 目录是否存在, 取决于配置的
+安装选项)这些目录。在这些目录里可以看到许多应用程序的符号链接, 这些符号链接
+都指向 BusyBox。
+
+\subsection{配置文件系统}
+\begin{itemize}\itemsep=-3pt
+  \item 创建 etc 目录, 在 etc 下建立 inittab、rc、motd三个文件。
+
+	/etc/inittab \\ ==========================================
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+# /etc/inittab
+::sysinit:/etc/init.d/rcS
+::askfirst:-/bin/sh
+::once:/usr/sbin/telnetd -l /bin/login
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r
+\end{verbatim}
+\end{boxedminipage}
+
+	此文件由系统启动程序 init 读取并解释执行。以\# 开头的行是注释行。
+
+	/etc/rc \\ ==========================================
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+#!/bin/sh
+hostname BeagleBone
+mount -t proc proc /proc
+/bin/cat /etc/motd
+\end{verbatim}
+\end{boxedminipage}
+
+	此文件要求可执行属性, 用命令 ``chmod +x rc''修改其属性。
+{\bf rc文件和其他脚本文件(.sh)第一行的\# 不是注释。}
+
+	/etc/motd \\ ==========================================
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+  Welcome to
+  ===============================
+          ARM-LINUX WORLD
+          BB -- BLACK
+  ===============================
+\end{verbatim}
+\end{boxedminipage}
+
+	此文件内容不影响系统正常工作, 由 /etc/rc 调用打印在终端上，意为 Message
+Of ToDay 。
+
+	在 etc 目录下再创建 init.d 目录, 并将 /etc/rc 向 /etc/init.d/rcS 做符号
+链接。此文件为 inittab 指定的启动脚本：
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+  $ mkdir init.d
+  $ cd init.d
+  $ ln -s ../rc rcS
+\end{verbatim}
+\end{boxedminipage}
+
+  \item 创建 dev 目录, 并在该目录下建立必要的设备\footnote{如果内核支持了
+devtmpfs 自动挂载功能，创建设备文件的工作会由系统自动完成。此外，手工创建
+  设备文件的工作``mknod''应在目标文件系统中进行，因为设备文件不能用``cp''
+  命令复制。}：
+\begin{verbatim}
+$ mknod console c 5 1
+$ mknod null c 1 3
+$ mknod zero c 1 5
+\end{verbatim}
+
+  \item 建立 proc 空目录, 供 proc 文件系统使用。
+  \item 建立 lib 目录, 将交叉编译器链接库路径下的下面几个库复制到 lib目录：\\
+		ld-2.10.1.so, libc-2.10.1.so, libm-2.10.1.so 并做相应的符号链接：\\
+		ln --s ld-2.10.1.so ld-linux.so.3\\
+		ln --s libc-2.10.1.so libc.so.6\\
+		ln --s libm-2.10.1.so libm.so.6
+
+		如果BusyBox以静态链接方式编译, 没有这些库, 不影响系统正常启动, 但会影响
+		其他动态链接的程序运行。
+\end{itemize}
+
+	至此文件系统目录构造完毕。从根目录看下去, 应该至少有下面几个目录:
+
+	bin\qquad  dev\qquad  etc\qquad  lib\qquad lost+found\qquad
+	mnt\qquad proc\qquad sbin
+
+    它们是下面制作文件系统的基础。
+
+\subsection{制作 ramdisk 文件映像}
+	配置内核时, ramdisk 要求在 ``Block devices$\to$''中选中``RAM block
+device support'', 并设置适当的 ramdisk 大小。在 ``General setup'' 设置分支里
+选中 ``Initial RAM filesystem and RAM disk (initramfs/initrd) support''。
+
+	为了生成并修改 ramdisk, 需要在主机上创建一个空文件并将它格式化成ext2fs
+文件系统映像。格式化后的文件就可以像普通文件系统一样在主机上进行挂载和卸载。
+挂载后可以进行正常的文件和目录操作, 卸载后, 如果原映像文件仍然存在, 则更新到
+卸载之前的操作内容。
+\footnote{ 挂载 ext2fs 文件系统需要 root权限。实验室已在 /etc/fstab 中设置指定
+文件和目录, 允许普通用户将文件 ramdisk\_img 挂载到 /mnt/ramdisk}
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+  $ dd if=/dev/zero of=ramdisk_img bs=1k count=8192
+  $ mke2fs ramdisk_img
+  $ mount ramdisk_img
+  $ (复制文件系统目录和文件, 及其他一些必要的设置)
+  $ umount /mnt/ramdisk
+\end{verbatim}
+\end{boxedminipage}
+
+	注意, 此时虽然ramdisk\_img从形式上看和普通文件没什么区别, 但它却是一个完整
+独立的文件系统映像。逻辑上, 它和u盘、SD卡甚至硬盘是等同的。
+
+	内核支持压缩方式的 ramdisk, 以节省 FLASH 占用空间。通常用下面的方式
+压缩和解压(mount之前必须解压):
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+	$ gzip ramdisk_img
+	$ gunzip ramdisk_img.gz
+\end{verbatim}
+\end{boxedminipage}
+
+	bootloader 通过 bootargs 向内核传递信息，指示它挂载 ramdisk 作为根文件
+系统。同时 ramdisk 的映像文件也应装入内存的对应位置:
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+	u-boot # setenv ramdisk root=/dev/ram rw initrd=0x88008000,8M
+	u-boot # setenv bootargs console=ttyS0,115200 $ramdisk
+	u-boot # tftp 0x88008000 ramdisk_img.gz
+\end{verbatim}
+\end{boxedminipage}
+
+\subsection{制作 init\_ramfs}
+	也可以将之前制作的根文件系统做进内核映像中，使内核成为一个完整的独立系统。
+
+	首先，将根文件系统用 cpio 打包并压缩:
+
+\begin{boxedminipage}{.9\textwidth}
+\begin{verbatim}
+	$ find ./ -print |cpio -H newc -o |gzip -9 > ~/ramdisk.cpio.gz
+\end{verbatim}
+\end{boxedminipage}
+
+    注意将生成的文件ramdisk.cpio.gz 放到另外的目录(这里放到用户主目录下)，
+    以免被递归。
+
+	这种做法不要求制作独立的文件系统。之所以这里使用``/mnt/ramdisk''，是因为
+之前恰好做过一个完整的根文件系统并挂载到这个目录下。
+
+	将生成的文件 ramdisk.cpio.gz 复制到内核源码目录,并在内核配置选项中,
+``Initial RAM filesystem and RAM disk''下面的``Initramfs source file(s)''
+写上这个文件名。
+\footnote{解压 cpio: cpio -{}-no-absolute-filenames -imdv $<$ foo.cpio。注意
+    先要将之前压缩的 .gz 文件解压成 .cpio 文件。}
+
+	重新编译内核，将该文件编入内核文件 zImage，并复制到 tftp目录下。
+
+	在目标板中加载该内核，启动。
+
+\section{实验内容}
+\begin{itemize}\itemsep=-3pt
+  \item 编译 BusyBox, 以 BusyBox 为基础，构建一个适合的文件系统;
+  \item 制作 ramdisk 文件系统映像, 用你的文件系统启动到正常工作状态;
+  \item * 研究 NFS 作为根文件系统的启动过程。
+\end{itemize}
+
+\section{实验报告要求}
+\begin{itemize}\itemsep=-3pt
+  \item 讨论你的嵌入式系统所具备的功能；
+  \item 比较 romfs、ext2fs/ext3fs、JFFS2 等文件系统的优缺点；
+  \item * 考虑制作一个 YAFFS2 文件系统作为系统的根文件系统。
+\end{itemize}

@@ -1,0 +1,41 @@
+\documentclass[a4paper,10pt]{seminar}
+
+\input preamble
+
+\setCJKmainfont[BoldFont={WenQuanYi Zen Hei},%
+                ItalicFont={STFangsong}]{AR PL UMing TW}
+\setCJKsansfont[ItalicFont={LiSu}]{WenQuanYi Micro Hei}
+\setCJKmonofont{AR PL UKai CN}
+
+\begin{document}
+\lstset{language=C++, extendedchars=false,
+		basicstyle=\ttfamily\fontsize{8}{8}\selectfont,
+		keywordstyle=\color{blue}\ttfamily,
+		stringstyle=\color{red}\ttfamily,
+		commentstyle=\color{green}\ttfamily
+}
+
+\gdef\thetitle{嵌入式系统实验绪论}
+\gdef\email{yfang@nju.edu.cn}
+
+\pdfbookmark[0]{Contents}{table}
+\color{black}
+
+\centerslidesfalse
+\slide{}
+\raggedright
+ ~ \vskip5mm x210 实验系统\vskip15mm
+{
+\fontsize{30}{24}\selectfont
+\underbar{\it \color{red}\textsf{\thetitle}}}\vskip1cm
+\definecolor{mygray}{rgb}{0.4,0.4,0.4} {\color{mygray} yfang@nju.edu.cn}\\ \ \\
+  School of Electronics Science and Engineering\\
+    Nanjing University\\
+      Nanjing 210046
+\endslide
+
+\setcounter{tocdepth}{3}
+
+\input contents
+
+\end{document}

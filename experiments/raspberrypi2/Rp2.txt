@@ -1,0 +1,155 @@
+1. CD kernel source directory
+    export ARCH=arm
+    make menuconfig
+       (configure kernel properties)
+    make -j4
+       (take about half hour at first time)
+    zImage will be built at directory arch/arm/boot
+
+2. Partition SD card
+    fdisk /dev/disk2   (or /dev/sdb, /dev/mmcblkX, /dev/diskX, depends on OS)
+    delete existing partition, create new ones
+    first partition will hold BOOT code as boot partition, smaller
+       second partition holds root file system and data
+
+    mkfs.vfat /dev/disk2s1
+    mkfs.ext4 /dev/disk2s2
+
+        (fdisk and mkfs needs root privilege)
+
+3. Prepare BOOT partition
+    mount /dev/disk2s1 /mnt/Volume1
+      (mount device /dev/disk2s1 to directory /mnt/Volume1.
+       Create directory /mnt/Volume1 if it doesn't exist,
+       or /dev/disk2s1 may already be automatic mounted to a
+       certain directory.)
+
+    unzip "berryboot" to /mnt/Volume1. Some files may not necessary
+
+     bcm2708-rpi-b.dtb
+     bcm2708-rpi-b-plus.dtb
+     bcm2709-rpi-2-b.dtb
+     berryboot.img
+     bootcode.bin
+     cmdline.txt
+     config.txt
+     fixup_cd.dat
+     fixup.dat
+     fixup_x.dat
+     kernel_rpi2_aufs.img
+     LICENSE.berryboot
+     shared.tgz
+     start_cd.elf
+     start.elf
+     start_x.elf
+
+    copy kernel image file "zImage" to /mnt/Volume1
+    edit config.txt and cmdline.txt
+
+    script "config.txt" for bootcode.bin
+       berryboot.img : initramfs (initialise RAM file-system)
+       kernel=zImage: kernel file "zImage"
+    script "cmdline.txt" for kernel options:
+      smsc95xx.turbo_mode=N elevator=deadline bootmenutimeout=3 console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw rootfstype=ext4 kgdboc=ttyAMA0,115200
+       (DO NOT BREAK LINE)
+
+       ttyAMA0 as console when using minicom. Set its bitrate to 115200.
+       Kernel also prints messages on this terminal.
+       MMC card partition 2 as root file system, mount as read-write mode
+       root filesystem type is EXT4FS
+
+4. Build ROOT file system
+  1) configure and compile busybox, just like configure and compile kernel.
+     tar jxfv busybox-1.20.2.tar.bz2
+     make menuconfig
+     make
+     make install
+
+      Files are installed at directory _install by default:
+        bin,  sbin, usr/bin,  usr/sbin
+
+      copy them to /mnt/Volume2
+  2) Create some empty directories on /mnt/Volume2:
+          proc,  lib,  etc,  dev,  mnt,  home
+  3) Create and edit etc/inittab(after boot, first process is "init".
+      /etc/inittab is script for "init"
+  # /etc/inittab
+  ::sysinit:/etc/init.d/rcS
+  ::askfirst:-/bin/sh
+  ::once:/usr/sbin/telnetd -l /bin/login
+  ::ctrlaltdel:/sbin/reboot
+  ::shutdown:/bin/umount -a -r
+
+  4) Create and edit etc/rc
+  #!/bin/sh
+  hostname rpi2
+  mount -t proc proc /proc
+  /bin/cat /etc/motd
+   
+     Change its properties to executable "chmod +x rc"
+     Create directory etc/init.d, link etc/rc to etc/init.d/rcS
+     This "rcS" is called by init via script inittab
+
+     It sets hostname, mount proc filesystem, and display a short message
+     in the file /etc/motd.
+
+  5) Create and edit /etc/motd. It just show some messages on the screen.
+  ===============================
+  Welcome to
+    Raspberry PI2
+  ===============================
+
+  6) Copy some shared objects(dynamic linked libraries) to directory "lib"
+     from cross-compiler toolchain ( and their symbolic links).
+     Libraries are in the direcroty
+     /opt/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/default/lib
+     
+     cp ld-2.13.so libc-2.13.so libm-2.13.so /mnt/Volume2/lib
+     cd /mnt/Volume2/lib
+     ln –s ld-2.13.so ld-linux.so.3
+     ln –s libc-2.13.so libc.so.6
+     ln –s libm-2.13.so libm.so.6
+
+     Extra libraries: libgcc_s.so.1, libstdc++.so.6.0.16 in
+     /opt/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/default/usr/lib
+     ln -s libgcc_s.so.1 libgcc_s.so
+     ln -s libstdc++.so.6.0.16 libstdc++.so.6
+     ln -s libstdc++.so.6.0.16 libstdc++.so
+
+     You can simply copy lib, usr/lib to /mnt/Volume2 and /mnt/Volume2/usr.
+     cd  /opt/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/default
+     cp -ar lib/* /mnt/Volume2/lib/
+     cp -ar usr/lib /mnt/Volume2/usr
+
+  7) create some device files in the directory dev
+     mknod console c 5 1
+     mknod null c 1 3
+     mknod zero c 1 5
+    (Kernel has supported devtmpfs filesystem to mount /dev, so mknod 
+      is not necessary.)
+
+--------------- Development ------------
+
+1. Start telnet daemon on Raspberry pi2, add a line to /etc/inittab:
+     ::once:/usr/sbin/telnetd -l /bin/login
+   configure network ip address, add a line to /etc/rc:
+   ifconfig eth0 192.168.1.120
+   (The ip must be at the same network area within host PC)
+
+   Above will allow a client login raspberry pi2 via
+        telnet 192.168.1.120
+   when a account is valid (/etc/passwd and /etc/group list), usesrs
+   can operate raspberry through network instead of minicom.
+
+2. Host PC runs nfs-daemon: (Network File System)
+     sudo /sbin/nfsd enable
+    This will creat directory sharing between raspberry pi2 and PC.
+   The NFS server takes /etc/exports as its script. This file contains
+   shared direcroty and network, like:
+
+   /Users/fangxinran/RaspBerryPi2 -network 192.168.1.0 -netmask 255.255.255.0
+   It means all the IP address between 192.168.1.0 through 192.168.1.255
+   can mount /Users/fangxinran/RaspBerryPi2 as client.
+
+
+

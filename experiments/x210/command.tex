@@ -1,0 +1,234 @@
+\documentclass[a4paper]{article}
+
+\usepackage[colorlinks=true, 
+            linkcolor=black]{hyperref}
+\usepackage{graphicx, subfig, multicol, multirow, fancyhdr}
+\usepackage[left=0cm,right=0cm,top=2mm,bottom=2mm]{geometry}
+\usepackage{fontspec}
+\usepackage{fancybox}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,petri}
+\usetikzlibrary{decorations}
+\usetikzlibrary{plothandlers}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
+\usetikzlibrary{matrix}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+
+\makeatletter
+\def\hlinewd#1{%
+  \noalign{\ifnum0=`}\fi\hrule\@height #1\futurelet%
+   \reserved@a\@xhline}
+\makeatother
+\newcommand\Trule{\hlinewd{1.5pt}}
+\newcommand\Brule{\hlinewd{1.5pt}}
+
+\makeatletter
+\def\thline{%
+  \noalign{\ifnum0=`}\fi
+    \penalty\@M
+    \futurelet\@let@token\LT@@thline{1.5pt}}
+\def\LT@@thline#1{%
+    \global\let\@gtempa\@empty
+    \gdef\LT@sep{\penalty-\@lowpenalty\vskip-#1}%
+  \ifnum0=`{\fi}%
+  \multispan\LT@cols
+     \unskip\leaders\hrule\@height #1\hfill\cr
+  \noalign{\LT@sep}%
+  \multispan\LT@cols
+     \unskip\leaders\hrule\@height #1\hfill\cr
+  \noalign{\penalty\@M}%
+  \@gtempa}
+\makeatother
+
+\setmainfont{Times New Roman}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+\begin{document}
+
+\definecolor{gray2}{rgb}{0.8,0.8,0.8}
+
+\tt
+\begin{center}
+\shadowbox{\Huge Unix/Linux Command Reference}
+\end{center}
+
+\begin{multicols}{2}
+
+\newcommand{\subtitle}[1]{
+\setlength\shadowsize{2pt}
+\setlength\fboxrule{1pt}
+\shadowbox{\fcolorbox{gray}{yellow!30!white}{\parbox{8cm}{
+	\vskip 5pt \large \ \ \color{blue} #1 \vskip 5pt}}}
+\ \\
+}
+
+
+\scriptsize
+\setlength\fboxsep{0pt}
+\subtitle{File Commands}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+   ls  & Directory listing\\
+   ls -al& Formatted listing with hidden files\\
+   cd dir& Change directory to {\color{red} dir}\\
+   cd & Change to home directory\\
+   pwd & Show current directory\\
+   mkdir dir & Create a directory {\color{red} dir}\\
+   rm file & Delete {\color{red} file}\\
+   rm -r dir & Delete directory {\color{red} dir}\\
+   rm -f file & Force remove {\color{red} file}\\
+   rm -rf dir & Force remove directory {\color{red} dir}\\
+   cp file1 file2 & Copy {\color{red} file1} to {\color{red} file2}\\
+   cp -r dir1 dir2 & Copy {\color{red} dir1} to {\color{red} dir2};create
+            {\color{red}
+	    dir2} if it doesn't\\
+		 & exist\\
+   mv file1 file2 & Rename or move {\color{red} file1} to {\color{red} file2}\\
+   ln [-s] file link & Create [symbolic] link {\color{red} link} to 
+     {\color{red} file}\\
+   touch file & Create or update {\color{red} file}\\
+   cat $>$file & Places standard input into {\color{red} file}\\
+   more file & Output the contents of {\color{red} file}\\
+   head file & Output the first 10 lines of {\color{red} file}\\
+   tail -f file & Output the contens of {\color{red} file} as it grows,\\
+              & starting with the last 10 lines
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{Process Management}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+   ps & Display all current active processes\\
+   top & Display all running processes\\
+   kill pid & Kill process id pid\\
+   killall proc & Kill all processes named {\color{red} proc}\\
+   bg & List stopped or background jobs; resume a \\
+       & stopped job in the background\\
+   fg  & Bring the most recent job to the foreground\\
+   fg a & Bring job a to the foreground
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{File Permissions}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+  chmod octal file & Change the permissions of file to octal,\\
+	  & which can be found separately for user,\\
+	  & group and world by adding:\\
+	  & {\bf 4 -- read(r)}\\
+	  & {\bf 2 -- write(w)}\\
+	  & {\bf 1 -- execute(x)}\\
+	  & Examples:\\
+	  & chmod 777 -- read, write, execute for all\\
+	  & chmod 755 -- rwx for owner, rx- for group,\\
+	  & and world. For more options  man chmod\\
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{Searching}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+  grep pattern files & Search for pattern in {\color{red}files}\\
+  grep -r pattern dir & Search recursively for pattern in {\color{red}dir}\\
+  command | grep pattern & Search for pattern in the output  \\
+            & command\\
+  locate file & Find instances of {\color{red} file}
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{Network}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+  ping host & ping {\color{red}host} and output result\\
+  whois domain & get whois information for domain\\
+  dig domain & get DNS information for domain\\
+  dig -x host & reverse lookup host\\
+  wget URL:file & download {\color{red}file} from network\\
+  wget -c file & continue a stopped download\\
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{System Info}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+  date  & Show the current date and time\\
+  cal   & Show this month's calendar\\
+  uptime & Show current uptime\\
+  w  & Display who is online\\
+  whoami & Who you are logged in as\\
+  finger user & Display information about user\\
+  uname -a & Show kernel information\\
+  cat /proc/cpuinfo & CPU information\\
+  cat /proc/meminfo & Show memory information\\
+  man command & Show the manual for command\\
+  df & Show disk usage\\
+  du & Show directory space usage\\
+  free & Show memory and swap usage\\
+  whereis app & Show possible locations of app\\
+  which app & Show which app will be run by default\\
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{Compression}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+  tar cf file.tar files & Create a tar named {\color{red}file.tar} \\
+	   &  containing {\color{red}files}\\
+  tar xf file.tar & Extract files from file.tar\\
+  tar czf file.tar.gz file & Create a tar with Gzip \\
+       & compression\\  
+  tar xzf file.tar.gz & Extract a tar using Gzip\\
+  tar cjf file.tar.bz2 & Create a tar with Bzip2 \\
+        & compression\\
+  tar xjf file.tar.bz2 & Extract a tar using Bzip2\\
+  gzip file & Compress file and renames it to\\
+       & {\color{red}file.gz}\\
+  gzip -d file.gz & Decompress {\color{red}file.gz} back to file\\
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{Installation}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+  ./configure &\\
+  make       & \\
+  make install &\\
+  rpm -Uvh pkg.rpm & Install a package(RPM)\\
+  dpkg -i pkg.deb & Install a package(Debian)\\
+  apt-get install & Install package(s) from repository
+\end{tabular}
+} \ \\ \ \\
+
+\subtitle{Shortcuts}
+
+\shadowbox{
+\begin{tabular}{>{\columncolor{gray2}}ll}
+ Ctrl+C &  Halt the current command\\
+ Ctrl+Z &  Stop the current command, resume with fg in the \\
+        & foreground or bg in the background\\
+ Ctrl+D &  Logout of current session, similar to exit\\
+ Ctrl+W &  Erase one word in the current line\\
+ Ctrl+U & Erase the whole line\\
+ Ctrl+R & Type to bring up a recent command\\
+   !!  &   Repeat the last command\\
+  $*$    & \textcolor{red}{USE WITH EXTREME CAUTION}\\
+\end{tabular}
+} \ \\ \ \\
+
+\end{multicols}
+
+\end{document}
+
