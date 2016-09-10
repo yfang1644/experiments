@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="1100"
+   height="400"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="GTK+_architecture.svg">
+  <metadata
+     id="metadata86">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1075"
+     inkscape:window-height="900"
+     id="namedview84"
+     showgrid="false"
+     inkscape:zoom="0.74"
+     inkscape:cx="663.66609"
+     inkscape:cy="180.24322"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <!-- 1100x400 -->
+  <desc
+     id="desc4">Created by Devin Samarin (eboyjr) with help from Raphaël</desc>
+  <defs
+     id="defs6">
+    <linearGradient
+       id="gtk-grey"
+       x1="0"
+       y1="1"
+       x2="6.123031769111886e-17"
+       y2="0">
+      <stop
+         offset="0%"
+         stop-color="#aaaaaa"
+         id="stop9" />
+      <stop
+         offset="100%"
+         stop-color="#dddddd"
+         id="stop11" />
+    </linearGradient>
+    <linearGradient
+       id="gtk-blue"
+       x1="0"
+       y1="1"
+       x2="6.123031769111886e-17"
+       y2="0">
+      <stop
+         offset="0%"
+         stop-color="#729fcf"
+         id="stop14" />
+      <stop
+         offset="100%"
+         stop-color="#b0d6ff"
+         id="stop16" />
+    </linearGradient>
+    <linearGradient
+       id="gtk-green"
+       x1="0"
+       y1="1"
+       x2="6.123031769111886e-17"
+       y2="0">
+      <stop
+         offset="0%"
+         stop-color="#7fe719"
+         id="stop19" />
+      <stop
+         offset="100%"
+         stop-color="#beff7e"
+         id="stop21" />
+    </linearGradient>
+    <linearGradient
+       id="gtk-red"
+       x1="0"
+       y1="1"
+       x2="6.123031769111886e-17"
+       y2="0">
+      <stop
+         offset="0%"
+         stop-color="#e40000"
+         id="stop24" />
+      <stop
+         offset="100%"
+         stop-color="#ff3f3f"
+         id="stop26" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#gtk-green"
+       id="linearGradient3414"
+       x1="286.37825"
+       y1="417.193"
+       x2="286.37825"
+       y2="282.84271"
+       gradientTransform="scale(1.4142136,0.70710678)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#gtk-green"
+       id="linearGradient3416"
+       x1="600"
+       y1="295"
+       x2="600"
+       y2="200"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     id="yourapp">
+    <path
+       fill="url(#gtk-blue)"
+       stroke="none"
+       d="M5,5L1095,5L1095,295L1005,295L1005,195L905,195L905,95L195,95L195,195L95,195L95,295L5,295Z"
+       style="opacity: 1; fill-opacity: 1; "
+       opacity="1"
+       fill-opacity="1"
+       id="path29" />
+    <text
+       x="550"
+       y="62"
+       text-anchor="middle"
+       style="text-anchor: middle; font: normal 10px/normal Arial; font-size: 36px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', sans-serif; "
+       font="50px :Arial"
+       stroke="none"
+       fill="#000000"
+       font-size="36px"
+       font-family="DejaVu Sans, Bitstream Vera Sans, sans-serif"
+       id="text31">
+      <tspan
+         id="tspan33">Your GTK+ Application</tspan>
+    </text>
+  </g>
+  <g
+     id="gtk">
+    <path
+       fill="url(#gtk-red)"
+       stroke="none"
+       d="M200,100L900,100L900,195L800,195L800,295L700,295L700,195L400,195L400,295L300,295L300,195L200,195Z"
+       style="opacity: 1; fill-opacity: 1; "
+       opacity="1"
+       fill-opacity="1"
+       id="path36" />
+    <text
+       x="550"
+       y="159.5"
+       text-anchor="middle"
+       style="text-anchor: middle; font: normal 10px/normal Arial; font-size: 36px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', sans-serif; "
+       font="50px :Arial"
+       stroke="none"
+       fill="#000000"
+       font-size="36px"
+       font-family="DejaVu Sans, Bitstream Vera Sans, sans-serif"
+       id="text38">
+      <tspan
+         id="tspan40">GTK+</tspan>
+    </text>
+  </g>
+  <g
+     id="pango">
+    <path
+       fill="url(#gtk-green)"
+       stroke="none"
+       d="M100,200L295,200L295,295L100,295Z"
+       style="opacity: 1; fill-opacity: 1; "
+       opacity="1"
+       fill-opacity="1"
+       id="path43" />
+    <text
+       x="197.5"
+       y="259.5"
+       text-anchor="middle"
+       style="text-anchor: middle; font: normal 10px/normal Arial; font-size: 36px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', sans-serif; "
+       font="50px :Arial"
+       stroke="none"
+       fill="#000000"
+       font-size="36px"
+       font-family="DejaVu Sans, Bitstream Vera Sans, sans-serif"
+       id="text45">
+      <tspan
+         id="tspan47">Pango</tspan>
+    </text>
+  </g>
+  <g
+     id="gdk"
+     transform="matrix(0.85918215,0,0,1,57.03123,0)">
+    <path
+       d="m 405,200 190,0 0,95 -190,0 z"
+       style="opacity:1;fill:url(#linearGradient3414);fill-opacity:1;stroke:none"
+       id="path50"
+       inkscape:connector-curvature="0" />
+    <text
+       x="497.5"
+       y="259.5"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:normal;font-family:'DejaVu Sans', 'Bitstream Vera Sans', sans-serif;text-anchor:middle;fill:#000000;stroke:none"
+       font="50px :Arial"
+       font-size="36px"
+       id="text52">
+      <tspan
+         id="tspan54">GDK</tspan>
+    </text>
+  </g>
+  <g
+     id="atk"
+     transform="matrix(1.2605546,0,0,1,-181.17708,0)">
+    <path
+       d="m 600,200 95,0 0,95 -95,0 z"
+       style="opacity:1;fill:url(#linearGradient3416);fill-opacity:1;stroke:none"
+       id="path57"
+       inkscape:connector-curvature="0" />
+    <text
+       x="647.5"
+       y="259.5"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:normal;font-family:'DejaVu Sans', 'Bitstream Vera Sans', sans-serif;text-anchor:middle;fill:#000000;stroke:none"
+       font="50px :Arial"
+       font-size="36px"
+       id="text59">
+      <tspan
+         id="tspan61">ATK</tspan>
+    </text>
+  </g>
+  <g
+     id="gio">
+    <path
+       fill="url(#gtk-green)"
+       stroke="none"
+       d="M805,200L1000,200L1000,295L805,295Z"
+       style="opacity: 1; fill-opacity: 1; "
+       opacity="1"
+       fill-opacity="1"
+       id="path64" />
+    <text
+       x="900"
+       y="259.5"
+       text-anchor="middle"
+       style="text-anchor: middle; font: normal 10px/normal Arial; font-size: 36px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', sans-serif; "
+       font="50px :Arial"
+       stroke="none"
+       fill="#000000"
+       font-size="36px"
+       font-family="DejaVu Sans, Bitstream Vera Sans, sans-serif"
+       id="text66">
+      <tspan
+         id="tspan68">GIO</tspan>
+    </text>
+  </g>
+  <g
+     id="cairo">
+    <path
+       fill="url(#gtk-grey)"
+       stroke="none"
+       d="M5,300L495,300L495,395L5,395Z"
+       style="opacity: 1; fill-opacity: 1; "
+       opacity="1"
+       fill-opacity="1"
+       id="path71" />
+    <text
+       x="250"
+       y="359.5"
+       text-anchor="middle"
+       style="text-anchor: middle; font: normal 10px/normal Arial; font-size: 36px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', sans-serif; "
+       font="50px :Arial"
+       stroke="none"
+       fill="#000000"
+       font-size="36px"
+       font-family="DejaVu Sans, Bitstream Vera Sans, sans-serif"
+       id="text73">
+      <tspan
+         id="tspan75">Cairo</tspan>
+    </text>
+  </g>
+  <g
+     id="glib">
+    <path
+       fill="url(#gtk-grey)"
+       stroke="none"
+       d="M500,300L1095,300L1095,395L500,395Z"
+       style="opacity: 1; fill-opacity: 1; "
+       opacity="1"
+       fill-opacity="1"
+       id="path78" />
+    <text
+       x="795"
+       y="359.5"
+       text-anchor="middle"
+       style="text-anchor: middle; font: normal 10px/normal Arial; font-size: 36px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', sans-serif; "
+       font="50px :Arial"
+       stroke="none"
+       fill="#000000"
+       font-size="36px"
+       font-family="DejaVu Sans, Bitstream Vera Sans, sans-serif"
+       id="text80">
+      <tspan
+         id="tspan82">GLib</tspan>
+    </text>
+  </g>
+</svg>
