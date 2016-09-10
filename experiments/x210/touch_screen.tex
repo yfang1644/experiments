@@ -4,27 +4,42 @@
 \section{实验目的}
 \begin{itemize}\itemsep=-3pt
   \item 了解嵌入式系统中触摸屏的原理;
-  \item 学习开源软件的移植方法。
+  \item 学习开源软件的移植方法.
 \end{itemize}
 
 \section{Linux系统的触摸屏支持}
-	触摸屏是目前最简单、方便、自然的一种人机交互方式，在嵌入式系统中得到了
-普遍的应用。触摸屏库除了用于支持图形接口环境以外，它本身也可以作为触摸屏应用
-软件编程的学习范例。
+	触摸屏是目前最简单、方便、自然的一种人机交互方式,在嵌入式系统中得到了
+普遍的应用.触摸屏库除了用于支持图形接口环境以外,它本身也可以作为触摸屏应用
+软件编程的学习范例.
+
+\subsection{触摸屏的基本原理}
+    触摸屏是由触摸板和显示屏两部分有机结合在一起构成的设备. 根据不同的感应方式,
+触摸板又有电阻式、电容式、声表面波式等不同构成. 早期电阻式触摸板由两层透明的
+金属氧化物导电层构成. 当触摸屏被按压时，平常相互绝缘的两层导电层就在触摸点
+位置形成接触. 由于当触摸板在 X 和 Y 方向分布了均匀电场, 按压点相当于在 X 和
+Y 方向形成了电阻分压. A/D 转换器对该电压采样便可得到按压点的位置坐标.
+
+    电容触摸屏利用人体电流感应进行工作. 当被触碰时, 人体电容和触摸板形成耦合,
+触摸屏四个角上的电感应设备可以检测到电流的变化. 控制器通过对这四个电流比例
+的计算得到触摸点的位置.
+
+    以上提到的几种触摸板, 无论采用何种传感原理, 最终都要通过A/D转换器变成
+数字量进行分析计算. Linux 系统内核中完成A/D转换部分, 而触摸屏库则给应用程序
+提供方便的接口.
 
 \subsection{内核配置}
-	Linux操作系统内核支持多种触摸屏设备。在Linux内核源码配置界面中，找到并
-选中正确的驱动，将其编入内核。(Device Drivers $\to$ Input device support
+	Linux操作系统内核支持多种触摸屏设备.在Linux内核源码配置界面中,找到并
+选中正确的驱动,将其编入内核.(Device Drivers $\to$ Input device support
 $\to$ Touchscreens $\to$ x210 touchscreen driver)
 
-	内核中，触摸屏可以是独立驱动，也可以加入Event interface。后者通过
- /dev/input/eventX 设备存取输入设备的事件。建议在内核配置中也选中
- Event interface。
+	内核中,触摸屏可以是独立驱动,也可以加入Event interface.后者通过
+ /dev/input/eventX 设备存取输入设备的事件.建议在内核配置中也选中
+ Event interface.
 
 \subsection{触摸屏库 tslib}
-	下载触摸屏库 tslib-1.0.tar.bz2，并将其解压到工作目录。
+	下载触摸屏库 tslib-1.0.tar.bz2,并将其解压到工作目录.
 
-	进入解压目录，依次执行下面的操作:
+	进入解压目录,依次执行下面的操作:
 
 \begin{boxedminipage}{.9\textwidth}
 \begin{verbatim}
@@ -37,58 +52,58 @@ $ make install
 
 	以上过程注意事项:
 \begin{itemize}
-  \item 必须事先设置好环境变量PATH，加入交叉编译器路径，否则在``make''中交叉
+  \item 必须事先设置好环境变量PATH,加入交叉编译器路径,否则在``make''中交叉
 	编译命令不能正确执行;
-  \item -{}-prefix 选项用于 ``make install''的安装目录，请使用一个拥有写权限
-	的目录，编译完成后会将结果集中存放于此。如果不指定安装目录，默认的安装
-	目录一般是 /usr/local，普通用户没有写权限，此时不宜用``make install''命令，
-	可以仅用``make''命令，结果分散在 src/.libs(库)和 plugins/.libs(插件)中。
+  \item -{}-prefix 选项用于 ``make install''的安装目录,请使用一个拥有写权限
+	的目录,编译完成后会将结果集中存放于此.~如果不指定安装目录,默认的安装
+	目录一般是 /usr/local,普通用户没有写权限,此时不宜用``make install''命令,
+	可以仅用``make''命令,结果分散在 src/.libs(库)和 plugins/.libs(插件)中.
   \item 编译过程中可能会有错误提示 ``undefined reference to `rpl\_malloc' '',
 	可在 configure 之前设置环境变量``export ac\_cv\_func\_malloc\_0\_nonnull
-	=yes''。
+	=yes''.
 \end{itemize}
 
-	正确编译后，会在安装目录下新生成 etc、bin、lib、include 四个子目录。
-etc里的 ts.conf 是库的配置文件，bin下面的可执行程序包括触摸屏校准和测试工具，
-lib里是触摸屏的动态链接库和模块插件，include 下面的 tslib.h 可用于基于触摸屏库
-的应用程序二次开发。
+	正确编译后,会在安装目录下新生成 etc、bin、lib、include 四个子目录.
+~etc里的 ts.conf 是库的配置文件,bin下面的可执行程序包括触摸屏校准和测试工具,
+lib里是触摸屏的动态链接库和模块插件,include 下面的 tslib.h 可用于基于触摸屏库
+的应用程序二次开发.
 
 \subsection{触摸屏库的安装和测试}
-	将前面产生的文件按目录对应关系分别复制到目标系统的相应目录中，编辑 ts.conf
-文件，去掉``\# module\_raw input''前面的注释。按下面的方式设置环境变量:
+	将前面产生的bin、lib、etc三个目录复制到目标系统的/usr 目录下, 编辑 ts.conf
+文件,去掉``\# module\_raw input''前面的注释.按下面的方式设置环境变量:
 
 \begin{itemize}\itemsep=-4pt
   \item export TSLIB\_TSDEVICE=/dev/input/event2
 
-	触摸屏设备文件或Event interface设备文件。eventX的主设备号是13，次设备号
-从64开始，可通过 /proc/bus/input/devices 文件获知触摸屏的次设备号。
-  \item export TSLIB\_CONFFILE=/etc/ts.conf         
+	触摸屏设备文件或Event interface设备文件.eventX的主设备号是13,次设备号
+从64开始,可通过 /proc/bus/input/devices 文件获知触摸屏的次设备号.
+  \item export TSLIB\_CONFFILE=/usr/etc/ts.conf         
 
-	触摸屏库的配置文件。一般需要保留这几个模块:
+	触摸屏库的配置文件.~一般需要保留这几个模块:
   \begin{itemize}
-    \item variance, 用于过滤AD转换器的随机噪声。它假定触点不可能移动太快，
-	其阈值(距离的平方)由参数 delta 指定。
-    \item dejitter, 去除抖动，保持触点坐标平滑变化。
-    \item linear, 线性坐标变换。
+    \item variance, 用于过滤AD转换器的随机噪声.它假定触点不可能移动太快,
+	其阈值(距离的平方)由参数 delta 指定.
+    \item dejitter, 去除抖动,保持触点坐标平滑变化.
+    \item linear, 线性坐标变换.
   \end{itemize}
-  \item export TSLIB\_PLUGINDIR=/lib/ts
+  \item export TSLIB\_PLUGINDIR=/usr/lib/ts
 
 	插件模块文件(.so)
   \item export TSLIB\_CONSOLEDEVICE=none
 
-	终端设备，缺省的是 /dev/tty，此处不需要。
+	终端设备,缺省的是 /dev/tty,此处不需要.
   \item export TSLIB\_FBDEVICE=/dev/fb0
 
 	帧缓冲设备文件
   \item export TSLIB\_CALIBFILE=/etc/pointercal
 
-	校准文件。早期触摸屏由于工艺原因，每台机器的坐标读取数值差异较大，使用前
-必须通过校准工具将触摸屏和液晶屏坐标进行校准，产生一个校准文件。
+	校准文件.早期触摸屏由于工艺原因,每台机器的坐标读取数值差异较大,使用前
+必须通过校准工具将触摸屏和液晶屏坐标进行校准,产生一个校准文件.
 \end{itemize}
 
-	以上准备工作就绪后，尝试执行 /bin/ts\_test。
+	以上准备工作就绪后,尝试执行 /usr/bin/ts\_test.
 
 \section{实验内容}
-	完成触摸屏移植。
+	完成触摸屏移植.
 
-	分析 ts\_test.c，利用触摸屏库编写一个能进行触摸屏操作的应用程序，功能自定。
+	分析 ts\_test.c,利用触摸屏库编写一个能进行触摸屏操作的应用程序,功能自定.

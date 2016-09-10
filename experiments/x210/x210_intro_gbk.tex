@@ -114,15 +114,15 @@
 \begin{itemize}
   \item 实验由个人计算机(主机,或称 host)、EDR 实验机(目标机,或称target)
 		及目标机编译软件 arm-linux-gcc 组成
-  \item 每个实验台上提供两个IP:\\
+  \item 每个实验台上提供两个IP：\\
         个人计算机使用192.168.207.xx(丙413)/192.168.208.xx(丙418)\\
 		(普通用户不可更改)\\
 		实验板的 IP 由实验人员自行设置，应与实验室个人计算机处于同一网段,
         建议 IP 的最后一个数字为PC机的最后一位数字+100
-  \item 编译器路径:\\
-        /usr/local/arm-2009q3/\\
-		请将编译器路径添加到环境变量PATH:\\
-		export PATH=/usr/local/arm-2009q3/bin:\$PATH
+  \item 编译器路径：\\
+        /opt/arm-2016.08\\
+		请将编译器路径添加到环境变量PATH：\\
+		export PATH=/opt/arm-2016.08/bin:\$PATH
 \end{itemize}
 
 \newslide
@@ -182,7 +182,7 @@ Linux操作系统由两个文件构成
 \newslide
 \slideheading{熟悉Linux环境}
 \begin{itemize}
-  \item 配置目标机的IP: ifconfig
+  \item 配置目标机的IP： ifconfig
   \item 主机和目标机之间互相 \textcolor{red}{ping}
   \item 尝试用另外的窗口或终端从主机 telnet 到目标机
   \item 熟悉目标机的 Linux 环境

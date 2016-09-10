@@ -10,153 +10,154 @@
 
 \section{相关知识}
 \subsection{内核源代码目录介绍}
-	Linux 内核源代码可以从网上下载(http://www.kernel.org/pub/linux)。
-一般主机平台的Linux内核源码在 /usr/src/linux 目录下。内核源代码的文件按树形
-结构进行组织，在源代码树的最上层可以看到如下一些目录：
+	Linux 内核源代码可以从网上下载(http://www.kernel.org/pub/linux).
+一般主机平台的Linux内核源码下载后存放在
+/usr/src/linux 目录下.内核源代码的文件按树形 结构进行组织,
+在源代码树的最上层可以看到如下一些目录:
 \begin{itemize}\itemsep=-3pt
-  \item arch：arch 子目录包括所有与体系结构相关的内核代码。arch 的每一个
-		子目录都代表一个 Linux 所支持的体系结构。例如 arm 目录下就是 ARM
-		体系架构的处理器目录，包含我们使用的 s5pv210 处理器(mach--s5pv210)。
-  \item include：include 子目录包括编译内核所需要的头文件。与 ARM 相关的
-		头文件在 include/asm-arm 子目录下。
-  \item init：这个目录包含内核的初始化代码(不是系统的引导代码)，其中所包含
-		main.c 和 version.c 文件是研究 Linux 内核的起点。
-  \item mm：该目录包含所有独立于 CPU 体系结构的内存管理代码，如页式存储管理、
-		内存的分配和释放等。与 ARM 体系结构相关的代码在 arch/arm/mm 中。
-  \item kernel：这里包括主要的内核代码。此目录下的文件实现大多数 Linux 的
-		内核函数。
-  \item drivers：此目录存放系统所有的设备驱动程序，每种驱动程序各占一个子目录：
+  \item arch:arch 子目录包括所有与体系结构相关的内核代码.arch 的每一个
+		子目录都代表一个 Linux 所支持的体系结构.例如支持Intel x86 架构的 x86,
+        支持Intel 64位处理器的 ia64,arm 目录下就是 ARM 体系架构的处理器
+        目录,包含我们使用的 s5pv210 处理器(mach--s5pv210).
+  \item include:include 子目录包括编译内核所需要的头文件.与具体处理器架构
+        相关的头文件分别归入 arm/\$ARCH/inculde子目录.
+  \item init:这个目录包含内核的初始化代码(不是系统的引导代码),其中所包含
+		main.c 和 version.c 文件是研究 Linux 内核的起点.
+  \item mm:该目录包含所有独立于 CPU 体系结构的内存管理代码,如页式存储管理、
+		内存的分配和释放等.与 ARM 体系结构相关的代码在 arch/arm/mm 中.
+  \item kernel:这里包括主要的内核代码.此目录下的文件实现大多数 Linux 的
+		内核函数.
+  \item drivers:此目录存放系统所有的设备驱动程序,每种驱动程序各占一个子目录:
   \begin{enumerate}\itemsep=-3pt
-  \item block：块设备驱动程序。块设备包括 IDE 和 scsi 设备；
-  \item char：字符设备驱动程序。如串口、鼠标等；
+  \item block:块设备驱动程序.块设备包括 IDE 和 scsi 设备；
+  \item char:字符设备驱动程序.如串口、鼠标等；
   \item cdrom:包含 Linux 所有的 CD-ROM 代码；
-  \item pci：PCI 卡驱动程序代码，包含 PCI 子系统映射和初始化代码等；
-  \item scsi：包含所有的 SCSI 代码以及 Linux 所支持的所有的 SCSI 设备驱动
+  \item pci:PCI 卡驱动程序代码,包含 PCI 子系统映射和初始化代码等；
+  \item scsi:包含所有的 SCSI 代码以及 Linux 所支持的所有的 SCSI 设备驱动
 		程序代码；
-  \item net：网络设备驱动程序；
-  \item sound：声卡设备驱动程序；
+  \item net:网络设备驱动程序；
+  \item sound:声卡设备驱动程序；
   \end{enumerate}
-  \item lib：放置内核的库代码；
-  \item net：包含内核与网络的相关的代码；
-  \item ipc：包含内核进程通信的代码；
-  \item fs： fs 目录是所有的文件系统代码和各种类型的文件操作代码，它的每一个
-		子目录支持一个文件系统，如 jffs2、fat、ext2等等。
-  \item scripts：目录包含用于配置内核的脚本文件等。每个目录下一般都有depend
-		文件和一个 Makefile 文件，他们是编译时使用的辅助文件。仔细阅读这
-		两个文件对弄清各个文件之间的相互依托关系很有帮助。
+  \item lib:放置内核的库代码；
+  \item net:包含内核与网络的相关的代码；
+  \item ipc:包含内核进程通信的代码；
+  \item fs: fs 目录是所有的文件系统代码和各种类型的文件操作代码,它的每一个
+		子目录支持一个文件系统,如 jffs2、fat、ext2等等.
+  \item scripts:目录包含用于配置内核的脚本文件等.每个目录下一般都有depend
+		文件和一个 Makefile 文件,他们是编译时使用的辅助文件.仔细阅读这
+		两个文件对弄清各个文件之间的相互依托关系很有帮助.
 \end{itemize}
 
 \subsection{内核的配置的基本结构}
-	Linux 内核的配置系统由四个部分组成：
+	Linux 内核的配置系统由四个部分组成:
 \begin{enumerate}\itemsep=-3pt
-  \item Makefile：分布在 Linux 内核源码中的 Makefile，定义 Linux 内核的
-		编译规则。顶层 Makefile 是整个内核配置、编译的总体控制文件；
-  \item 配置文件 config.in：给用户提供配置选择的功能。``.config''是内核配置
-		文件，包括由用户选择的配置选项，用来存放内核配置后的结果；
-  \item 配置工具：包括对配置脚本中使用的配置命令进行解释的配置命令解释器和
-		配置用户界面(基于字符界面: make config，基于 ncurses 界面:make 
-		menuconfig，基于 X-Window 图形界面:make xconfig)；
-  \item Rules.make：规则文件，被所有的 Makefile 使用。
+  \item Makefile:分布在 Linux 内核源码中的 Makefile,定义 Linux 内核的
+		编译规则.顶层 Makefile 是整个内核配置、编译的总体控制文件；
+  \item 配置文件 config.in:给用户提供配置选择的功能.``.config''是内核配置
+		文件,包括由用户选择的配置选项,用来存放内核配置后的结果；
+  \item 配置工具:包括对配置脚本中使用的配置命令进行解释的配置命令解释器和
+		配置用户界面(基于字符界面: make config,基于 ncurses 界面:make 
+		menuconfig,基于 X-Window 图形界面:make xconfig)；
+  \item Rules.make:规则文件,被所有的 Makefile 使用.
 \end{enumerate}
 \subsection{编译规则 Makefile}
 	利用 make menuconfig(或 make config、make xconfig)对 Linux 内核进行
-配置后，系统将产生配置文件``.config''。之前的配置文件备份到``.config.old''，
-以便用 make oldconfig 恢复上一次的配置。
+配置后,系统将产生配置文件``.config''.之前的配置文件备份到``.config.old'',
+以便用 make oldconfig 恢复上一次的配置.
 
-	编译时，顶层 Makefile 完成产生核心文件(vmlinux )和内核模块(module)两个
-任务，为了达到此目的，顶层 Makefile 将读取.config中的配置选项，递归进入到
-内核的各个子目录中，分别调用位于这些子目录中的 Makefile 进行编译。
-配置文件(.config)中有许多配置变量设置，用来说明用户配置的结果。例如
-``CONFIG\_ MODULES=y''表明用户选择了Linux 内核的模块功能。
+	编译时,顶层 Makefile 完成产生核心文件(vmlinux )和内核模块(module)两个
+任务,为了达到此目的,顶层 Makefile 将读取.config中的配置选项,递归进入到
+内核的各个子目录中,分别调用位于这些子目录中的 Makefile 进行编译.
+配置文件(.config)中有许多配置变量设置,用来说明用户配置的结果.例如
+``CONFIG\_ MODULES=y''表明用户选择了Linux 内核的模块功能.
 
-	配置文件(.config)被顶层 Makefile 包含后，就形成许多的配置变量，每个配置
-变量具有四种不同的取值：
+	配置文件(.config)被顶层 Makefile 包含后,就形成许多的配置变量,每个配置
+变量具有四种不同的取值:
 \begin{itemize}\itemsep=-3pt
   \item y --- 表示本编译选项对应的内核代码被静态编译进 Linux 内核；
   \item m --- 表示本编译选项对应的内核代码被编译成模块；
   \item n --- 表示不选择此编译选项；
-  \item 如果根本就没有选择，那么配置变量的值为空。
+  \item 如果根本就没有选择,那么配置变量的值为空.
 \end{itemize}
 
-	除了 Makefile 的编写外，另外一个重要的工作就是把新增功能加入到 Linux 的
-配置选项中来提供功能的说明，让用户有机会选择新增功能项。Linux 所有选项配置
-都需要在 config.in 文件中用配置语言来编写配置脚本，然后顶层 Makefile 调用
-scripts/Configure， 按照 arch/arm/config.in 来进行配置。命令执行完后生成
-保存有配置信息的配置文件 .config。
+	除了 Makefile 的编写外,另外一个重要的工作就是把新增功能加入到 Linux 的
+配置选项中来提供功能的说明,让用户有机会选择新增功能项.Linux 所有选项配置
+都需要在 config.in 文件中用配置语言来编写配置脚本,然后顶层 Makefile 调用
+scripts/Configure, 按照 arch/arm/config.in 来进行配置.命令执行完后生成
+保存有配置信息的配置文件 .config.
 
 \section{编译内核}
 \subsection{Makefile 的选项参数}
 	编译 Linux 内核常用的 make 命令选项包括 config、dep、clean、
-mrproper、zImage、bzImage、modules、modules\_install等等。
+mrproper、zImage、bzImage、modules、modules\_install等等.
 \begin{enumerate}\itemsep=-3pt
-  \item config/xconfig/menuconfig：内核配置。调用./scripts/Configure 按照
-		arch/arm/config.in 来进行配置。命令执行后产生文件``.config''，
-		其中保存着配置信息。下次在做 make config 时将产生新的``.config''
-		文件，原文件 ``.config'' 更名为 ``.config.old''。
-  \item dep：建立依赖关系，产生两个文件``.depend'' 和``.hdepend''，其中
-		``.hdepend''表示每个 .h 文件都包含其他哪些嵌入文件，而``.depend''
-		文件有多个，在每个会产生目标文件 .o 文件的目录下均存在，它表示每个
-		目标文件都依赖于哪些嵌入文件 .h。2.6以上版本的内核编译不需要这个步骤。
-  \item clean：清除以前构核所产生的所有的目标文件、模块文件、核心以及一些
-		临时文件等，不产生任何新文件。
-  \item mrproper：删除以前在构核过程产生的所有文件，即除了做 make clean 外，
-		还要删除``.config''、``.depend'' 等文件，把核心源码恢复到最原始的
-		状态。下次构核时必须进行重新配置。
-  \item make,make zImage, make bzImage，编译内核，通过各目录的 Makefile
-		文件进行，会在各个目录下产生一大堆目标文件。如核心代码没有错误，将
-		产生文件 vmlinux，这就是所构的核心。同时产生映像文件 System.map。
-		zImage 和 bzImage 选项是在 make 的基础上产生 压缩的核心映像文件。
-		正常编译完成后, 生成的 ARM 内核 zImage 文件在目录 arch/arm/boot 中。
-		需将其移至 tftp 服务器目录供下载。
-  \item modules、modules\_install：模块编译和安装。当内核配置中有选择模块时，
-		这些代码不被编入内核文件 vmlinuz，而是通过``make modules'' 编译
-		成独立的模块文件 .ko (2.4版本的模块扩展名是 .o)。``make
+  \item config/xconfig/menuconfig:内核配置.调用./scripts/Configure 按照
+		arch/arm/config.in 来进行配置.命令执行后产生文件``.config'',
+		其中保存着配置信息.下次在做 make config 时将产生新的``.config''
+		文件,原文件 ``.config'' 更名为 ``.config.old''.
+  \item dep:建立依赖关系,产生两个文件``.depend'' 和``.hdepend'',其中
+		``.hdepend''表示每个 .h 文件都包含其他哪些嵌入文件,而``.depend''
+		文件有多个,在每个会产生目标文件 .o 文件的目录下均存在,它表示每个
+		目标文件都依赖于哪些嵌入文件 .h.2.6以上版本的内核编译不需要这个步骤.
+  \item clean:清除以前构核所产生的所有的目标文件、模块文件、核心以及一些
+		临时文件等,不产生任何新文件.
+  \item mrproper:删除以前在构核过程产生的所有文件,即除了做 make clean 外,
+		还要删除``.config''、``.depend'' 等文件,把核心源码恢复到最原始的
+		状态.下次构核时必须进行重新配置.
+  \item make,make zImage, make bzImage,编译内核,通过各目录的 Makefile
+		文件进行,会在各个目录下产生一大堆目标文件.如核心代码没有错误,将
+		产生文件 vmlinux,这就是所构的核心.同时产生映像文件 System.map.
+		zImage 和 bzImage 选项是在 make 的基础上产生 压缩的核心映像文件.
+		正常编译完成后, 生成的 ARM 内核 zImage 文件在目录 arch/arm/boot 中.
+		需将其移至 tftp 服务器目录供下载.
+  \item modules、modules\_install:模块编译和安装.当内核配置中有选择模块时,
+		这些代码不被编入内核文件 vmlinuz,而是通过``make modules'' 编译
+		成独立的模块文件 .ko (2.4版本的模块扩展名是 .o).``make
 		modules\_install''将这些文件复制到内核模块文件目录(PC机上通常是
-		/lib/modules/\$VERSION/......)。
+		/lib/modules/\$VERSION/......).
 \end{enumerate}
 
 	简单的内核配置和编译过程通常是 export ARCH=arm $\to$ make menuconfig
 	$\to$ make clean $\to$ make dep(kernel2.4) $\to$ make $\to$
-	make zImage。
+	make zImage.
 
 \subsection{内核配置项介绍}
-	内核配置主目录有下面这些分支：
+	内核配置主目录有下面这些分支:
 \begin{enumerate}\itemsep=-3pt
   \item General setup, 内核配置选项和编译方式等等
   \item Enable loadable module support, 利用模块化功能可将不常用的设备驱动
-		或功能作为模块放在内核外部，必要时动态地加载。操作结束后还可以从
-		内存中删除。这样可以有效地使用内存，同时也可减小了内核的大小。
+		或功能作为模块放在内核外部,必要时动态地加载.操作结束后还可以从
+		内存中删除.这样可以有效地使用内存,同时也可减小了内核的大小.
 
-		模块可以自行编译并具有独立的功能。即使需要改变模块的功能，也不用对
-		整个内核进行修改。文件系统、设备驱动、二进制格式等很多功能都支持模块。
-		开发过程中通常都需要选中这项。
-  \item System Type，处理器架构及相关选项, 根据开发的对象选择。
-  \item Networking options，网络配置。
-  \item Device Drivers, 设备驱动。包括针对硬盘、CDROM 等以 block 为单位进行
+		模块可以自行编译并具有独立的功能.即使需要改变模块的功能,也不用对
+		整个内核进行修改.文件系统、设备驱动、二进制格式等很多功能都支持模块.
+		开发过程中通常都需要选中这项.
+  \item System Type,处理器架构及相关选项, 根据开发的对象选择.
+  \item Networking options,网络配置.
+  \item Device Drivers, 设备驱动.包括针对硬盘、CDROM 等以 block 为单位进行
 		操作的存储装置和以数据流方式进行操作的字符设备, 还包括网络设备、
-		USB设备、多媒体接口、图形接口、声卡等等。和系统硬件相关的配置主要在
-		这里。
-  \item File systems，文件系统。对 Linux 可访问的各个文件系统的设置。所有的
-		操作系统都具有固有的文件系统格式。一般为了对不同操作系统的文件系统
-		进行读写操作需安装特殊的应用程序。但是在 Linux 系统中可以通过
-		kernel 模块完成这些操作。
+		USB设备、多媒体接口、图形接口、声卡等等.和系统硬件相关的配置主要在
+		这里.
+  \item File systems,文件系统.对 Linux 可访问的各个文件系统的设置.所有的
+		操作系统都具有固有的文件系统格式.一般为了对不同操作系统的文件系统
+		进行读写操作需安装特殊的应用程序.但是在 Linux 系统中可以通过
+		kernel 模块完成这些操作.
 \end{enumerate}
 
 \section{实验内容}
-	配置一个完整的内核，尽可能理解配置选项在操作系统中的作用；
+	配置一个完整的内核,尽可能理解配置选项在操作系统中的作用；
 
-	将编译的内核文件复制到 tftp 服务器目录，在目标机中下载并运行:
+	将编译的内核文件复制到 tftp 服务器目录,在目标机中下载并运行:
 
 \begin{boxedminipage}{.9\textwidth}
 \begin{verbatim}
-	x210 # tftp c0008000 zImage
-	x210 # bootm c0008000
+	x210 # tftp 30008000 zImage
+	x210 # bootm 30008000
 \end{verbatim}
 \end{boxedminipage}
-
 
 \section{实验报告要求}
 \begin{itemize}\itemsep=-3pt
   \item 总结内核映像文件的生成方法及对操作系统的作用；
-  \item 内核配置中，哪些选项对操作系统的正常启动是必须的？
+  \item 内核配置中,哪些选项对操作系统的正常启动是必须的？
 \end{itemize}

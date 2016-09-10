@@ -23,12 +23,12 @@
   \item 每个实验台上提供两个IP:\\
         个人计算机使用192.168.207.xx(丙413)/192.168.208.xx(丙418)\\
 		(普通用户不可更改)\\
-		实验板的 IP 由实验人员自行设置，应与实验室个人计算机处于同一网段,
+		实验板的 IP 由实验人员自行设置,应与实验室个人计算机处于同一网段,
         建议 IP 的最后一个数字为PC机的最后一位数字+100
   \item 编译器路径:\\
-        /usr/local/arm-2009q3/\\
+        /opt/arm-2016.08/\\
 		请将编译器路径添加到环境变量PATH:\\
-		export PATH=/usr/local/arm-2009q3/bin:\$PATH
+		export PATH=/opt/arm-2016.08/bin:\$PATH
 \end{itemize}
 \endslide
 
@@ -39,15 +39,15 @@
 \caption{宿主机/目标机的开发模式}
 \end{figure}
 
-利用宿主机编辑工具、交叉编译器开发软件，\\
-通过下载工具或其它联接方式传到目标机使之运行。
+利用宿主机编辑工具、交叉编译器开发软件,\\
+通过下载工具或其它联接方式传到目标机使之运行.
 \endslide
 
 \slide{启动minicom}
-实验板上电后自动启动bootloader(bootloader可通过其他工具烧写)，
+实验板上电后自动启动bootloader(bootloader可通过其他工具烧写),
 并支持RS232和tftp两个协议
 \begin{itemize}
-  \item 主机运行minicom,该程序通过串口(RS232)和目标机连接。
+  \item 主机运行minicom,该程序通过串口(RS232)和目标机连接.
   \item \textcolor{red}{minicom -s}表示对串口进行设置,普通用户不需要做这一步
   \item 串口设置 /dev/ttyS0、~bps=115200、8位数据、无校验、无流控制
   \item bootloader启动后会向终端送出显示信息
@@ -81,7 +81,7 @@ Linux操作系统由两个文件构成
   \item \textcolor{red}{rootfs...}  --- file system(yaffs2/jffs2)
   \item \textcolor{red}{ramdisk\_img...}  --- file system(ext2fs)
 \end{itemize}
-加载成功后可通过bootloader的命令烧入FLASH，也可通过内存方式直接引导启动。
+加载成功后可通过bootloader的命令烧入FLASH,也可通过内存方式直接引导启动.
 \endslide
 
 \slide{熟悉Linux环境}
@@ -130,7 +130,7 @@ Linux操作系统由两个文件构成
 \slide{Trouble Shooting---串口控制}
 \begin{itemize}
   \item minicom 打不开\\
-		检查是否本机已经运行了一个~minicom。串行口硬件设备不允许资源共享。
+		检查是否本机已经运行了一个~minicom.串行口硬件设备不允许资源共享.
   \item minicom 无法访问实验板, 或出现乱码
   \begin{itemize}
 	\item 检查硬件连接(电源、串口线、串口位置)
@@ -156,7 +156,7 @@ Linux操作系统由两个文件构成
 \slide{Trouble Shooting---启动}
 \begin{itemize}
   \item 启动与预期现象不符\\
-		是否设错了启动选项，使用了不同的根文件系统？\\
+		是否设错了启动选项,使用了不同的根文件系统？\\
 		bootloader 中是否设错了 tftp 服务器地址, 用了别人的内核？
   \item 启动后无法获得终端\\
 		文件系统中缺少必要的设备
@@ -178,7 +178,7 @@ Linux操作系统由两个文件构成
   \item 嵌入式系统应用软件移植
   \item 扩展实验、综合实验
 \end{itemize}
-除必做实验以外，必须再完成至少一个选做实验。
+除必做实验以外,必须再完成至少一个选做实验.
 \endslide
 
 \slide{实验要求}
@@ -198,6 +198,6 @@ Linux操作系统由两个文件构成
   \item 附上经实验指导教师签字的原始实验记录
   \item 参考文献(参考来源)
   \item {\bf 避免成段地抄袭书本内容(无论是文字叙述还是程序代码)}
-  \item 格式规范，篇幅适当(12页以内)
+  \item 格式规范,篇幅适当(12页以内)
 \end{enumerate}
 \endslide

@@ -1,27 +1,27 @@
 \chapter{交叉编译工具}
 
-  在基于x86系统的PC上开发其他平台的处理器，通常通过交叉编译来完成。
-Linux GCC交叉编译工具主要由以下四部分组成：
+  在基于x86系统的PC上开发其他平台的处理器,通常通过交叉编译来完成.
+Linux GCC交叉编译工具主要由以下四部分组成:
 
 \begin{itemize}\itemsep=-3pt
-  \item GNU gcc compilers for c, c++，包括编译器、链接器等；
-  \item GNU binutil，包括归档、目标程序复制和转换、代码分析调试等工具；
-  \item GNU C Library，支持目标代码的 c 语言库；
-  \item GNU C header，头文件。
+  \item GNU gcc compilers for c, c++,包括编译器、链接器等；
+  \item GNU binutil,包括归档、目标程序复制和转换、代码分析调试等工具；
+  \item GNU C Library,支持目标代码的 c 语言库；
+  \item GNU C header,头文件.
 \end{itemize}
 
 \section{准备工作}
-  准备一个工作目录和一个安装目录。
+  准备一个工作目录和一个安装目录.
 
 	由于Cortex--A8 基于 ARM 体系结构, 所以在基于Cortex--A8 开发过程中
-必须使用 ARM 的交叉编译。这个编译器环境将使用下面的 GNU 工具：
-针对 ARM 的。最终编译后产生的二进制文件只能在 ARM 架构的处理器上运行。
+必须使用 ARM 的交叉编译.这个编译器环境将使用下面的 GNU 工具:
+针对 ARM 的.最终编译后产生的二进制文件只能在 ARM 架构的处理器上运行.
 
 \subsection{工具链安装}
-	GNU 工具链提供完整的源代码，可以在 PC 机上用x86 平台的编译工具编译安装，
-也可以直接下载二进制代码包解压安装。
+	GNU 工具链提供完整的源代码,可以在 PC 机上用x86 平台的编译工具编译安装,
+也可以直接下载二进制代码包解压安装.
 
 	本实验使用的交叉编译工具链路径是 /usr/local/arm-2009q3, 可执行程序在
- /usr/local/arm-2009q3/bin 目录下。 实验中请将该目录添加到环境变量 ``PATH''
+ /usr/local/arm-2009q3/bin 目录下. 实验中请将该目录添加到环境变量 ``PATH''
 中, 或给出完整的路径和编译程序名, 如
 /usr/local/arm-2009q3/bin/arm-none-linux-gnueabi-gcc

@@ -206,10 +206,10 @@ $ mknod zero c 1 5
 
   \item 建立 proc 空目录, 供 proc 文件系统使用。
   \item 建立 lib 目录, 将交叉编译器链接库路径下的下面几个库复制到 lib目录：\\
-		ld-2.10.1.so, libc-2.10.1.so, libm-2.10.1.so 并做相应的符号链接：\\
-		ln --s ld-2.10.1.so ld-linux.so.3\\
-		ln --s libc-2.10.1.so libc.so.6\\
-		ln --s libm-2.10.1.so libm.so.6
+		ld-2.13.so, libc-2.13.so, libm-2.13.so 并做相应的符号链接：\\
+		ln --s ld-2.13.so ld-linux-armhf.so.3\\
+		ln --s libc-2.13.so libc.so.6\\
+		ln --s libm-2.13.so libm.so.6
 
 		如果BusyBox以静态链接方式编译, 没有这些库, 不影响系统正常启动, 但会影响
 		其他动态链接的程序运行。
