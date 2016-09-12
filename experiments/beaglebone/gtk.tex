@@ -1,4 +1,5 @@
-\chapter{\tt gtk+ 移植}
+\chapter{gtk+ 移植}{GTK+}
+
 \section{实验目的}
 \begin{itemize}\itemsep=-3pt
   \item 学习GNU 开源软件的一般移植方法
@@ -11,14 +12,14 @@ GNU Image Manipulation Program 的缩写, Linux中重要的图像处理软件, �
 许多桌面系统都建立在 gtk+ 基础上, 如著名的 Gnome、xfce4.(另一款与之齐名的GUI
 是Qt).
 
-    gtk+ 不直接和显示硬件设备打交道.~Linux 桌面系统通常基于 X-Window.~而在
-嵌入式应用中, 作为全功能 X 窗口系统的替代方案, 可以选择DirectFB作为后端. 
-
-\begin{figure}
+\begin{figure}[h]
   \centering
-  \includegraphics[width=.8\textwidth]{GTK+_architecture}
+  \includegraphics[width=.7\textwidth]{GTK+_architecture}
   \caption{基于gtk+的软件层次结构}\label{fig_gtk}
 \end{figure}
+
+    gtk+ 不直接和显示硬件设备打交道.~Linux 桌面系统通常基于 X-Window.~而在
+嵌入式应用中, 作为全功能 X 窗口系统的替代方案, 可以选择DirectFB作为后端. 
 
 \section{gtk 库的依赖关系}
 从图\ref{fig_gtk}\footnote{图片引自 en.wikipedia.org/wiki}中可以看到, 
@@ -27,13 +28,57 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
 这样的依赖关系逐层构造系统的API.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=.8\textwidth]{gtk_dependency}
+\centering\bf \large
+\begin{tikzpicture}[level distance=2.5cm, sibling distance=1.2cm,
+    nodes={rectangle,minimum width=1.8cm,top color=white,
+        bottom color=red!50!black!20},
+    level 1/.style={nodes=blue},
+    level 2/.style={nodes=red},
+    level 3/.style={nodes=green!50!black},
+    level 4/.style={nodes=black},
+    edge from parent fork right,grow=right,
+    edge from parent path={(\tikzparentnode.east) 
+        -- (\tikzchildnode.west)}]
+\node {gtk+}
+    child {node [yshift=-1cm] {atk}
+        child {node {glib}
+            child {node {dbus}
+                child {node {expat}}
+            }
+            child {node {zlib}}
+        }
+    }
+    child {node {pango}
+        child {node {glib}
+        }
+        child {node {cairo}
+            child {node {fontconfig}
+                child {node {libxml2}}
+                child {node {freetype}}
+            }
+            child {node {pixman}}
+            child {node {DirectFB}
+                child {node {freetype}}
+                child {node {libpng}
+                    child {node {zlib}}
+                }
+                child {node {libjpeg}}
+                child {node {tslib}}
+            }
+        }
+    }
+    child {node [yshift=1.5cm] {gdk-pixbuf}
+        child {node {libjpeg}}
+        child {node {libpng}}
+        child {node {glib}}
+    }
+;
+\end{tikzpicture}
   \caption{gtk+的软件依赖关系}\label{fig_gtkdfb}
 \end{figure}
 
-    本实验中, 我们的最终目标是编译出 gtk+-2.16.6 的库以及演示程序gtk-demo.
-~以下根据依赖关系, 对各个库加以简单的说明.~版本号是本实验建议版本.
+本实验中, 我们的最终目标是编译出 gtk+ (建议版本2.22.1) 的库以及演示程序
+gtk-demo.~以下根据依赖关系, 对各个库加以简单的说明.~版本号是本实验建议版本.
 \begin{itemize}
   \item zlib-1.2.8. zlib 是 Linux 系统最基本的压缩/解压库, 许多软件都会直接
       或间接地用到它.~zlib 仅依赖 glibc.~针对 Linux系统的交叉编译工具链中已经
@@ -62,7 +107,7 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
       freedesktop.org 项目的一部分.~dbus 依赖 xml 库, 可选择 libxml 或者
       expat.~但由于 libxml 早已停止开发, 所以在编译dbus时指定连接 expat库.
 
-  \item glib-2.26.1. glib 原始于gtk+计划.~在gtk+-2版本之前, 不属于图形用户
+  \item glib-2.28.8. glib 原始于gtk+计划.~在gtk+-2版本之前, 不属于图形用户
       接口部分的功能被从 gtk+ 中分离出来单独开发, 这部分就是glib.~glib 依赖
       dbus 和 zlib.
 
@@ -83,8 +128,12 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
   \item atk-1.29.4. ATK (Accessibility Toolkit) 提供客户/服务器访问API实现.
       ~依赖 glib.
 
-  \item pango-1.20.5. pango 用于将多语种的文字高质量地渲染输出, 后端依赖cairo
+  \item pango-1.26.2. pango 用于将多语种的文字高质量地渲染输出, 后端依赖cairo
       和glib.
+
+  \item gdk-pixbuf-2.21.3. gdk-pixbuf 原也是属于gtk+ 的一部分, 用于处理图像
+      缓冲区工作, 在gtk+-2.21之后的版本被剥离.~它依赖 glib 和 libpng、libjpeg
+      等底层图形库.
 \end{itemize}
 
 \section{编译过程}
@@ -121,33 +170,27 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
       系统检查和配置工作, 便可生成Makefile.~Makefile 可能在各级子目录中都会
       存在, 我们只需要在根目录上看到有 Makefile 即表示配置成功.\\
       为了获得不同的编译结果 configure 命令包含了很多选项, 需要在执行命令的
-      同时给出.~例如, 我们通常会这样执行配置命令:
+      同时给出.~例如, 多数软件包通常会这样执行配置命令:
 
     \begin{boxedminipage}{.8\textwidth}
         \begin{tabular}{ll}
             ./configure           &$\backslash$\\
+            \qquad -{}-prefix=/home/student/target &$\backslash$\\
             \qquad -{}-host=arm-linux      &$\backslash$\\
-            \qquad -{}-prefix=/usr         &$\backslash$\\
-            \qquad -{}-bindir=/usr/bin     &$\backslash$\\
-            \qquad -{}-sbindir=/usr/sbin   &$\backslash$\\
-            \qquad -{}-sysconfdir=/etc     &$\backslash$\\
-            \qquad -{}-libexecdir=/usr/lib &$\backslash$\\
-            \qquad -{}-localstatedir=/var  &$\backslash$\\
-            \qquad -{}-disable-static      &$\backslash$\\
-            \qquad -{}-enable-shared       &
+            \qquad -{}-enable-shared       &$\backslash$\\
+            \qquad -{}-disable-static      &
         \end{tabular}
     \end{boxedminipage}
 
-    该配置命令设置了软件运行环境, 指定交叉编译器前缀为``arm-linux-'', 编译共享
+    该配置命令设置了软件安装目录, 指定交叉编译器前缀为``arm-linux-'', 编译共享
 库, 不编译静态库.
 
   \item 编译和安装\\
       多数软件简单执行``make'' 便可完成编译工作, 部分软件需要在``make''命令
       后加上编译的目标项目.\\
-      通常用 ``make install'' 完成软件安装.~在我们的实验中用 ``make install 
-      DESTDIR=/home/student/target'' 安装, 将软件安装到DESTDIR 指定的
-      安装目录, 否则, 按缺省方式会安装到 /usr 目录(``configure 选项
-      -{}-prefix''), 而这个目录是主机系统的目录.
+      通常用 ``make install'' 完成软件安装.~在我们的实验中, 软件安装在
+      -{}-prefix 指定的目录.~如不指定, 缺省方式会安装到 /usr/local 目录, 
+      该目录是主机系统的目录, 不用于目标系统开发.
 
 \end{enumerate}
 
@@ -223,20 +266,22 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
       FONTCONFIG\_CFLAGS="-I/home/student/target/usr/include/fontconfig" \\
       FONTCONFIG\_LIBS="-lfontconfig -lfreetype -lxml2 -lz"
 
+  \item pango, configure 时增加一个变量声明 CXX=arm-linux-g++
+
+  \item gdk-pixbuf, configure 时增加两个选项:\\
+      -{}-without-libtiff gio\_can\_sniff=yes
+
+      如果之前编译了 tiff(Tagged Image File Format) 库, 则 -{}-without-libtiff 
+      可以去掉.
+
   \item gtk+, 首先需要去除 gtk+ configure 中检查 pango 过程的代码.
-      ~用编辑器打开 configure, 将30893到30899行删除.
+      ~用编辑器打开 configure, 将 23155 到23161 行删除.
 
      其次, 需要将 demos/gtk-demo/geninclude.pl.in 中 所有``defined''单词
      删除,避免高版本 perl 在处理该文件时产生语法错误.
 
-     打完上面两个补丁, 再行编译, 仍然需要增加几个选项:\\
-      -{}-with-gdktarget=directfb \\
-      -{}-without-libjasper \\
-      -{}-without-libtiff \\
-      gio\_can\_sniff=yes
+     打完上面两个补丁, 再行配置. 配置时加上选项 -{}-with-gdktarget=directfb \\
 
-      如果之前编译了libjasper(JPEG2000库)和tiff(Tagged Image File Format),则
-      上面两个``without''可以换成``with''.
 \end{enumerate}
 
 \subsection{编译技巧}
@@ -254,12 +299,9 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
    export INSTALLPATH=/home/student/target
 
    export PREFIX="-{}-host=arm-linux $\backslash$\\
-   　　　-{}-prefix=/usr    $\backslash$\\
-   　　　-{}-exec-prefix=/usr    $\backslash$\\
-   　　　-{}-sysconfdir=/etc   $\backslash$\\
-   　　　-{}-localstatedir=/var $\backslash$\\
-   　　　-{}-disable-static  $\backslash$\\
-   　　　-{}-enable-shared"
+   　　　-{}-prefix=\${INSTALLPATH}/usr    $\backslash$\\
+   　　　-{}-enable-shared  $\backslash$\\
+   　　　-{}-disable-static"
 
    export CFLAGS="-I\${INSTALLPATH}/usr/include"
 
@@ -267,11 +309,11 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
 
    export LDFLAGS="-L\${INSTALLPATH}/usr/lib"
 
-   export PKG\_CONFIG\_PATH=\${INSTALLPATH}/lib/pkgconfig
+   export PKG\_CONFIG\_PATH=\${INSTALLPATH}/usr/lib/pkgconfig
 
-   cd \$BUILDPATH
+   cd \${BUILDPATH}
 
-   tar xf ../src/\$1.tar.*
+   tar xf \${SOURCEPATH}/\$1.tar.*
 
    cd \$1
 
@@ -287,10 +329,36 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
 传递参数, 或专门单独写一个脚本, 都可以大大提高开发效率.
 
 \section{测试}
-    gtk+ 编译完成后, 将 target/ 目录平移到目标系统, 保持子目录结构不变.~
-此时 gtk-demo 应该在 /usr/bin 目录下.~由于字体和图形环境没有正确设置, 初次
+    gtk+ 编译完成后, 将 target/usr 目录平移到目标系统, 保持子目录结构不变
+(即/home/student/target/usr), 再将该目录符号链接到 /usr 目录.~此时 gtk-demo
+应该在 /usr/bin 目录下.
+
+    复制主机上的一些字体库到 /usr/share/fonts, 用 fc-cache 命令更新字体信息.
+~之后便可以尝试运行 gtk-demo 程序了.~由于字体和图形环境没有正确设置, 初次
 运行会有一些不成功的提示信息.~请根据这些提示完善系统设置.
 
 \section{实验要求}
+    完成 gtk+ 的移植, 能正确运行gtk-demo演示程序.
 
-\clearpage
+    尝试根据示例编写一个简单的 gtk+ 图形界面程序, 编译并运行.~编译时会用到
+移植gtk+过程中的头文件和库, 可以使用下面的Makefile:
+
+\begin{boxedminipage}{.9\textwidth}
+\lstset{language=make}
+%\definecolor{bg}{rgb}{.85,.85,1}
+%\lstset{backgroundcolor=\color{bg}}
+\begin{lstlisting}
+CC      = /opt/arm-2016.08/bin/arm-none-linux-gnueabi-gcc
+
+CFLAGS  = -I/home/student/target/usr/include
+LDFLAGS = -L/home/student/target/usr/lib -lgtk-directfb
+TARGET  = hello
+
+all: $(TARGET)
+
+$(TARGET) : $(TARGET).c
+        $(CC) $(CFLAGS) $^ -o $@ $(CFLAGS) $(LDFLAGS)
+
+\end{lstlisting}
+\end{boxedminipage}
+

@@ -1,5 +1,4 @@
-\chapter{实验系统介绍}
-\addthumb{实验系统介绍}{\bf 简介}{white}{gray}
+\chapter{实验系统介绍}{简介}
 
 \section{性能概括}
 
@@ -44,7 +43,6 @@ S5PV210 为 Cortex--A8架构, 主频可到 1GHz, 支持 1GiB DDR2, 片内32KiB I
   \item 2D/3D 高性能图形加速;
 \end{itemize}
 
-
 \section{软件}
 
 	在x210v3平台上, 可以进行 Linux、WinCE等多种操作系统的移植以及裸机实验.
@@ -56,24 +54,24 @@ S5PV210 为 Cortex--A8架构, 主频可到 1GHz, 支持 1GiB DDR2, 片内32KiB I
 运行在相应的目标平台上.
 
 	由于Cortex--A8 基于 ARM 体系结构, 所以在基于Cortex--A8 开发过程中
-必须使用 ARM 的交叉编译.这个编译器环境将使用下面的 GNU 工具:
+必须使用 ARM 的交叉编译.~这个编译器环境将使用下面的 GNU 工具:
 \begin{itemize}\itemsep=-3pt
-  \item GNU gcc compilers for c, c++,包括编译器、链接器等；
-  \item GNU binutil,包括归档、目标程序复制和转换、代码分析调试等工具；
-  \item GNU C Library,支持目标代码的 c 语言库；
-  \item GNU C header,头文件.
+  \item GNU gcc compilers for c, c++, 包括编译器、链接器等；
+  \item GNU binutil, 包括归档、目标程序复制和转换、代码分析调试等工具；
+  \item GNU C Library, 支持目标代码的 c 语言库；
+  \item GNU C header, 头文件.
 \end{itemize}
-	通用的 GNU Tools 都是针对 x86 体系结构的,而上述的 GNU 交叉编译工具是
+	通用的 GNU Tools 都是针对 x86 体系结构的, 而上述的 GNU 交叉编译工具是
 针对 ARM 的.最终编译后产生的二进制文件只能在 ARM 架构的处理器上运行.
 
 \subsection{工具链安装}
-	GNU 工具链提供完整的源代码,可以在 PC 机上用x86 平台的编译工具编译安装,
+	GNU 工具链提供完整的源代码, 可以在 PC 机上用x86 平台的编译工具编译安装,
 也可以直接下载二进制代码包解压安装.
 
 	本实验使用的交叉编译工具链路径是 /opt/arm-2016.08, 可执行程序在
- /opt/arm-2016.08/bin 目录下. 实验中请将该目录添加到环境变量 ``PATH''
+ /opt/arm-2016.08/bin 目录下.~实验中请将该目录添加到环境变量 ``PATH''
 中, 或给出完整的路径和编译程序名
-/opt/arm-2016.08/bin/arm-none-linux-gnueabi-gcc .可以通过下面的方法检查编译器
+/opt/arm-2016.08/bin/arm-none-linux-gnueabi-gcc.~可以通过下面的方法检查编译器
 是否正确安装:
 
     首先编写一个 c 语言原文件(设文件名是 hello.c),在该目录下执行
@@ -108,15 +106,15 @@ clean:
 
 
 \subsection{嵌入式系统软件}
-	嵌入式系统软件从下到上通常由 bootloader、操作系统、文件系统和应用软件
-等若干层构成.bootloader的目的是加载并引导操作系统运行,有时也会负责文件系统
-的加载.bootloader还负责核心软件的升级.一旦操作系统启动, bootloader的任务
+	嵌入式操作系统软件从下到上通常由 bootloader、操作系统、文件系统和应用软件
+等若干层构成.~bootloader的目的是加载并引导操作系统运行,有时也会负责文件系统
+的加载.~bootloader还负责核心软件的升级.~一旦操作系统启动, bootloader的任务
 便暂告终结,直到系统重启.
 
-	本系统使用的bootloader名为u-boot.根据本实验系统特点, 厂家对u-boot做了
+	本系统使用的bootloader名为u--boot.~根据本实验系统特点, 厂家对u-boot做了
 针对性的修改, 例如对inand-Flash操作以及支持Android系统升级的 fastboot 模式.
 
 	厂家在此平台上移植的 Linux 操作系统内核版本是2.6.35(Android4.0.4使用
-的内核版本是3.0.8).用户可在此基础上进一步剪裁和优化.完成内核正常启动后,
+的内核版本是3.0.8).~用户可在此基础上进一步剪裁和优化.完成内核正常启动后,
 与硬件相关的工作基本上都可以由内核解决, 以后的软件开发可以由用户自由发挥,
 例如移植不同版本的根文件系统、不同的图形用户接口、桌面等.

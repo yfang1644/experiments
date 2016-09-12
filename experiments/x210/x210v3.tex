@@ -98,7 +98,7 @@
 
 \renewcommand\figurename{图}
 \renewcommand\tablename{表}
-\renewcommand\chaptername{}
+\renewcommand\chaptername{实验}
 \renewcommand\contentsname{目录}
 \renewcommand\bibname{参考文献}
 %\renewcommand\thechapter{\chinese{chapter}}
@@ -106,16 +106,16 @@
  
 % chapter tiltes formatting
 \titleformat{\chapter}[display]{\normalfont\tt\LARGE}
-    {\renewcommand{\thechapter}{\chinese{chapter}}
-        \hspace*{0.5em}\colorbox{black}{%
-        \parbox[c][1.8cm][c]{1cm}{%
+    {\renewcommand{\thechapter}{\Roman{chapter}}
+        \hspace*{0.5em}\colorbox{gray}{%
+        \parbox[c][1.2cm][c]{1.5cm}{%
         \centering\textcolor{white} {\Huge\thechapter}}}}
     {-1ex}
     {\titlerule\vspace{.7ex}\filleft\MakeUppercase{#1}}
     [\vspace{.2ex}\titlerule]
 
 % chapter tiltes spacing
-\titlespacing*{\chapter}{0pt}{20pt}{30pt}
+\titlespacing*{\chapter}{0pt}{50pt}{80pt}
 
 % section tiltes formatting
 \titleformat{\section}
@@ -178,22 +178,9 @@
 
 \begin{document}
 \pagenumbering{arabic}
-\pagestyle{empty}
 \maketitle
 
-\frontmatter
-\addtitlethumb{Frontmatter}{\bf 目录}{white}{gray}{pagesLTS.1}
-\pagestyle{headings}
-\setlength{\parindent}{2em}
-\setlength\doublerulesep{.2pt}
-
-\baselineskip=17pt
-\setcounter{page}{1}
-\tableofcontents
-
-\newpage
- ~ \vskip 2cm
-
+\thispagestyle{empty} ~ \vskip 2cm
 \begin{center} \LARGE \it \textsf{实验室规章制度} \end{center}
 \large \tt
 \begin{enumerate}\itemsep=-5pt
@@ -213,11 +200,24 @@ $\spadesuit~~ \heartsuit~~ \diamondsuit~~ \clubsuit~~
 
 \input format
 
+\frontmatter
+\addtitlethumb{Frontmatter}{\bf 目录}{white}{gray}{pagesLTS.1}
+\setlength{\parindent}{2em}
+\setlength\doublerulesep{.2pt}
+
+\baselineskip=17pt
+\tableofcontents
+
 \mainmatter
 
-%\let\oldchapter\chapter
-%\renewcommand\chapter[1]{\oldchapter{\tt #1}}
+\let\oldchapter\chapter
+\renewcommand{\chapter}[2]
+{\oldchapter{#1}
+   \addthumb{#1}{\bf #2}{white}{gray}
+}
 
+
+\pagestyle{headings}
 \setcounter{page}{1}
 \input introduction
 \input environment
@@ -231,6 +231,5 @@ $\spadesuit~~ \heartsuit~~ \diamondsuit~~ \clubsuit~~
 \input drivers
 \input mplayer
 
-\clearpage
 \end{document}
 
