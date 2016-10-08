@@ -1,0 +1,66 @@
+% 开放实验--嵌入式系统gtk on DirectFB(x210v3, 2016.10)
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{indentfirst}                % 每章、节首段缩进
+\usepackage[extension=pdf,%
+            pdfpagelayout=TwoPageRight,%
+            pdfpagemode=UseThumbs,%
+            colorlinks=true,            % 允许彩色链接
+            linkcolor=black]{hyperref} % 超链接包
+
+\usepackage{graphicx, subfig, multicol, multirow, fancyhdr}
+\usepackage{listings}
+\usepackage[left=1in,right=1in,top=3cm,bottom=3cm]{geometry}
+\usepackage[nofonts]{ctex}
+\usepackage{fontspec}
+\usepackage{amsfonts}
+\usepackage{boxedminipage} 
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,petri}
+\usetikzlibrary{decorations}
+\usetikzlibrary{plothandlers}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{graphs}
+\usetikzlibrary{trees}
+\usetikzlibrary{calc}
+\usetikzlibrary{matrix}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+
+\setCJKmainfont[BoldFont=WenQuanYi Micro Hei,
+                ItalicFont=STFangsong]{AR PL SungtiL GB}
+\setCJKsansfont[BoldFont=LiSu,
+                ItalicFont=STXinwei]{WenQuanYi Micro Hei}
+\setCJKmonofont{AR PL UKai CN}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\graphicspath{{../x210/images/}}
+
+\lstset{language=C++,showstringspaces=false}
+\lstset{extendedchars=false} % tetex-3 conflict with CJK
+
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+\renewcommand\contentsname{目录}
+%\renewcommand\refname{参考文献}
+
+\newcommand{\chapter}[2]{}
+
+\title{
+ 嵌入式系统 GUI 移植实验
+}
+\author{}
+\date{}
+
+\sloppy
+\hyphenpenalty=10000\exhyphenpenalty=10000
+
+\begin{document}
+
+\maketitle
+
+\input gtk
+
+\end{document}
+
