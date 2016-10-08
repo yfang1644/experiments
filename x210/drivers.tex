@@ -48,16 +48,15 @@ GPJ0的相关寄存器, 寄存器的功能含义在表{}\ref{regs2}中.
 \centering
 \caption{GPJ0 寄存器地址}\label{regs1} \ \\
 
-\begin{tabular}{|l|c|l|}
-\hline
+\begin{tabular}{|l|c|l|} \toprule
 \multicolumn{1}{|c|}{寄存器名} & 地址 & 
-\multicolumn{1}{c|}{描述} \\\hline
+\multicolumn{1}{c|}{描述} \\\midrule
 	GPJ0CON   & 0xE020\_0240 & GPJ0 配置寄存器              \\\hline
 	GPJ0DAT   & 0xE020\_0244 & GPJ0 数据寄存器              \\\hline
 	GPJ0PUD   & 0xE020\_0248 & GPJ0 上拉/下拉寄存器         \\\hline
 	GPJ0DRV   & 0xE020\_024C & GPJ0 驱动强度控制寄存器      \\\hline
 	GPJ0CONPDN& 0xE020\_0250 & GPJ0 掉电模式配置寄存器      \\\hline
-	GPJ0PUDPDN& 0xE020\_0254 & GPJ0 掉电模式上拉/下拉寄存器 \\\hline
+	GPJ0PUDPDN& 0xE020\_0254 & GPJ0 掉电模式上拉/下拉寄存器 \\\bottomrule
 \end{tabular}
 \end{table}
 
@@ -65,14 +64,14 @@ GPJ0的相关寄存器, 寄存器的功能含义在表{}\ref{regs2}中.
 \begin{center}
 \longtable{|l|c|l|}
 \caption{寄存器描述}\label{regs2}\\
-\hline
-\multicolumn{1}{|c|}{寄存器} & 位域 & \multicolumn{1}{c|}{描述} \\\thline
+\toprule
+\multicolumn{1}{|c|}{寄存器} & 位域 & \multicolumn{1}{c|}{描述} \\\midrule
 \endfirsthead
 \caption{寄存器描述(续)}\\
-\hline
-\multicolumn{1}{|c|}{寄存器} & 位域 & \multicolumn{1}{c|}{描述} \\\thline
+\toprule
+\multicolumn{1}{|c|}{寄存器} & 位域 & \multicolumn{1}{c|}{描述} \\\midrule
 \endhead
-\hline \endfoot
+\bottomrule \endfoot
 \endlastfoot
     GPJ0CON[7] & [31:28] & 0000 = Input                 \\
                &         & 0001 = Output                \\
@@ -174,25 +173,23 @@ GPJ0的相关寄存器, 寄存器的功能含义在表{}\ref{regs2}中.
 	void * ioremap(unsigned long phys\_addr, unsigned long size, unsigned long
 flags)
 
-	端口释放时, 应通过函数iounmap()取消ioremap()所做的映射:
+	端口释放时, 应通过函数iounmap ()取消ioremap ()所做的映射:
 
-	void iounmap(void * addr)
+	void iounmap (void * addr)
 
 	当I/O设备的物理地址被映射到内核虚拟地址后, 就可以像读写 RAM 那样直接读写
-I/O设备资源了.例如可以通过下面的方式点亮最左边的一个LED:
+I/O设备资源了. 例如可以通过下面的方式点亮最左边的一个LED:\@
 
-\begin{boxedminipage}{.9\textwidth}
 \lstset{language=c,escapeinside=``}
-%\lstset{backgroundcolor=\color{bg}}
-\begin{lstlisting}{}
+\begin{lstlisting}[frame=trBL]
 #define	GPJ0CON		0xE0200240
 #define	GPJ0DAT		0xE0200244
 ......
 
   `/* 映射控制寄存器地址 */`
-  volatile int *pConfReg = ioremap(GPJ0CON, 4);
+  volatile int *pConfReg = ioremap (GPJ0CON, 4);
   `/* 映射数据寄存器地址 */`
-  volatile int *pDataReg = ioremap(GPJ0DAT, 4);
+  volatile int *pDataReg = ioremap (GPJ0DAT, 4);
 
   *pConfReg &= 0xFFFF0FFF;           `/* 只改变GPJ0\_3设置   */`
   *pConfReg |= 0x00001000;           `/* GPJ0\_3 设为输出    */`
@@ -200,25 +197,24 @@ I/O设备资源了.例如可以通过下面的方式点亮最左边的一个LED:
   *pDataReg &= ~(1 << 3);            `/* GPJ0\_3 输出低电平  */`
 ......
 \end{lstlisting}
-\end{boxedminipage}
 	
 	为了保证驱动程序的跨平台的可移植性, 建议使用~Linux~中特定的函数来访问
 ~I/O~内存资源, 如~readb()、~readw()、~writeb()、~writew()~等.在RISC处理器里, 
 它们实际上就是对存储器读写的重定义:
 
-\begin{boxedminipage}{.9\textwidth}
-\begin{verbatim}
+\begin{lstlisting}[frame=trBL]
 #define readb(addr)  (*(volatile unsigned char *)__io_virt(addr))
 #define readw(addr) (*(volatile unsigned short *)__io_virt(addr))
 #define readl(addr) (*(volatile unsigned int *)__io_virt(addr))
 
-#define writeb(b,addr) (*(volatile unsigned char *)__io_virt(addr) = (b))
-#define writew(b,addr) (*(volatile unsigned short *)__io_virt(addr) = (b))
-#define writel(b,addr) (*(volatile unsigned int *)__io_virt(addr) = (b))
-
+#define writeb(b,addr) (*(volatile unsigned char *) \
+                           __io_virt(addr) = (b))
+#define writew(b,addr) (*(volatile unsigned short *) \
+                           __io_virt(addr) = (b))
+#define writel(b,addr) (*(volatile unsigned int *) \
+                           __io_virt(addr) = (b))
 ......
-\end{verbatim}
-\end{boxedminipage}
+\end{lstlisting}
 
 \subsection{Key pad}
 	S5PV210 内部设计了矩阵键盘接口, 但在我们的实验系统中, 只引出了少数的
@@ -277,14 +273,14 @@ $$ CLOCK_{PWM} = \frac{PCLK}{(prescaler+1)*divider} $$
 \begin{center}
 \longtable{|l|c|l|}
 \caption{定时器相关寄存器地址}\label{timer_map}\\
-\hline
-\multicolumn{1}{|c|}{寄存器名} & 地址 & \multicolumn{1}{c|}{描述} \\\hline
+\toprule
+\multicolumn{1}{|c|}{寄存器名} & 地址 & \multicolumn{1}{c|}{描述} \\\midrule
 \endfirsthead
 \caption{定时器相关寄存器地址(续)}\\
-\hline
-\multicolumn{1}{|c|}{寄存器名} & 地址 & \multicolumn{1}{c|}{描述} \\\hline
+\toprule
+\multicolumn{1}{|c|}{寄存器名} & 地址 & \multicolumn{1}{c|}{描述} \\\midrule
 \endhead
-\hline \endfoot
+\bottomrule \endfoot
 \endlastfoot
     TCFG0  & 0xE250\_0000 & 定时器配置寄存器1(2个 8-bit 预定标器)\\\hline
     TCFG1  & 0xE250\_0004 & 定时器配置寄存器2(5个二级分频选择开关)\\\hline
@@ -311,14 +307,14 @@ $$ CLOCK_{PWM} = \frac{PCLK}{(prescaler+1)*divider} $$
 \begin{center}
 \longtable{|l|c|l|}
 \caption{定时器控制寄存器}\\
-\hline
-\multicolumn{1}{|c|}{TCON} & 位域 & \multicolumn{1}{c|}{描述} \\\hline
+\toprule
+\multicolumn{1}{|c|}{TCON} & 位域 & \multicolumn{1}{c|}{描述} \\\midrule
 \endfirsthead
 \caption{定时器控制寄存器(续)}\\
-\hline
-\multicolumn{1}{|c|}{TCON} & 位域 & \multicolumn{1}{c|}{描述} \\\hline
+\toprule
+\multicolumn{1}{|c|}{TCON} & 位域 & \multicolumn{1}{c|}{描述} \\\midrule
 \endhead
-\hline \endfoot
+\bottomrule \endfoot
 \endlastfoot
   Reserved & [31:23]   & ---                               \\\hline
   Timer 4 自动重载     & [22] & 0 = 单次                   \\

@@ -368,30 +368,7 @@ V3(rfc1813)、NFS V4(rfc3010)等。
 \definecolor{bg}{rgb}{.85,.85,1}
 \begin{enumerate}\itemsep=-3pt
   \item 编写一个简单的独立程序;
-  \item 使用如下的Makefile
-
-\lstset{language=make}
-%\definecolor{bg}{rgb}{.85,.85,1}
-%\lstset{backgroundcolor=\color{bg}}
-\begin{lstlisting}
-CC      = /usr/local/arm-2012q3/bin/arm-none-linux-gnueabi-gcc
-
-CFLAGS  =
-
-TARGET  = hello
-OBJS    = $(TARGET).o
-
-all: $(TARGET)
-
-$(TARGET) : $(TARGET).o
-         $(CC) $(CFLAGS) $^ -o $@
-$(TARGET).o : $(TARGET).c
-         $(CC) $(CFLAGS) -c $< -o $@
-
-clean:
-        rm -f $(OBJS) $(TARGET) *.elf *.gdb
-\end{lstlisting}
-
+  \item 使用交叉编译工具编译;
   \item 将编译生成的可执行程序 hello 拷贝到 NFS 共享目录下，在目标板上
 		运行该程序。
 

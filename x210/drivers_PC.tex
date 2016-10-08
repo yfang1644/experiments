@@ -10,29 +10,26 @@
 \subsection{内核模块}	
 	一个内核模块至少包括两个函数:
 \begin{itemize}\itemsep=-3pt
-  \item 由 module\_init(function) 声明,缺省函数名为 int init\_module(),
+  \item 由 module\_init (function) 声明,缺省函数名为 int init\_module (),
 		在装载时被调用
-  \item 由 module\_exit(function) 声明,缺省函数名为 void cleanup\_module(),
+  \item 由 module\_exit (function) 声明,缺省函数名为 void cleanup\_module (),
 		卸载模块时被调用
 \end{itemize}
 
     2.6内核版本编译内核模块通常使用下面的Makefile:
 
-\begin{boxedminipage}{.9\textwidth}
 \lstset{language=make}
-%\lstset{backgroundcolor=\color{bg}}
-\begin{lstlisting}{}
-# Makefile (!not makefile)
-ifneq ($(KERNELRELEASE),)
-obj-m       := mod_name.o
-else
-KDIR        := /lib/modules/`uname -r`/build
-PWD         := $(shell pwd)
-default:
+\begin{lstlisting}[frame=trBL]
+ # Makefile (!not makefile)
+ ifneq ($(KERNELRELEASE),)
+ obj-m       := mod_name.o
+ else
+ KDIR        := /lib/modules/`uname -r`/build
+ PWD         := $(shell pwd)
+ default:
         $(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
-endif
+ endif
 \end{lstlisting}
-\end{boxedminipage}
 
 执行命令``make''后生成以``.ko''为后缀的文件名.
 
@@ -129,11 +126,11 @@ Linux 系统中有两类设备文件,一类是字符设备,一类是块设备.�
     下表是可供参考的音符与频率对应关系(单位:Hz):
 \begin{table}[!h]
 \centering\large
-\begin{tabular}{|*8{|c}||} \hline
-   音符 &  1  &  2  &  3  &  4  &  5  &  6  &  7\\\hline
+\begin{tabular}{|*8{|c}||} \toprule
+   音符 &  1  &  2  &  3  &  4  &  5  &  6  &  7\\\midrule
    低音 & 131 & 147 & 165 & 175 & 196 & 220 & 247\\
    中音 & 262 & 294 & 330 & 349 & 392 & 440 & 494\\
-   高音 & 523 & 587 & 659 & 698 & 784 & 880 & 987\\\hline
+   高音 & 523 & 587 & 659 & 698 & 784 & 880 & 987\\\bottomrule
 \end{tabular}
 \end{table}
 

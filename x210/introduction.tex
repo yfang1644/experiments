@@ -78,13 +78,14 @@ S5PV210 为 Cortex--A8架构, 主频可到 1GHz, 支持 1GiB DDR2, 片内32KiB I
 
     arm-none-linux-gnueabi-gcc -o hello hello.c
 
-    看看是否生成了名为 hello 的可执行程序.或者使用下面的 Makefile
+    或者使用下面的 Makefile
 
-\begin{boxedminipage}{.9\textwidth}
 \lstset{language=make}
 %\definecolor{bg}{rgb}{.85,.85,1}
 %\lstset{backgroundcolor=\color{bg}}
-\begin{lstlisting}
+\lstset{frameround=ftft}
+
+\begin{lstlisting}[frame=trBL]
 CC      = /opt/arm-2016.08/bin/arm-none-linux-gnueabi-gcc
 
 CFLAGS  =
@@ -102,8 +103,8 @@ $(TARGET).o : $(TARGET).c
 clean:
         rm -f $(OBJS) $(TARGET) *.elf *.gdb
 \end{lstlisting}
-\end{boxedminipage}
 
+    执行编译命令make, 看看是否生成了名为 hello 的可执行程序.
 
 \subsection{嵌入式系统软件}
 	嵌入式操作系统软件从下到上通常由 bootloader、操作系统、文件系统和应用软件

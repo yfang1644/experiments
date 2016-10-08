@@ -6,11 +6,11 @@
 \end{itemize}
 
 \section{gtk+ 的背景}
-    gtk+ 是一款跨平台的图形用户接口组件工具包, 原是 GIMP Toolkit 的缩写(GIMP 是
-GNU Image Manipulation Program 的缩写, Linux中重要的图像处理软件, 类似Windows
-中的photoshop), 以GPL版权协议发布, 是 Linux 系统中使用最为广泛的图形工具之一,
-许多桌面系统都建立在 gtk+ 基础上, 如著名的 Gnome、xfce4.(另一款与之齐名的GUI
-是Qt).
+    gtk+ 是一款跨平台的图形用户接口组件工具包, 原是 GIMP Toolkit 的缩写
+(GIMP 是 GNU Image Manipulation Program 的缩写, Linux中重要的图像处理软件,
+类似Windows 中的photoshop), 以GPL版权协议发布, 是 Linux 系统中使用最为广泛的
+图形工具之一, 许多桌面系统都建立在 gtk+ 基础上, 如著名的 Gnome、xfce4.
+(另一款与之齐名的GUI 是Qt)
 
 \begin{figure}[h]
   \centering
@@ -23,9 +23,9 @@ GNU Image Manipulation Program 的缩写, Linux中重要的图像处理软件, �
 
 \section{gtk 库的依赖关系}
 从图\ref{fig_gtk}\footnote{图片引自 en.wikipedia.org/wiki}中可以看到, 
-gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列的更底层的库.~
-图\ref{fig_gtkdfb}是建立gtk+的库依赖关系.~我们需要根据
-这样的依赖关系逐层构造系统的API.
+gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列的更底层的库.
+图\ref{fig_gtkdfb}是建立gtk+的库依赖关系. 我们需要根据这样的依赖关系逐层
+构造系统的API.\@
 
 \begin{figure}
 \centering\bf \large
@@ -80,34 +80,34 @@ gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列�
 本实验中, 我们的最终目标是编译出 gtk+ (建议版本2.22.1) 的库以及演示程序
 gtk-demo.~以下根据依赖关系, 对各个库加以简单的说明.~版本号是本实验建议版本.
 \begin{itemize}
-  \item zlib-1.2.8. zlib 是 Linux 系统最基本的压缩/解压库, 许多软件都会直接
-      或间接地用到它.~zlib 仅依赖 glibc.~针对 Linux系统的交叉编译工具链中已经
-      包含了 glibc 的动态和静态库, 编译 zlib 时会自动链接.(Linux 系统中几乎
-      所有软件都会链接 glibc, 下面不再特别说明)
+  \item zlib-1.2.8. \ zlib 是 Linux 系统最基本的压缩/解压库, 许多软件都会直接
+      或间接地用到它.\@ zlib 仅依赖 glibc.\@针对 Linux系统的交叉编译工具链中
+      已经包含了 glibc 的动态和静态库, 编译 zlib 时会自动链接.
+      (Linux 系统中几乎所有软件都会链接 glibc, 下面不再特别说明)
 
   \item tslib-1.0.0. 触摸屏支持库, 提供人机交互接口的输入支持.~有关触摸屏库的
       说明和编译请参考触摸屏移植部分.
 
-  \item libpng-1.2.24. PNG(Portable Network Graphics)是广泛应用于互联网的一种
-      图像格式. libpng 依赖 zlib 库的压缩/解压功能.
+  \item libpng-1.2.24. PNG (Portable Network Graphics)是广泛应用于互联网的一种
+      图像格式.\@ libpng 依赖 zlib 库的压缩/解压功能.
 
-  \item libjpeg-turbo-1.2.1. JPEG(Joint Photographic Experts Group), 非常
+  \item libjpeg-turbo-1.2.1. JPEG (Joint Photographic Experts Group), 非常
       著名的图像压缩标准格式.libjpeg 不依赖其它库.
 
-  \item pixman-0.16.0. 底层像素处理工具(Pixel Manipulation).~可依赖于 gtk+,
+  \item pixman-0.16.0. 底层像素处理工具 (Pixel Manipulation), 可依赖于 gtk+,
       本实验在编译时禁止该依赖关系.
 
-  \item libxml2-2.6.30/expat-2.0.1. XML(Extensible Markup Language, 扩展标记
+  \item libxml2-2.6.30/expat-2.0.1. XML (Extensible Markup Language, 扩展标记
       语言) 是在互联网中广泛使用的一种标记语言, 既可以让人读懂, 也能让机器
       读懂.~Linux 系统中的很多软件基于 xml 语言.~目前在Linux系统中, 提供 xml
       解释功能的主要有两套库:expat 和 libxml2.~多数软件依赖于 libxml2, 但
       仍有少数仅依赖 expat.~expat 不依赖其它软件, libxml2 可以依赖 zlib.
 
-  \item dbus-1.8-16. D-Bus(Desktop BUS) 提供桌面环境下的进程间通信机制, 属于
+  \item dbus-1.8-16. D-Bus (Desktop BUS) 提供桌面环境下的进程间通信机制, 属于
       freedesktop.org 项目的一部分.~dbus 依赖 xml 库, 可选择 libxml 或者
       expat.~但由于 libxml 早已停止开发, 所以在编译dbus时指定连接 expat库.
 
-  \item glib-2.28.8. glib 原始于gtk+计划.~在gtk+-2版本之前, 不属于图形用户
+  \item glib-2.28.8. \ glib 原始于gtk+计划.~在gtk+-2版本之前, 不属于图形用户
       接口部分的功能被从 gtk+ 中分离出来单独开发, 这部分就是glib.~glib 依赖
       dbus 和 zlib.
 
@@ -126,12 +126,12 @@ gtk-demo.~以下根据依赖关系, 对各个库加以简单的说明.~版本号
   \item cairo-1.6.4. 基于2维矢量图形的工具包.~在本实验中, 除后端选择DirectFB外,
       还依赖 fontconfig、libxml2 和 pixman.
   \item atk-1.29.4. ATK (Accessibility Toolkit) 提供客户/服务器访问API实现.
-      ~依赖 glib.
+      依赖 glib.
 
-  \item pango-1.26.2. pango 用于将多语种的文字高质量地渲染输出, 后端依赖cairo
+  \item pango-1.26.2.\ pango 用于将多语种的文字高质量地渲染输出, 后端依赖cairo
       和glib.
 
-  \item gdk-pixbuf-2.21.3. gdk-pixbuf 原也是属于gtk+ 的一部分, 用于处理图像
+  \item gdk-pixbuf-2.21.3. \ gdk-pixbuf 原也是属于gtk+ 的一部分, 用于处理图像
       缓冲区工作, 在gtk+-2.21之后的版本被剥离.~它依赖 glib 和 libpng、libjpeg
       等底层图形库.
 \end{itemize}
@@ -139,7 +139,7 @@ gtk-demo.~以下根据依赖关系, 对各个库加以简单的说明.~版本号
 \section{编译过程}
 \subsection{编译准备}
     主机准备好必要的编译工具, 包括针对目标系统的交叉编译工具链和主机的开发
-工具(gcc、GNUmake、autoconf、libtool等).
+工具 (gcc、GNUmake、autoconf、libtool等).
 
     准备三个有权限的目录, 一个用于存放源码包, 一个用于编译, 一个用于存放编译
 后生成的文件, 也就是目标系统运行所需的程序以及库.~下面的编译过程中, 基于如下
@@ -206,7 +206,7 @@ gtk-demo.~以下根据依赖关系, 对各个库加以简单的说明.~版本号
     export CFLAGS="-I/home/student/target/usr/include"
 
     该变量中可以包含多个路径.如果是用g++编译, 该功能对应的变量名称是CPPFLAGS
-或CXXFLAGS.
+或CXXFLAGS.\@
 
     gcc 链接时要为它指明库文件所在路径: 
 
@@ -288,41 +288,36 @@ gtk-demo.~以下根据依赖关系, 对各个库加以简单的说明.~版本号
     软件移植的工作相当繁琐, 很多操作需要重复多次.~为避免重复劳动, 减少错误,
 我们可以把一些程序化的工作写成脚本程序.~例如, 下面的脚本可以胜任多数软件编译:
 
-\begin{boxedminipage}{.8\textwidth}
-\setlength{\parindent}{0em}
-   \#!/bin/bash\\ \ 
+\lstset{language={bash},escapeinside=``}
+\lstset{extendedchars=false}
+\lstset{numbers=none} 
+\lstset{frameround=fttt}
+         
+\begin{lstlisting}[frame=trBL]
+ #!/bin/bash
 
-   export SOURCEPATH=/home/student/src
+ export SOURCEPATH=/home/student/src
+ export BUILDPATH=/home/student/build
+ export INSTALLPATH=/home/student/target
+ export PREFIX="--host=arm-linux \
+ 　　　--prefix=${INSTALLPATH}/usr \
+ 　　　--enable-shared \
+ 　　　--disable-static"
 
-   export BUILDPATH=/home/student/build
+ export CFLAGS="-I${INSTALLPATH}/usr/include"
+ export CPPFLAGS="-I${INSTALLPATH}/usr/include"
+ export LDFLAGS="-L${INSTALLPATH}/usr/lib"
+ export PKG_CONFIG_PATH=${INSTALLPATH}/usr/lib/pkgconfig
+ cd ${BUILDPATH}
+ tar xf ${SOURCEPATH}/$1.tar.*
 
-   export INSTALLPATH=/home/student/target
+ cd $1
 
-   export PREFIX="-{}-host=arm-linux $\backslash$\\
-   　　　-{}-prefix=\${INSTALLPATH}/usr    $\backslash$\\
-   　　　-{}-enable-shared  $\backslash$\\
-   　　　-{}-disable-static"
+ ./configure ${PREFIX} $2
 
-   export CFLAGS="-I\${INSTALLPATH}/usr/include"
-
-   export CPPFLAGS="-I\${INSTALLPATH}/usr/include"
-
-   export LDFLAGS="-L\${INSTALLPATH}/usr/lib"
-
-   export PKG\_CONFIG\_PATH=\${INSTALLPATH}/usr/lib/pkgconfig
-
-   cd \${BUILDPATH}
-
-   tar xf \${SOURCEPATH}/\$1.tar.*
-
-   cd \$1
-
-   ./configure \${PREFIX} \$2
-
-   make
-   
-   make install DESTDIR=\${INSTALLPATH}
-\end{boxedminipage}
+ make
+ make install DESTDIR=${INSTALLPATH}
+\end{lstlisting}
 
 将其命名为 build.sh, 每次只要执行``sh build.sh pixman-0.16.0 -{}-disable-gtk''
 就可以完成 pixman 的编译.~对那些编译格式特殊的软件, 或借助中间文件, 或利用脚本
@@ -343,11 +338,10 @@ gtk-demo.~以下根据依赖关系, 对各个库加以简单的说明.~版本号
     尝试根据示例编写一个简单的 gtk+ 图形界面程序, 编译并运行.~编译时会用到
 移植gtk+过程中的头文件和库, 可以使用下面的Makefile:
 
-\begin{boxedminipage}{.9\textwidth}
 \lstset{language=make}
 %\definecolor{bg}{rgb}{.85,.85,1}
 %\lstset{backgroundcolor=\color{bg}}
-\begin{lstlisting}
+\begin{lstlisting}[frame=trBL]
 CC      = /opt/arm-2016.08/bin/arm-none-linux-gnueabi-gcc
 
 CFLAGS  = -I/home/student/target/usr/include
@@ -360,5 +354,3 @@ $(TARGET) : $(TARGET).c
         $(CC) $(CFLAGS) $^ -o $@ $(CFLAGS) $(LDFLAGS)
 
 \end{lstlisting}
-\end{boxedminipage}
-
