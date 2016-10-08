@@ -1,4 +1,4 @@
-% 嵌入式系统实验讲义(x210v3, 2016.6)
+% 嵌入式系统实验讲义(BeagleBone, 2016.6)
 \documentclass[a4paper,11pt]{book}
 
 \usepackage{indentfirst}                % 每章、节首段缩进
@@ -11,8 +11,8 @@
 \usepackage[thumblink=rule,%
 			linefill=dots,%
 			height=auto,%
-			minheight=47pt,%
-			width=auto,%
+			minheight=32pt,%
+			width=48pt,%
 			distance=2mm,%
 			topthumbmargin=auto,%
 			bottomthumbmargin=auto,%
@@ -55,6 +55,7 @@
 \setCJKmonofont{AR PL UKai CN}
 
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\graphicspath{{../x210/images/}}
 
 \lstset{language=C++,showstringspaces=false}
 \lstset{extendedchars=false} % tetex-3 conflict with CJK
@@ -90,12 +91,6 @@
 \renewcommand\chaptername{实验}
 \renewcommand\contentsname{目录}
 %\renewcommand\refname{参考文献}
-
-\let\oldchapter\chapter
-\renewcommand{\chapter}[2]
-{\oldchapter{#1}
-   \addthumb{#1}{\bf #2}{white}{gray}
-}
 
 \iffalse
 \titlespacing*{\chapter}{0pt}{20pt}{30pt}
@@ -175,6 +170,12 @@ $\spadesuit~~ \heartsuit~~ \diamondsuit~~ \clubsuit~~
 
 \baselineskip=17pt
 \tableofcontents
+
+\let\oldchapter\chapter
+\renewcommand{\chapter}[2]
+{\oldchapter{#1}
+   \addthumb{#1}{\bf #2}{white}{gray}
+}
 
 \mainmatter
 \pagestyle{headings}
