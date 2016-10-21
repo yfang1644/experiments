@@ -269,8 +269,13 @@ device support'', 并设置适当的 ramdisk 大小.在 ``General setup'' 设置
 \subsection{制作 init\_ramfs}
 	也可以将之前制作的根文件系统做进内核映像中,使内核成为一个完整的独立系统.
 
-	首先,进入根文件系统结构所在目录/mnt/ramdisk,将根文件系统用 cpio
-    打包并压缩:
+	首先,进入根文件系统结构所在目录/mnt/ramdisk, 在这里创建 init.~可以直接使用
+BusyBox编译出来的init:
+
+   ln --s bin/busybox init
+
+如果 BusyBox 不编译 init, 也可以创建一个以 init 命名的脚本.~然后用cpio 命令
+将整个目录结构打包并压缩:
 
 \begin{boxedminipage}{.9\textwidth}
 \begin{verbatim}
@@ -281,14 +286,14 @@ device support'', 并设置适当的 ramdisk 大小.在 ``General setup'' 设置
     注意将生成的文件ramdisk.cpio.gz 放到另外的目录(这里放到用户主目录下),
     以免被递归.
 
-	这种做法不要求制作独立的文件系统.之所以这里使用``/mnt/ramdisk'',是因为
+	这种做法不要求制作独立的文件系统. 之所以这里使用``/mnt/ramdisk'',是因为
 之前恰好做过一个完整的根文件系统并挂载到这个目录下.
 
-	将生成的文件 ramdisk.cpio.gz 复制到内核源码目录,并在内核配置选项中,
+	将生成的文件 ramdisk.cpio.gz \footnote{解压、解包 cpio 压缩文件通过
+管道方式一次完成:gunzip -cd ~ \~{}/ramdisk.cpio.gz | cpio -i}
+复制到内核源码目录,并在内核配置选项中,
 ``Initial RAM filesystem and RAM disk''下面的``Initramfs source file(s)''
 写上这个文件名.
-\footnote{解压 cpio: cpio -{}-no-absolute-filenames -imdv $<$ foo.cpio.注意
-    先要将之前压缩的 .gz 文件解压成 .cpio 文件.}
 
 	重新编译内核,将该文件编入内核文件 zImage,并复制到 tftp目录下.
 

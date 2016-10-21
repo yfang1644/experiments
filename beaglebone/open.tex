@@ -8,13 +8,15 @@
             colorlinks=true,            % 允许彩色链接
             linkcolor=black]{hyperref} % 超链接包
 
-\usepackage{graphicx, subfig, multicol, multirow, fancyhdr}
+\usepackage{graphicx, multicol, fancyhdr}
 \usepackage{listings}
 \usepackage[left=1in,right=1in,top=3cm,bottom=3cm]{geometry}
 \usepackage[nofonts]{ctex}
 \usepackage{fontspec}
 \usepackage{amsfonts}
-\usepackage{boxedminipage} 
+\usepackage{booktabs}
+\usepackage[explicit]{titlesec}
+\usepackage[dotinlabels]{titletoc}
 
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,petri}
@@ -46,9 +48,8 @@
 %\renewcommand\refname{参考文献}
 
 \newcommand{\chapter}[2]{}
-
 \title{
- 嵌入式系统 GUI 移植实验
+    开放实验---Linux图形库gtk+ 移植
 }
 \author{}
 \date{}
