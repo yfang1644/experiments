@@ -15,23 +15,25 @@
 \begin{figure}[!h]
   \centering
   \includegraphics[width=.7\textwidth]{GTK+_architecture}
-  \caption{基于gtk+的软件层次结构}\label{fig_gtk}
+    \caption[基于gtk+的软件层次结构]
+    {基于gtk+的软件层次结构\footnotemark} \label{fig_gtk}
 \end{figure}
+\footnotetext{图片引自 en.wikipedia.org/wiki}
 
     gtk+ 不直接和显示硬件设备打交道. Linux 桌面系统通常基于 X--Window. 而在
 嵌入式应用中, 作为全功能 X 窗口系统的替代方案, 可以选择DirectFB作为后端. 
 
 \section{gtk 库的依赖关系}
-从图\ref{fig_gtk}\footnote{图片引自 en.wikipedia.org/wiki}中可以看到, 
+从图\ref{fig_gtk}中可以看到, 
 gtk+ 除了为上层应用提供接口函数库以外, 自身也依赖一系列的更底层的库.
 图\ref{fig_gtkdfb}是建立gtk+的库依赖关系. 我们需要根据这样的依赖关系逐层
 构造系统的API.\@
 
 \begin{figure}[!h]
-\centering\bf \large
+\centering
 \begin{tikzpicture}[level distance=2.5cm, sibling distance=1.2cm,
     nodes={rectangle,minimum width=1.8cm,top color=white,
-        bottom color=red!50!black!20},
+        bottom color=red!50!black!20,font=\bf},
     level 1/.style={nodes=blue},
     level 2/.style={nodes=red},
     level 3/.style={nodes=green!50!black},
@@ -93,9 +95,9 @@ gtk-demo. 以下根据依赖关系, 对各个库加以简单的说明. 版本号
       图像格式.\@ libpng 依赖 zlib 库的压缩/解压功能.
 
   \item libjpeg-turbo-1.2.1. JPEG (Joint Photographic Experts Group), 非常
-      著名的图像压缩标准格式.libjpeg 不依赖其它库.
+      著名的图像压缩标准格式. libjpeg 不依赖其它库.
 
-  \item tiff-3.9.7. 用于处理 tiff (Tagged Image File Format) 图像格式文件,
+  \item tiff-3.9.7. 用于处理 TIFF (Tagged Image File Format) 图像格式文件,
       为gdk-pixbuf 提供部分支持. 可依赖 libjpeg.
 
   \item pixman--0.16.0. 底层像素处理工具 (Pixel Manipulation). 可依赖于
@@ -103,31 +105,31 @@ gtk-demo. 以下根据依赖关系, 对各个库加以简单的说明. 版本号
 
   \item libxml2-2.6.30/expat-2.0.1. XML (Extensible Markup Language, 扩展标记
       语言) 是在互联网中广泛使用的一种标记语言, 既可以让人读懂, 也能让机器
-      读懂. Linux 系统中的很多软件基于 xml 语言.~目前在Linux系统中, 提供 xml
+      读懂. Linux 系统中的很多软件基于 XML 语言. 目前在Linux系统中, 提供 XML
       解释功能的主要有两套库:expat 和 libxml2. 多数软件依赖于 libxml2, 但
       仍有少数仅依赖 expat.\ expat 不依赖其它软件, libxml2 可以依赖 zlib.
 
   \item dbus-1.8.16. D-Bus (Desktop BUS) 提供桌面环境下的进程间通信机制, 属于
       freedesktop.org 项目的一部分.\ dbus 依赖 xml 库, 可选择 libxml 或者
-      expat. 但由于 libxml 早已停止开发, 所以在编译dbus时指定连接 expat库.
+      expat. 但由于 libxml 早已停止开发, 所以在编译dbus时指定链接 expat库.
 
   \item glib-2.28.8. \ glib 原始于gtk+计划. 在gtk+-2版本之前, 不属于图形用户
       接口部分的功能被从 gtk+ 中分离出来单独开发, 这部分就是glib.\ glib 依赖
       dbus 和 zlib.
 
   \item freetype-2.3.7.\ freetype 库实现矢量字体TrueType、Type1显示效果支持
-      (字体渲染). 在连接 libpng 时还可以支持 png 压缩的点阵字体.\ freetype
+      (字体渲染). 在链接 libpng 时还可以支持 png 压缩的点阵字体.\ freetype
       自身已包含 zlib 解压功能, 可以不依赖 zlib, 也可在编译时指定使用系统的
       zlib.
 
-  \item fontconfig-2.6.0. 字体配置工具, 告诉系统如何找到字体库, 依赖freetype,
-      和 zlib, 可选择性地依赖 expat 或者 libxml2.
+  \item fontconfig-2.6.0. 字体配置工具, 告诉系统如何找到字体库, 依赖
+      freetype、zlib 和 XML. XML 可选择 expat 或者 libxml2.
 
   \item DirectFB-1.4.1. Direct Frame Buffer 提供图形加速、输入抽象层处理以及
-      窗口系统的基本功能, 是gtk+ 的后端.~它依赖触摸屏库tslib、字体库freetype
+      窗口系统的基本功能, 是gtk+ 的后端. 它依赖触摸屏库tslib、字体库 freetype
       以及图形库libpng、libjpeg.
 
-  \item cairo-1.6.4. 提供2维矢量图形处理的工具包. 在本实验中, 除后端选择
+  \item cairo-1.8.0. 提供2维矢量图形处理的工具包. 在本实验中, 除后端选择
       DirectFB外, 还依赖 fontconfig、pixman 和 XML.\@
 
   \item atk-1.29.4. ATK (Accessibility Toolkit) 提供客户/服务器访问API实现.
@@ -180,17 +182,16 @@ gdk-pixbuf-csource, 用于将 gtk+ 源码中的 png 图像转换成 c 语言格�
       为了获得不同的编译结果, configure 命令包含了很多选项, 需要在执行命令的
       同时给出. 例如, 多数软件包通常会这样执行配置命令:
 
-\lstset{language={bash},escapeinside=``}
-\lstset{extendedchars=false}
-\lstset{numbers=none} 
-\lstset{frameround=fttt}
-         
-\begin{lstlisting}[frame=trBL]
-    ./configure \
-        --prefix=/home/student/target \
-        --host=arm-linux \
-        --enable-shared  \
-        --disable-static
+\lstset{showspaces=false}
+\lstset{numbers=none,columns=flexible} 
+\lstset{frameround=fttt,frame=trBL}
+\begin{lstlisting}[language=bash,firstline=2,deletekeywords=enable]
+#!/bin/bash
+./configure \
+    --prefix=/home/student/target \
+    --host=arm-linux \
+    --enable-shared  \
+    --disable-static
 \end{lstlisting}
 
     该配置命令设置了软件安装目录, 指定交叉编译器前缀为``arm-linux-'', 编译共享
@@ -225,7 +226,7 @@ gdk-pixbuf-csource, 用于将 gtk+ 源码中的 png 图像转换成 c 语言格�
 
     如果需要特别指明链接库, 用 LIBS 变量 ("-lfoo").
 \subsection{一些特殊的设置}
-    多数软件包都可以按照上面给出的``configure''形式配置和编译.~下面几个软件包
+    多数软件包都可以按照上面给出的``configure''形式配置和编译. 下面几个软件包
 在配置或者编译时略有不同:
 \begin{enumerate}
   \item zlib, 按下面的步骤编译\\
@@ -271,10 +272,10 @@ gdk-pixbuf-csource, 用于将 gtk+ 源码中的 png 图像转换成 c 语言格�
       -{}-disable-win32 \\
       -{}-disable-xlib \\
       -{}-enable-directfb \\
-      -{}-enable-freetype \\
-      FREETYPE\_CFLAGS="--I/home/student/target/usr/include/freetype2" \\
-      FONTCONFIG\_CFLAGS="--I/home/student/target/usr/include/fontconfig" \\
-      FONTCONFIG\_LIBS="--lfontconfig --lexpat --lfreetype --lz"
+      -{}-enable-freetype
+%      FREETYPE\_CFLAGS="--I/home/student/target/usr/include/freetype2" \\
+%      FONTCONFIG\_CFLAGS="--I/home/student/target/usr/include/fontconfig" \\
+%      FONTCONFIG\_LIBS="--lfontconfig --lexpat --lfreetype --lz"
 
   \item pango, configure 时增加一个变量声明 CXX=arm-linux-g++
 
@@ -283,14 +284,18 @@ gdk-pixbuf-csource, 用于将 gtk+ 源码中的 png 图像转换成 c 语言格�
 
       如果之前编译了 tiff 库, 则 -{}-without-libtiff 可以去掉.
 
-  \item gtk+, 首先需要去除 gtk+ configure 中检查 pango 过程的代码.
-      用编辑器打开 configure, 将 23155 到23161 行删除\footnote{2.22.1版本.
-      其他版本方法类似, 但configure具体修改位置不同.}.
+  \item gtk+, configure 时会找不到之前已经编译过的 pango 动态库, 需要让gcc
+      传递给链接器该库的路径. 具体做法是在 LDFLAGS 中添加一项 ``-Wl,-rpath'':
 
-     其次, 需要将 demos/gtk-demo/geninclude.pl.in 中 所有``defined''单词
+      export LDFLAGS="--L/home/student/target/usr/lib $\backslash$ \\ 
+         --Wl,--rpath,/home/student/target/usr/lib"
+      \footnote{另有一种不规范的做法是直接修改 configure 文件, 将检查 pango
+      过程的代码删除, 具体到 2.22.1 版本, 就是删除 23155 到23161 行}
+
+     此外, 还需要将 demos/gtk-demo/geninclude.pl.in 中 所有``defined''单词
      删除,避免高版本 perl 在处理该文件时产生语法错误.
 
-     打完上面两个补丁, 再行配置. 配置时加上选项 -{}-with-gdktarget=directfb
+     完成上面两项工作后, 再行配置. 配置时加上选项 -{}-with-gdktarget=directfb
 \end{enumerate}
 
     fontconfig、cairo 依赖的 XML 都可以通过expat解决, 且本实验编译的软件没有
@@ -300,35 +305,33 @@ gdk-pixbuf-csource, 用于将 gtk+ 源码中的 png 图像转换成 c 语言格�
     软件移植的工作相当繁琐, 很多操作需要重复多次. 为避免重复劳动, 减少错误,
 我们可以把一些程序化的工作写成脚本程序. 例如, 下面的脚本可以胜任多数软件编译:
 
-\lstset{language={bash},escapeinside=``}
-\lstset{extendedchars=false}
-\lstset{numbers=none} 
-\lstset{frameround=fttt}
-         
-\begin{lstlisting}[frame=trBL]
- #!/bin/bash
+\lstset{showspaces=false}
+\lstset{numbers=none,columns=flexible} 
+\lstset{frameround=fttt,frame=trBL}
+\begin{lstlisting}[language=bash]
+#!/bin/bash
 
- export SOURCEPATH=/home/student/src
- export BUILDPATH=/home/student/build
- export INSTALLPATH=/home/student/target
- export PREFIX="--host=arm-linux \
- 　　　--prefix=${INSTALLPATH}/usr \
- 　　　--enable-shared \
- 　　　--disable-static"
+export SOURCEPATH=/home/student/src
+export BUILDPATH=/home/student/build
+export INSTALLPATH=/home/student/target
+export PREFIX="--host=arm-linux \
+   --prefix=${INSTALLPATH}/usr \
+   --enable-shared \
+   --disable-static"
 
- export CFLAGS="-I${INSTALLPATH}/usr/include"
- export CPPFLAGS="-I${INSTALLPATH}/usr/include"
- export LDFLAGS="-L${INSTALLPATH}/usr/lib"
- export PKG_CONFIG_PATH=${INSTALLPATH}/usr/lib/pkgconfig
- cd ${BUILDPATH}
- tar xf ${SOURCEPATH}/$1.tar.*
+export CFLAGS="-I${INSTALLPATH}/usr/include"
+export CPPFLAGS="-I${INSTALLPATH}/usr/include"
+export LDFLAGS="-L${INSTALLPATH}/usr/lib"
+export PKG_CONFIG_PATH=${INSTALLPATH}/usr/lib/pkgconfig
+cd ${BUILDPATH}
+tar xf ${SOURCEPATH}/$1.tar.*
 
- cd $1
+cd $1
 
- ./configure ${PREFIX} $2
+./configure ${PREFIX} $2
 
- make
- make install DESTDIR=${INSTALLPATH}
+make
+make install DESTDIR=${INSTALLPATH}
 \end{lstlisting}
 
 将其命名为 build.sh, 每次只要执行``sh build.sh pixman-0.16.0 -{}-disable-gtk''
@@ -350,10 +353,9 @@ gdk-pixbuf-csource, 用于将 gtk+ 源码中的 png 图像转换成 c 语言格�
     尝试根据示例编写一个简单的 gtk+ 图形界面程序, 编译并运行.~编译时会用到
 移植gtk+过程中的头文件和库, 可以使用下面的Makefile:
 
-\lstset{language=make}
 %\definecolor{bg}{rgb}{.85,.85,1}
 %\lstset{backgroundcolor=\color{bg}}
-\begin{lstlisting}[frame=trBL]
+\begin{lstlisting}[language=make]
 CC      = /opt/arm-2016.08/bin/arm-none-linux-gnueabi-gcc
 
 CFLAGS  = -I/home/student/target/usr/include
