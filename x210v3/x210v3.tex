@@ -146,6 +146,20 @@
 % First level of itemize uses a Square
 \renewcommand\labelitemi{\MySquare}
 
+\renewenvironment{itemize}{%
+\begin{list} {\labelitemi}{%
+    \settowidth{\labelwidth}{\labelitemi}%
+    \setlength{\leftmargin}{\labelwidth}%
+    \addtolength{\leftmargin}{\labelsep}%
+    \itemsep=-2pt }%
+}{\end{list}}
+											  
+\LetLtxMacro\oldenum\enumerate 
+\LetLtxMacro\oldendenum\endenumerate 
+\renewenvironment{enumerate}
+{\oldenum\setlength{\parskip}{\smallskipamount} \itemsep=-2pt}
+{\oldendenum}
+
 %\CTEXsetup[name={第,章},number={\chinese{chapter}},%
 %	format+={\song},beforeskip={-10ex plus -.1ex minus -.1ex},%
 %	afterskip={1ex plus .1ex minus .1ex}]{chapter}

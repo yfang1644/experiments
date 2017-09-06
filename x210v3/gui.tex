@@ -1,0 +1,179 @@
+\chapter{图形用户接口}{图形}
+
+\section{实验目的}
+\begin{itemize}
+  \item 了解嵌入式系统图形界面的基本编程方法
+  \item 学习图形库的制作
+\end{itemize}
+
+\section{原理概述}
+\subsection{帧缓冲设备}
+显示屏的整个显示区域，在系统内会有一段存储空间与之对应。通过改变该存储
+空间的内容达到改变显示信息的目的。该存储空间被称为帧缓冲区 (Frame Buffer)，
+或称显存。显示屏上的每一点都与帧缓冲区里的某一位置对应。所以，解决
+显示屏的显示问题，首先需要解决的是帧缓冲区的大小以及屏上的每一像素与帧缓冲
+的映射关系。
+
+按照显示屏的性能或显示模式区分，显示屏可以以单色或彩色显示。单色用 1 位
+来表示 (单色并不等于黑与白两种颜色，而是说只能以两种颜色来表示。通常取允许
+范围内颜色对比度最大的两种颜色)。彩色有 2、4、8、16、24、32等位色。这些色调
+代表整个屏幕所有像素的颜色取值范围。如：采用 8 位色/像素的显示模式，显示屏上
+能够出现的颜色种类最多只能有 $2^8$ 种。究竟应该采取什么显示模式，首先必须
+根据显示屏的性能，然后再由显示的需要来决定。这些因素会影响帧缓冲
+空间的大小,因为帧缓冲空间的计算大小是以屏幕的大小和显示模式来
+决定的。另一个影响帧缓冲空间大小的因素是显示屏的单/双屏幕模式。
+
+单屏模式表示屏幕的显示范围是整个屏幕。这种显示模式只需一个帧缓冲区
+来存储整个屏幕的显示内容，并且只需一个通道来将帧缓冲区的内容传输到
+显示屏上 (帧缓冲区的内容可能需要被处理后再传输到显示屏)。双屏模式则将
+整个屏幕划分成两部分。它有别于将两个独立的显示屏组织成一个显示屏。单看其中
+一部分，它们的显示方式与单屏方式是一致的，并且两部分同时扫描，工作方式是独
+立的。这两部分都各自有缓冲区，且他们的地址无需连续 (这里指的是下
+半部的帧缓冲的首地址无需紧跟在上半部的地址末端)，并且同时具有独立的
+两个通道将帧缓冲区的数据传输到显示屏。
+
+帧缓冲通常就是从内存空间分配所得，并且它是由连续的字节空间组成。
+由于屏幕的显示操作通常是从左到右逐点像素扫描、从上到下逐行扫描，直到扫描到
+右下角，然后再折返到左上角，而帧缓冲区里的数据则是按地址递增的顺序被
+提取，当帧缓冲区里的最后一个字节被提取后,再返回到帧缓冲区的
+首地址，所以屏幕同一行上相邻的两像素被映射到帧缓冲区里是连续的，某一行的
+最末像素与它下一行的首像素反映在帧缓冲区里也是连续的，并且屏幕上最左
+上角的像素对应帧缓冲区的第一单元空间，最右下角的像素对应帧缓冲区
+的最后一个单元空间。
+
+\subsection{帧缓冲与色彩}
+计算机反映自然界的颜色是通过 RGB(Red--Green--Blue)值来表示的。如果要在
+屏幕某一点显示某种颜色，则必须给出相应的 RGB 值。帧缓冲为屏幕提供
+显示的内容，就必须能够从帧缓冲区里得到每一个像素的 RGB 值。像素的
+RGB 值可以直接从帧缓冲区里得到，或是从是调色板间接得到 (此时帧缓冲区
+存放的并不是 RGB 值，而是调色板的索引值。通过索引值可以获得调色板的
+RGB 值)。
+
+帧缓冲区由所有像素的 RGB 值或 RGB 值的部分位 (RGB 由红、绿、蓝
+各 8 位组成，共 24 位，称为真彩色。由于某些显示屏的数据线有限，只有 16 条
+数据线或更少，这时只能取 R、G、B 部分位与数据线对应)所组成。例如，16 位/像素
+模式下，帧缓冲区里的每个单元为 16 位，每个单元代表一个像素的 RGB 值
+(RGB565)，如下图。\\
+
+\small
+\begin{tabular}{|*{16}{c|}}
+\hline
+   D15 & D14 & D13 & D12 & D11 & D10 & D9 & D8 &
+        D7 & D6 & D5 & D4 & D3 & D2 & D1 & D0\\\hline
+  R & R & R & R & R & G & G & G & G & G & G & B & B & B & B & B\\\hline
+\end{tabular}
+\ \\
+\normalsize
+
+有了以上的分析，就可以用下面的计算公式计算帧缓冲区的大小(以字节为单位)：
+$$
+	FrameBufferSize=\frac{Width \times Height \times Bit\_per\_Pixel}{8}
+$$
+
+\subsection{LCD控制器}
+在帧缓冲区与显示屏之间还需要一个中间件，该中间件负责从帧缓冲区
+里提取数据，进行处理，并传输到显示屏上。
+
+处理器内部集成 LCD 控制器, 将帧缓冲区里的数据传输到 LCDC 的内部,
+然后经过处理，输出数据到 LCD 的输入引脚上。
+
+本实验系统使用的是32位 LCD，像素分辨率 800$\times$480。相关驱动程序在
+\$(KERNEL-PATH)/drivers/video/samsung/s3cfb.c中。
+
+\subsection{帧缓冲设备操作}
+帧缓冲设备是 /dev/fb (它通常是字符设备 /dev/fb0 的符号链接，该设备
+主设备号是29，次设备号是0)。了解这个设备的参数可以通过
+FBIOGET\_FSCREENINFO、FBIOGET\_VSCREENINFO 命令，如：
+\begin{lstlisting}
+#include <linux/fb.h>
+#include <sys/ioctl.h>
+	...
+	struct fb_var_screeninfo vinfo;
+	......
+	fd = open("/dev/fb", O_RDWR);
+	...
+    ioctl(fd, FBIOGET_VSCREENINFO, &vinfo)
+\end{lstlisting}
+可以获得显示器色位、分辨率等信息 (vinfo.bits\_per\_pixel、vinfo.xres、
+vinfo.yres)。描述帧缓冲设备的有两个重要的数据结构：fb\_fix\_screeninfo 和
+fb\_var\_screeninfo。前者称固定信息，用于记录缓冲区地址、大小、设备尺寸
+等等，后者称可变信息，包括可视分辨率、虚拟分辨率、色彩位、扫描时钟等等。
+他们被包含在头文件``\verb!#include <linux/fb.h>!''中。
+
+获取帧缓冲区首地址的系统调用是
+\begin{lstlisting}
+void *mmap(void *addr, size_t length, int prot, int flags,
+            int fd, off_t offset);
+\end{lstlisting}
+addr=NULL时，由内核选择映射地址(这是最常用的方式)；length 是要求映射
+的存储器大小，以字节为单位；prot 是读写访问保护方式；flags 决定了
+映射到同一区域的存储器更新时对其他进程是否可见；fd 是打开设备的文件
+描述符；offset 是设备的存储器起始地址。一个典型的用法是：
+
+\begin{lstlisting}
+#include <sys/mman.h>
+...
+    unsigned char *fbp = 0;
+    ......
+    fbp = (unsigned char *)mmap(0, screensize,\
+            PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+\end{lstlisting}
+screensize 是根据显示器信息计算出的缓冲区大小，通过 mmap() 函数获得的缓冲区
+首地址。从该首地址开始、以 screensize 为大小的范围即是显示缓冲区的内存映射
+地址。如果采用RGB--24位色，在坐标$(x, y)$处画一个红点，可以用下面的方法：
+\begin{lstlisting}
+int draw_point(int x, int y)
+{
+	...
+    offset = (y * vinfo.xres + x) * vinfo.bits_per_pixel / 8;
+    *(unsigned char *)(fbp + offset + 0) = 255;
+    *(unsigned char *)(fbp + offset + 1) = 0;
+    *(unsigned char *)(fbp + offset + 2) = 0;
+    ...
+}
+\end{lstlisting}
+
+如果是16位色(RGB565)，须根据格式要求将 RGB压缩到 16 位，再填充对应字节：
+
+\begin{lstlisting}
+int draw_point(int x, int y)
+{
+   ...
+    offset = (y * vinfo.xres + x) * vinfo.bits_per_pixel / 8;
+    color = (Red << 11) | ((Green << 5) & 0x07E0) | (Blue & 0x1F);
+    *(unsigned char *)(fbp + offset + 0) = color & 0xFF;
+    *(unsigned char *)(fbp + offset + 1) = (color >> 8) & 0xFF;
+    ...
+}
+\end{lstlisting}
+
+色彩分量的移位和拼接方式，除了需要考虑处理器位端 (endian)以外，还应
+注意移位及高低字节顺序的不同。准确描述这些信息应访问
+struct fb\_var\_screeninfo 结构中的 bitfield red、green、blue 成员。
+
+将显示缓冲区清零，memset(fbp, 0, screensize)，即可以实现清屏 (黑屏)操作。
+
+使用完毕应通过 munmap() 释放显示缓冲区。
+\begin{lstlisting}
+int munmap(void *addr, size_t length);
+\end{lstlisting}
+
+\section{实验内容}
+\subsection{实现基本画图功能}
+以帧缓冲基础，编写画点、画线的API函数，供应用程序调用，
+实现任意曲线的画图功能。
+
+\subsection{合理的软件结构}
+将调用设备驱动的基本 API 函数独立地构成一个函数库，为用户程序屏蔽底层硬件
+信息，直接提供一些简单的画图调用。函数库可以是独立编译后的``.o''文件或由归档
+管理器 ar 生成的库文件,或是将 ``.o''文件链接而成的共享库``.so''。
+(例如，静态库文件名为 libfoo.a，或共享库文件名 libfoo.so, 编译链接时可用
+``--l foo'' 选项)
+
+\section{实验报告要求}
+\begin{itemize}
+  \item 总结帧缓冲设备的操作方法；
+  \item 探讨软件结构的层次关系；
+  \item 思考：如果一帧显示数据的计算量很大，连续图像的刷新、显示将消耗比较多
+		的时间，此时如何较好地实现连续画面的动态显示？
+\end{itemize}

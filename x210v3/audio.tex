@@ -1,78 +1,77 @@
 \chapter{音频接口程序设计}{音频}
 
 \section{实验目的}
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 了解音频编、解码的作用和工作原理；
-  \item 学习 Linux 系统的音频接口编程方法.
+  \item 学习 Linux 系统的音频接口编程方法。
 \end{itemize}
 
 \section{接口介绍}
-	S5PV210 片内集成了音频子系统,支持多种音频编解码,包含IIS总线接口.
+	S5PV210 片内集成了音频子系统，支持多种音频编解码，包含IIS总线接口。
 IIS总线通过串行方式传输数字音频、调制/解调, 实现音频输入/输出、寄存器控制和
-状态信息获取等, 可与多种音频接口芯片连接.
+状态信息获取等, 可与多种音频接口芯片连接。
 
-	本实验系统使用的CODEC芯片为 WM8976.它采用~$\Delta$--$\Sigma$~转换工作原理
-进行模拟/数字之间的转换.该芯片驱动程序在
+	本实验系统使用的CODEC芯片为 WM8976。它采用~$\Delta$--$\Sigma$~转换工作原理
+进行模拟/数字之间的转换。该芯片驱动程序在
 
   \$(KERNELPATH)/drivers/sound/soc/codecs/wm8976.c
 
 \section{原理概述}
-	内核编译时需要有声音支持.
+	内核编译时需要有声音支持。
 
 \subsection{OSS}
 	Linux 系统的音频驱动主要有两类: OSS(Open Sound System)和 ALSA(Advanced
-Linux Sound Architecture).其中 OSS 主要出现在早期的 Linux版本中.
-与 OSS 相关的设备节点主要有两个:
+Linux Sound Architecture)。其中 OSS 主要出现在早期的 Linux版本中。
+与 OSS 相关的设备节点主要有两个：
 
-\begin{itemize}\itemsep=-3pt
-  \item /dev/dsp(主设备号14,次设备号3),负责音频数据的输入~(A/D~转换)和输出
-		~(D/A~转换)、工作方式设置(采样/输出频率、通道数、数据格式等等)；
-  \item /dev/mixer(主设备号14,次设备号0),混音及音量设置、高低音等等.
+\begin{itemize}
+  \item /dev/dsp(主设备号14，次设备号3)，负责音频数据的输入 (A/D转换)和输出
+		(D/A 转换)、工作方式设置(采样/输出频率、通道数、数据格式等等)；
+  \item /dev/mixer (主设备号14，次设备号0)，混音及音量设置、高低音等等。
 \end{itemize}
 
-	请参考\$(KERNEL\_PATH)/include/linux/soundcard.h~中的说明完成音频接口设置.
-(如,设置双声道, channels=2; ioctl(fd, SNDCTL\_DSP\_CHANNELS, \&channels);)
-编写应用程序,实现简单的录音和放音.记录模拟/数字音频转换结果.
+	请参考\$(KERNEL\_PATH)/include/linux/soundcard.h~中的说明完成音频接口设置。
+(如，设置双声道， channels=2; ioctl(fd, SNDCTL\_DSP\_CHANNELS, \&channels);)
+编写应用程序，实现简单的录音和放音。记录模拟/数字音频转换结果。
 
-	通过 /dev/dsp(或/dev/audio,主设备号13,次设备号4)设置给定的采样/输出
-模式.常用的设置命令有:
-\begin{itemize}\itemsep=-3pt
+	通过 /dev/dsp(或/dev/audio，主设备号13，次设备号4)设置给定的采样/输出
+模式。常用的设置命令有：
+\begin{itemize}
   \item SNDCTL\_DSP\_RESET
-  \item SNDCTL\_DSP\_SPEED,采样/输出率,如8000Hz、44100Hz、48000Hz等.
-		$\Delta-\Sigma$转换器通过晶振的有限个分频得到采样率,因此不能 直接
-        实现任意频率的采样/输出.
-  \item SNDCTL\_DSP\_SAMPLESIZE,采样值的数据位大小.
-  \item SNDCTL\_DSP\_CHANNELS,通道数,mono(1)或stereo(2).
-  \item SOUND\_PCM\_WRITE\_CHANNELS,输出通道数,通常和输入通道数一致.
-  \item SNDCTL\_DSP\_SETFRAGMENT,缓冲数据块大小.
-  \item SNDCTL\_DSP\_SETFMT、SNDCT\_DSP\_GETFMTS,设置/获取数据格式.这些格式
-		包括~$\mu$--律~(AFMT\_MU\_LAW)、~A--律~(AFMT\_A\_LAW)、~无符号8位~
-		(AFMT\_U8)、~带符号8位(AFMT\_S8)、~16位大端或小端模式~(AFMT\_S16\_LE、
-		~AFMT\_U16\_BE)等等.
+  \item SNDCTL\_DSP\_SPEED，采样/输出率，如8000Hz、44100Hz、48000Hz等。
+		$\Delta-\Sigma$转换器通过晶振的有限个分频得到采样率，因此不能 直接
+        实现任意频率的采样/输出。
+  \item SNDCTL\_DSP\_SAMPLESIZE，采样值的数据位大小。
+  \item SNDCTL\_DSP\_CHANNELS，通道数，mono(1)或stereo(2)。
+  \item SOUND\_PCM\_WRITE\_CHANNELS，输出通道数，通常和输入通道数一致。
+  \item SNDCTL\_DSP\_SETFRAGMENT，缓冲数据块大小。
+  \item SNDCTL\_DSP\_SETFMT、SNDCT\_DSP\_GETFMTS，设置/获取数据格式。这些格式
+		包括 $\mu$--律 (AFMT\_MU\_LAW)、A--律 (AFMT\_A\_LAW)、无符号8位
+		(AFMT\_U8)、带符号8位(AFMT\_S8)、16 位大端或小端模式 (AFMT\_S16\_LE、
+		AFMT\_U16\_BE)等等。
 \end{itemize}
 
-	对混音器(/dev/mixer)的常用命令有:
-\begin{itemize}\itemsep=-3pt
-  \item SOUND\_MIXER\_NRDEVICES,获取设备数量.
-  \item SOUND\_MIXER\_VOLUME,总音量设置.音量取值范围是0$\sim$100.
-  \item SOUND\_MIXER\_BASS、SOUND\_MIXER\_TREBLE,低音、高音设置.
-  \item ~SOUND\_MIXER\_PCM、~SOUND\_MIXER\_LINE、~SOUND\_MIXER\_MIC~等,对
-		各音源音量的独立设置. 
-  \item SOUND\_MIXER\_IGAIN,输入增益.
-  \item SOUND\_MIXER\_OGAIN,输出增益.
+	对混音器(/dev/mixer)的常用命令有：
+\begin{itemize}
+  \item SOUND\_MIXER\_NRDEVICES，获取设备数量。
+  \item SOUND\_MIXER\_VOLUME，总音量设置。音量取值范围是0$\sim$100。
+  \item SOUND\_MIXER\_BASS、SOUND\_MIXER\_TREBLE，低音、高音设置。
+  \item SOUND\_MIXER\_PCM、~SOUND\_MIXER\_LINE、SOUND\_MIXER\_MIC 等，对
+		各音源音量的独立设置。 
+  \item SOUND\_MIXER\_IGAIN，输入增益。
+  \item SOUND\_MIXER\_OGAIN，输出增益。
 \end{itemize}
 
 \subsection{ALSA}
-	现在的Linux发行版更多的采用ALSA音频驱动.与OSS不同的是, ALSA应用程序
-通过ALSA API完成对设备的操作,不再使用 open,close,ioctl,read,write 等低级
-系统调用.因此 ALSA 应用程序中看不到设备文件,有的只是对ALSA 函数的调用.
-编译ALSA程序需要链接 asound 库.
+现在的Linux发行版更多的采用ALSA音频驱动。与OSS不同的是, ALSA应用程序
+通过ALSA API完成对设备的操作，不再使用 open,close,ioctl,read,write 等低级
+系统调用。因此 ALSA 应用程序中看不到设备文件，有的只是对ALSA 函数的调用。
+编译ALSA程序需要链接 asound 库。
 
-	下面是一些API的例子:
+下面是一些API的例子：
 
-\lstset{language=c}
 %\lstset{backgroundcolor=\color{bg}}
-\begin{lstlisting}{}
+\begin{lstlisting}
   /* Allocate the snd_pcm_hw_params_t structure on the stack. */
   snd_pcm_hw_params_t *hwparams;
   snd_pcm_hw_params_alloca(&hwparams);
@@ -85,13 +84,13 @@ Linux Sound Architecture).其中 OSS 主要出现在早期的 Linux版本中.
   snd_pcm_hw_params_any(pcm_handle, hwparams);
   
   /* PCM 命令集的形式是
-  	snd_pcm_hw_params_can_<capability>
-  	snd_pcm_hw_params_is_<property>
-  	snd_pcm_hw_params_get_<parameter>
-   - 一些重要的参数,包括缓冲区大小、通道数、采样格式、速率等,可以通过
-  	snd_pcm_hw_params_set_<parameter> 调用实现 */
+   * snd_pcm_hw_params_can_<capability>
+   * snd_pcm_hw_params_is_<property>
+   * snd_pcm_hw_params_get_<parameter>
+   * 一些重要的参数，包括缓冲区大小、通道数、采样格式、速率等，
+   * 可以通过 snd_pcm_hw_params_set_<parameter> 调用实现 */
   
-  /* 设置数据格式:16bit-signed-little-endian */
+  /* 设置数据格式：16bit-signed-little-endian */
   snd_pcm_hw_params_set_format(pcm_handle, hwparams,
          SND_PCM_FORMAT_S16_LE);
   
@@ -104,33 +103,37 @@ Linux Sound Architecture).其中 OSS 主要出现在早期的 Linux版本中.
   /* 将数据写入设备 (Digital to Analogue) , 函数返回实际写入的帧数 */
   snd_pcm_write(pcm_handle, buffer, num_of_frames);
   
-  /* 对混音器操作,通过 snd_mixer_<parameter/property> 一组指令完成 */
+  /* 对混音器操作，通过 snd_mixer_<parameter/property> 一组指令完成 */
 \end{lstlisting}
 
 
 \section{实验内容}
 
-	根据内核配置,选择适当的音频驱动,实现数字音频的采集与回放.
+根据内核配置，选择适当的音频驱动，实现数字音频的采集与回放。
 
 \section{实验报告要求}
-\begin{itemize}\itemsep=-3pt
-  \item 将实验采集的数据与信号源产生的实际信号对比,将输出的预期信号与示波器
-		测量到的信号对比,分析产生差异的原因；
-  \item 思考:如果在信号采集过程中还包含了数据处理工作,如何保证信号的连续性?
+\begin{itemize}
+  \item 将实验采集的数据与信号源产生的实际信号对比，将输出的预期信号与示波器
+      测量到的信号对比，分析产生差异的原因；
+  \item 思考：如果在信号采集过程中还包含了数据处理工作，如何保证信号的连续性?
 \end{itemize}
 
 % **************************************************
 \newpage
 \tt [附] $\Delta-\Sigma$ AD转换器原理
-
+\iffalse
 Delta-Sigma ($\Delta-\Sigma$) ADC
+较为先进的一种A/D转换器是 Delta-Signa 型或用希腊字母标记的$\Delta-\Sigma$
+型A/D转换器。在数学或物理科学领域，大写希腊字母$\Delta$ 表示差分或
+改变，大写字母 $\Sigma$ 则表示求和。有时候这种A/D转换器的名字也会倒过来
+念成 Sigma-Delta ( $\Sigma-\Delta$)。
 
-One of the more advanced ADC technologies is the so-called delta-sigma,
-or $\Delta-\Sigma$ (using the proper Greek letter notation). In mathematics
-and physics, the capital Greek letter delta ($\Delta$) represents difference
-or change, while the capital letter sigma ($\Sigma$) represents summation:
-the adding of multiple terms together. Sometimes this converter is referred
-to by the same Greek letters in reverse order: sigma-delta, or $\Sigma-\Delta$.
+在$\Sigma-\Delta$ A/D转换器中，模拟电压输入信号连在积分器的输入端，在相应的
+输出端产生积分输出，然后与地电平同时输入到一个比较器。比较器相当于一个
+1位的A/D转换器，产生1位输出 (高电平或低电平，取决于积分器输出是正还是负)。
+比较器的输出通过一个D触发器锁存，并反馈到积分器的另一个输入端。基本电路
+看上去像下面这幅图的样子：
+\fi
 
 In a $\Sigma-\Delta$ converter, the analog input voltage signal is connected
 to the input of an integrator, producing a voltage rate-of-change, or slope,
@@ -147,6 +150,12 @@ circuit looks like this:
 \centering
 \includegraphics[width=0.6\textwidth]{adc1}
 \end{figure}
+
+\iffalse
+运放A是一个积分器。它的后级运放是一个比较器，也可看作1位A/D转换器。
+1位A/D转换器输出通过D触发器锁存，在时钟脉冲作用下输出连续的高、低电平
+序列。
+\fi
 
 The leftmost op-amp is the (summing) integrator. The next op-amp the
 integrator feeds into is the comparator, or 1-bit ADC. Next comes the

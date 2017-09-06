@@ -54,8 +54,8 @@
   \item 配置文件 config.in：给用户提供配置选择的功能。``.config''是内核配置
 		文件，包括由用户选择的配置选项，用来存放内核配置后的结果；
   \item 配置工具：包括对配置脚本中使用的配置命令进行解释的配置命令解释器和
-		配置用户界面(基于字符界面: make config，基于 ncurses 界面:make 
-		menuconfig，基于 X-Window 图形界面:make xconfig)；
+		配置用户界面(基于字符界面: make config，基于 ncurses 界面: make 
+		menuconfig，基于 X-Window 图形界面: make xconfig)；
   \item Rules.make：规则文件，被所有的 Makefile 使用。
 \end{enumerate}
 \subsection{编译规则 Makefile}
@@ -64,10 +64,10 @@
 以便用 make oldconfig 恢复上一次的配置。
 
 	编译时，顶层 Makefile 完成产生核心文件(vmlinux )和内核模块(module)两个
-任务，为了达到此目的，顶层 Makefile 将读取.config中的配置选项，递归进入到
+任务，为了达到此目的，顶层 Makefile 将读取 .config 中的配置选项，递归进入到
 内核的各个子目录中，分别调用位于这些子目录中的 Makefile 进行编译。
 配置文件(.config)中有许多配置变量设置，用来说明用户配置的结果。例如
-``CONFIG\_ MODULES=y''表明用户选择了Linux 内核的模块功能。
+``CONFIG\_ MODULES=y''表明用户选择了 Linux 内核的模块功能。
 
 	配置文件(.config)被顶层 Makefile 包含后，就形成许多的配置变量，每个配置
 变量具有四种不同的取值：

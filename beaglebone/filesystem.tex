@@ -46,14 +46,14 @@ NFS 作为根文件系统的信息:
 \end{verbatim}
 \end{boxedminipage}
 
-	系统启动后, ``nfs\_Root\_Dir''就成为系统的根目录``/'', 它和下面制作的
+    系统启动后, ``nfs\_Root\_Dir''就成为系统的根目录``/'', 它和下面制作的
 ramdisk 中的根目录结构是相同的。
 
 \subsection{JFFS2 文件系统}
 	JFFS 文件系统是瑞典 Axis 通信公司开发的一种基于 FLASH 的日志文件系统。
 它在设计时充分考虑了 FLASH 的读写特性和电池供电的嵌入式系统的特点。在这类
 系统中, 必需确保在读取文件时如果系统突然掉电, 其文件的可靠性不受到影响。对
-Red Hat 的 Davie Woodhouse 进行改进后, 形成了 JFFS2。JFFS2 克服了 JFFS
+Red Hat 的 David Woodhouse 进行改进后, 形成了 JFFS2。JFFS2 克服了 JFFS
 的一些缺点, 使用了基于哈希表的日志节点结构, 大大加快了对节点的操作速度；
 改善了存取策略以提高 FLASH 的抗疲劳性, 同时也优化了碎片整理性能, 增加了数据
 压缩功能。需要注意的是, 当文件系统已满或接近满时, JFFS2 会大大放慢运行速度。
