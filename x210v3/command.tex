@@ -1,12 +1,12 @@
 \documentclass[12pt]{article}
 
 \usepackage{graphicx}
-\usepackage[left=0cm,right=0cm,top=15mm,bottom=0mm,
+\usepackage[left=3mm,right=0cm,top=15mm,bottom=0mm,
             papersize={220mm,380mm}]{geometry}
 \usepackage{fancybox}
 \usepackage{multicol}
 \usepackage{lscape}
-\usepackage{indentfirst}
+\usepackage{tabularx}
 \usepackage[table]{xcolor}
 \graphicspath{{images/}}
 \usepackage[nofonts]{ctex}
@@ -23,7 +23,7 @@
 
 \pagestyle{empty}
 \pagecolor{lightblue}
-\setlength{\parindent}{1em}
+\setlength{\parindent}{0em}
 \setlength\tabcolsep{5pt}
 
 %\begin{landscape}
@@ -31,9 +31,9 @@
 \begin{center}
 \setlength\shadowsize{2pt}
 \setlength\fboxrule{1pt}
-\shadowbox{\fcolorbox{white}{white}{\parbox{11cm}{
-	\vskip 5pt \Huge Shell Command Reference \vskip 5pt}}}
-\includegraphics[width=0.12\textwidth]{tux.png}
+\shadowbox{\fcolorbox{white}{white}{\parbox{10.5cm}{
+    \vskip 15pt \Huge Shell Command Reference \vskip 15pt}}}
+\includegraphics[width=0.12\textwidth]{TUX_G2}
 \end{center}
 
 \begin{multicols}{2}
@@ -41,7 +41,7 @@
 \newcommand{\subtitle}[1]{
 \setlength\shadowsize{2pt}
 \setlength\fboxrule{1pt}
-\shadowbox{\fcolorbox{gray}{yellow!30!white}{\parbox{9cm}{
+\shadowbox{\fcolorbox{gray}{yellow!30!white}{\parbox{10.35cm}{
 	\vskip 5pt \large \ \ \color{blue} #1 \vskip 5pt}}}
 
 }
@@ -51,7 +51,7 @@
 
 \subtitle{File Commands}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     ls  & Directory listing\\
     ls -al& Formatted list all\\
     cd [dir]& Change directory to \tr{dir} \\
@@ -68,22 +68,22 @@
     head -n 10 file & Show first 10 lines of \tr{file}\\
     tail -n 5 file & Show last 5 lines of \tr{file}\\
     tail -f file & \tr{F}ollow the contents of \tr{file}
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{Searching}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     grep pattern files & Search \tr{pattern} in \tr{files}\\
     grep -r pattern dir & Search \tr{r}ecursively in \tr{dir}\\
     find dir -name '*.c' & Find files with suffix .c\\
     locate file & Find instances of \tr{ file}
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{Installation}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     ./configure & configure from source\\
     make       &  build from source\\
     make install & install \\
@@ -92,12 +92,12 @@
            & -i \tr{pkg.deb} \tr{i}nstall/upgrade\\
            & -r \tr{pkg}  \tr{r}emove\\
     apt-get & repository package manager
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{Compression}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     tar & Create/extract a tar file\\
         &{\bf f -- file}\\
         &{\bf c -- create/compression}\\
@@ -110,12 +110,12 @@
         & tar zcf foo.tar.gz dir\\
     gzip file & Compress \tr{file} to \tr{file.gz}\\
     gzip -d file.gz & Decompress \tr{file.gz}
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{System Info}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     date  & Show the current \tr{date} and time\\
     cal   & Show this month's \tr{cal}endar\\
     uptime & Show current \tr{uptime}\\
@@ -127,12 +127,12 @@
     du & Show directory space usage\\
     free & Show memory and swap usage\\
     whereis app & Show possible locations of \tr{app}
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{File Permissions}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     chmod & Change the permissions(rwx) of file\\
 	  & {\bf 4 -- read(r)}\\
 	  & {\bf 2 -- write(w)}\\
@@ -141,36 +141,36 @@
 	  & chmod 777 -- RWX for all\\
 	  & chmod 755 -- owner RWX , others R-W\\
     chown & Change owner@group of file(s)
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{Process Management}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     ps & Display active processes\\
     top & Display running processes\\
     kill pid & Kill process by \tr{pid}(number)\\
     killall proc & Kill all processes named \tr{proc}\\
     bg & Send a job into background \\
     fg job & Bring \tr{job} to the foreground
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{Network}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     ping host & check the \tr{host} connection\\
     whois domain & get whois for \tr{domain}\\
     dig domain & get DNS information\\
     dig -x host & reverse lookup \tr{host}\\
     wget URL:file & download \tr{file} from network\\
     wget -c file & continue a stopped download\\
-\end{tabular}
+\end{tabularx}
 }
 
 \subtitle{Shortcuts}
 \shadowbox{
-\begin{tabular}{>{\columncolor{gray2}}ll}
+\begin{tabularx}{10cm}{>{\columncolor{gray2}}lX}
     $^\wedge$C & Halt the current command\\
     $^\wedge$Z & Stop the current command, \\
           & cab be resumed with \tr{fg} or \tr{bg} \\
@@ -179,13 +179,13 @@
     $^\wedge$U & Erase the whole line\\
     !!    &   Repeat the last command\\
     $*$   & \tr{USE WITH EXTREME CAUTION}
-\end{tabular}
+\end{tabularx}
 }
 
 \end{multicols}
 
 \hfill \CJKfamily{heiti} \Large 南京大学电子信息专业实验教学中心
-\includegraphics[width=0.06\textwidth]{njulogo.png} ~
+\includegraphics[width=0.06\textwidth]{njulogo} ~
 %\end{landscape}
 \end{document}
 

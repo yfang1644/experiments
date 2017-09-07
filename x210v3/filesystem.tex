@@ -63,11 +63,11 @@ RAM Disk 中的根目录结构是相同的。
 
 \subsection{JFFS2 文件系统}
 
-作为可殿擦写的只读存储设备, FLASH 可分为 NOR Flash 和 NAND Flash 两种主要类型。
-一片没有使用过的 FLASH 存储器, 每一位的值都是逻辑 1。对 FLASH 的写操作
-就是将特定位的逻辑 1 改变为逻辑 0。而擦除就是将逻辑 0 改变为逻辑 1。FLASH
-的数据存储是以块 (Block)为单位进行组织, 所以 FLASH 在进行擦除操作时只能
-进行整块擦除。
+作为可电擦写的只读存储设备, FLASH 可分为 NOR Flash 和 NAND Flash 两种
+主要类型。一片没有使用过的 FLASH 存储器, 每一位的值都是逻辑 1。对
+FLASH 的写操作就是将特定位的逻辑 1 改变为逻辑 0。而擦除就是将逻辑 0
+改变为逻辑 1。FLASH 的数据存储是以块 (Block)为单位进行组织, 所以 FLASH
+在进行擦除操作时只能进行整块擦除。
 
 FLASH的使用寿命是以擦除次数进行计算的。一般在十万次左右。为了保证 FLASH
 存储芯片的某些块不早于其他块到达其寿命, 有必要在所有块中尽可能地平均分配擦除
@@ -88,7 +88,7 @@ JFFS 在设计时充分考虑了 FLASH 的读写特性和电池供电的嵌入�
 在这类系统中, 必需确保在读取文件时如果系统突然掉电, 其文件的可靠性不受到
 影响，且在擦写时必须考虑``损耗平衡''，延长 Flash 的使用寿命。
 
-Red Hat 的 David Woodhouse 对 JFFS 进行改进后, 形成了 JFFS2，自Linux-2.410
+Red Hat 的 David Woodhouse 对 JFFS 进行改进后, 形成了 JFFS2，自Linux-2.4.10
 开始并入内核主线。JFFS2 克服了 JFFS 的一些缺点, 使用了基于哈希表的日志
 节点结构, 大大加快了对节点的操作速度；改善了存取策略以提高 FLASH 的
 抗疲劳性, 同时也优化了碎片整理性能, 增加了Nand Flash的支持和数据
@@ -234,10 +234,11 @@ devtmpfs 自动挂载功能，创建设备文件的工作会由系统自动完�
   \item 建立 proc 空目录, 供 proc 文件系统使用。
   \item 建立 lib 目录, 将交叉编译器链接库路径下的下面几个库复制到 lib目录：\\
       ld-2.10.1.so, libc-2.10.1.so, libm-2.10.1.so 并做相应的符号链接：\\
-        ln --s ld-2.10.1.so ld-linux.so.3\\
-        ln --s libc-2.10.1.so libc.so.6\\
-        ln --s libm-2.10.1.so libm.so.6
-
+\begin{verbatim}
+  $ ln --s ld-2.10.1.so ld-linux.so.3
+  $ ln --s libc-2.10.1.so libc.so.6
+  $ ln --s libm-2.10.1.so libm.so.6
+\end{verbatim}
         如果BusyBox以静态链接方式编译, 没有这些库, 不影响系统正常启动, 
         但会影响其他动态链接的程序运行。
 \end{itemize}
@@ -278,7 +279,7 @@ device support'', 并设置适当的 RAM Disk 大小。在 ``General setup'' 设
   $ gunzip ramdisk_img.gz
 \end{verbatim}
 
-    bootloader 通过 bootargs 向内核传递信息，指示它挂载 RAM Disk 作为根文件
+BootLoader 通过 bootargs 向内核传递信息，指示它挂载 RAM Disk 作为根文件
 系统。同时 RAM Disk 的镜像文件也应装入内存的对应位置:
 \begin{verbatim}
   x210 # setenv ramdisk root=/dev/ram rw initrd=0x40000000,8M

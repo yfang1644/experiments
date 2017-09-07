@@ -22,35 +22,36 @@
 
     本系统主要基于串行口和网口进行开发。
 
-\subsection{bootloader}
+\subsection{BootLoader}
 PC 机中的引导加载程序由 BIOS 和位于硬盘的主引导记录 MBR(Master Boot
-Recorder) 中的 OS Boot Loader 一起组成。BIOS 在完成硬件检测和资源分配
-后，将硬盘 MBR 中的 Boot Loader 读到系统的 RAM 中，然后将控制权交给
-OS Boot Loader。Boot Loader 的主要运行任务就是将内核镜像从硬盘上读到
+Recorder) 中的 OS BootLoader 一起组成。BIOS 在完成硬件检测和资源分配
+后，将硬盘 MBR 中的 BootLoader 读到系统的 RAM 中，然后将控制权交给
+OS BootLoader。BootLoader 的主要运行任务就是将内核镜像从硬盘上读到
 RAM 中，然后跳转到内核的入口点去运行，也即开始启动操作系统。
 
 	嵌入式系统中，通常并没有像 BIOS 那样的固件程序，因此整个系统的加载启动
-任务完全由 bootloader 来完成。用于引导嵌入式操作系统的 bootloader 有
-U-Boot、vivi、RedBoot等等。bootloader的主要作用是：
+任务完全由 BootLoader 来完成。用于引导嵌入式操作系统的 BootLoader 有
+U-Boot、vivi、RedBoot等等。BootLoader的主要作用是：
 \begin{enumerate}
   \item 初始化硬件设备；
   \item 建立内存空间的映射图；
   \item 完成内核的加载，为内核设置启动参数。
 \end{enumerate}
 
-\subsection{bootloader程序结构框架}
-嵌入式系统中的 bootloader 的实现完全依赖于 CPU 的体系结构，因此
-大多数 bootloader 都分两个阶段。依赖于 CPU 体系结构的代码，比如设备初始化
+\subsection{BootLoader程序结构框架}
+嵌入式系统中的 BootLoader 的实现完全依赖于 CPU 的体系结构，因此
+大多数 BootLoader 都分两个阶段。依赖于 CPU 体系结构的代码，比如设备初始化
 代码等，通常都放在阶段一中，且通常都用汇编语言来实现，以达到短小精悍的目的。
 阶段一通常包括以下步骤：
 \begin{enumerate}
   \item 硬件设备初始化；
-  \item 拷贝Boot Loader的程序到RAM空间中；
+  \item 拷贝BootLoader的程序到RAM空间中；
   \item 设置好堆栈；
-  \item 跳转到阶段二的c入口点。
+  \item 跳转到阶段二的 C 入口点。
 \end{enumerate}
 
-	阶段二则通常用c语言来实现，这样可以实现一些复杂的功能，而且代码会具有更好的可读性和可移植性。这一阶段主要包括以下步骤：
+阶段二则通常用 C 语言来实现，这样可以实现一些复杂的功能，而且代码会
+具有更好的可读性和可移植性。这一阶段主要包括以下步骤：
 \begin{enumerate}
   \item 初始化本阶段要使用到的硬件设备；
   \item 系统内存映射(memory map)；
@@ -224,8 +225,8 @@ Press CTRL-A Z for help on special keys
 
 运行 minicom， \^{}A--o，进入minicom 的设置界面\footnote{\^{}A是
 minicom 的控制键，可以激活其他功能设置，例如\^{}A--z 调出全部功能菜单，
-\^{}A--x 退出 minicom。也可以在minicom启动时加上选项``--s''直接进入设置界面}。
-在 Serial port setup 项上修改下述设置：
+\^{}A--x 退出 minicom。也可以在minicom启动时加上选项``--s''直接进入
+设置界面。}。在 Serial port setup 项上修改下述设置：
 \begin{itemize}
   \item A --- ``Serial Device''，串口通信口的选择。如果串口线接在PC机的串口1
 		上，则为 /dev/ttyS0，如果连接在串口2上，则为 /dev/ttyS1，依此类推。
@@ -241,8 +242,8 @@ minicom 的控制键，可以激活其他功能设置，例如\^{}A--z 调出全
 以后使用不再需要每次设置。
 
 给开发板加电，这时可以在 minicom 主界面上看到开发板的启动信息。在短时间内
-(时间可通过bootloader命令设置)通过键盘干预, 将停止加载内核, 进入人机交互方式,
-出现提示符 ``x210 \#''。``help''命令可列出所有u-boot的命令；如需了解具体某个
+(时间可通过BootLoader命令设置)通过键盘干预, 将停止加载内核, 进入人机交互方式,
+出现提示符 ``x210 \#''。``help''命令可列出所有U-Boot的命令；如需了解具体某个
 命令的使用, 可用``help + 命令''的方式。
 
 	以下列出本实验常用的命令:
@@ -267,12 +268,12 @@ minicom 的控制键，可以激活其他功能设置，例如\^{}A--z 调出全
 
 
 \subsection{tftp}
-    tftp 是基于UDP协议的简单文件传输协议。目标板作为客户机，bootloader 默认
+tftp 是基于UDP协议的简单文件传输协议。目标板作为客户机，BootLoader 默认
 采用 tftp 协议。主机安装 tftp-server，作为 tftp 服务器。Linux系统的 tftp
 服务由超级服务器 xinetd 管理。安装 tftp-server 后，/etc/xinetd.d/tftp
-中大致是如下内容:
+中大致是如下内容
 \footnote{主机的不同发行版、不同的软件,使用方法和配置文件有所不同, 关键要
-了解服务的目的、目录、权限及启动方式; 下面的NFS服务亦然}
+了解服务的目的、目录、权限及启动方式; 下面的NFS服务亦然。}:
 
 \begin{verbatim}
   service tftp

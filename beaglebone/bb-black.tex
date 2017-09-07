@@ -55,7 +55,7 @@
 \setCJKmonofont{AR PL UKai CN}
 
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
-\graphicspath{{../x210/images/}}
+\graphicspath{{../x210v3/images/}}
 
 \lstset{language=C++,showstringspaces=false}
 \lstset{extendedchars=false} % tetex-3 conflict with CJK
@@ -108,6 +108,19 @@
     {\hfill\sffamily\bfseries\contentspage}
 \fi
 
+\renewenvironment{itemize}{%
+\begin{list} {\labelitemi}{%
+    \settowidth{\labelwidth}{\labelitemi}%
+    \setlength{\leftmargin}{\labelwidth}%
+    \addtolength{\leftmargin}{\labelsep}%
+    \itemsep=-2pt }%
+}{\end{list}}
+											  
+\LetLtxMacro\oldenum\enumerate 
+\LetLtxMacro\oldendenum\endenumerate 
+\renewenvironment{enumerate}
+{\oldenum\setlength{\parskip}{\smallskipamount} \itemsep=-2pt}
+{\oldendenum}
 
 %\CTEXsetup[name={第,章},number={\chinese{chapter}},%
 %	format+={\song},beforeskip={-10ex plus -.1ex minus -.1ex},%

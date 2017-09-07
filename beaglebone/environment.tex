@@ -5,7 +5,7 @@
 
 \section{嵌入式系统开发过程}
     嵌入式系统与普通计算机系统存在很大区别,主要表现在：
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 嵌入式系统往往不提供BIOS，因此基本输入输出系统需要程序员完成；
   \item 嵌入式系统开发缺乏友好的人机界面，为程序调试带来困难；
   \item 嵌入式系统开发能力不如通用计算机系统。通常采用交叉编译的方式，
@@ -32,7 +32,7 @@ RAM 中，然后跳转到内核的入口点去运行，也即开始启动操作�
 	嵌入式系统中，通常并没有像 BIOS 那样的固件程序，因此整个系统的加载启动
 任务完全由 bootloader 来完成。用于引导嵌入式操作系统的 bootloader 有
 U-Boot、vivi、RedBoot等等。bootloader的主要作用是：
-\begin{enumerate}\itemsep=-3pt
+\begin{enumerate}
   \item 初始化硬件设备；
   \item 建立内存空间的映射图；
   \item 完成内核的加载，为内核设置启动参数。
@@ -43,7 +43,7 @@ U-Boot、vivi、RedBoot等等。bootloader的主要作用是：
 大多数 bootloader 都分两个阶段。依赖于 CPU 体系结构的代码，比如设备初始化
 代码等，通常都放在阶段一中，且通常都用汇编语言来实现，以达到短小精悍的目的。
 阶段一通常包括以下步骤：
-\begin{enumerate}\itemsep=-5pt
+\begin{enumerate}
   \item 硬件设备初始化；
   \item 拷贝Boot Loader的程序到RAM空间中；
   \item 设置好堆栈；
@@ -51,7 +51,7 @@ U-Boot、vivi、RedBoot等等。bootloader的主要作用是：
 \end{enumerate}
 
 	阶段二则通常用c语言来实现，这样可以实现一些复杂的功能，而且代码会具有更好的可读性和可移植性。这一阶段主要包括以下步骤：
-\begin{enumerate}\itemsep=-3pt
+\begin{enumerate}
   \item 初始化本阶段要使用到的硬件设备；
   \item 系统内存映射(memory map)；
   \item 将kernel映像和根文件系统映像从Flash读到RAM空间中； 
@@ -136,59 +136,7 @@ Standard)，后被世界各国所接受并应用到计算机的I/O接口中。�
 \caption{PC机串口引脚信号}\label{pc-serial}
 \end{figure}
 
-
-\iffalse
-\fontsize{10}{20} \selectfont \kai\centering
-\begin{tabular}{lrp{3cm}lcrp{3cm}l}
-  保护地(接外壳)   &\rnode{a1}{1}& &\rnode{b1}{1}&
-                   &\rnode{c1}{1}& &\rnode{d1}{1}\\
-  数据发送 TxD     &\rnode{a2}{2}& &\rnode{b2}{2}&
-                   &\rnode{c2}{2}& &\rnode{d2}{2}\\
-  数据接受 RxD     &\rnode{a3}{3}& &\rnode{b3}{3}&
-                   &\rnode{c3}{3}& &\rnode{d3}{3}\\
-  信号地           &\rnode{a7}{7}& &\rnode{b7}{7}&
-                   &\rnode{c7}{7}& &\rnode{d7}{7}\\
-  请求发送 RTS     &\rnode{a4}{4}& &\rnode{b4}{4}&
-                   &\rnode{c4}{4}& &\rnode{d4}{4}\\
-  清除发送 CTS     &\rnode{a5}{5}& &\rnode{b5}{5}&
-                   &\rnode{c5}{5}& &\rnode{d5}{5}\\
-  载波检测 DCD     &\rnode{a8}{8}& &\rnode{b8}{8}&
-                   &\rnode{c8}{8}& &\rnode{d8}{8}\\
-  数据装置就绪 DSR &\rnode{a6}{6}& &\rnode{b6}{6}&
-                   &\rnode{c6}{6}& &\rnode{d6}{6}\\
-  振铃指示 RI      &\rnode{a22}{22}& &\rnode{b22}{22}&
-                   &\rnode{c22}{22}& &\rnode{d22}{22}\\
-  数据终端就绪 DTR &\rnode{a20}{20}& &\rnode{b20}{20}&
-                   &\rnode{c20}{20}& &\rnode{d20}{20}\\
-                   &    & 三线式 & & & & 七线式 &
-\end{tabular}
-\ncline[linestyle=dashed]{-}{a1}{b1}
-\ncdiag[angleA=0,angleB=180,arm=20pt]{->}{a2}{b3}
-\ncdiag[angleA=180,angleB=0,arm=20pt]{->}{b2}{a3}
-\ncline[]{-}{a7}{b7}
-\ncline[linestyle=dashed]{-}{c1}{d1}
-\ncdiag[angleA=0,angleB=180,arm=20pt]{->}{c2}{d3}
-\ncdiag[angleA=180,angleB=0,arm=20pt]{->}{d2}{c3}
-\ncline[]{-}{c7}{d7}
-\ncdiag[angleA=0,angleB=0,arm=20pt]{->}{a4}{a8}
-\ncdiag[angleA=0,angleB=0,arm=20pt]{->}{a4}{a5}
-\ncdiag[angleA=0,angleB=0,arm=20pt]{->}{a20}{a6}
-\ncdiag[angleA=0,angleB=0,arm=20pt]{->}{a20}{a22}
-\ncdiag[angleA=180,angleB=180,arm=20pt]{->}{b4}{b8}
-\ncdiag[angleA=180,angleB=180,arm=20pt]{->}{b4}{b5}
-\ncdiag[angleA=180,angleB=180,arm=20pt]{->}{b20}{b6}
-\ncdiag[angleA=180,angleB=180,arm=20pt]{->}{b20}{b22}
-\ncdiag[angleA=0,angleB=0,arm=20pt]{->}{c4}{c5}
-\ncdiag[angleA=0,angleB=180,arm=20pt]{->}{c5}{d8}
-\ncdiag[angleA=180,angleB=180,arm=20pt]{->}{d4}{d5}
-\ncdiag[angleA=180,angleB=0,arm=20pt]{->}{d5}{c8}
-\ncdiag[angleA=0,angleB=0,arm=20pt]{->}{c6}{c22}
-\ncdiag[angleA=180,angleB=0,arm=20pt]{->}{d20}{c22}
-\ncdiag[angleA=180,angleB=180,arm=20pt]{->}{d6}{d22}
-\ncdiag[angleA=0,angleB=180,arm=20pt]{->}{c20}{d22}
-\fi
-
-	Linux系统用 minicom 软件实现串口通信。
+Linux系统用 minicom 软件实现串口通信。
 
 \begin{figure}
 \centering \fontsize{10}{10}\selectfont
@@ -226,7 +174,7 @@ Press CTRL-A Z for help on special keys
 minicom 的控制键，可以激活其他功能设置，例如\^{}A--z 调出全部功能菜单，
 \^{}A--x 退出 minicom。也可以在minicom启动时加上选项``--s''直接进入设置界面}。
 在 Serial port setup 项上修改下述设置：
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item A --- ``Serial Device''，串口通信口的选择。如果串口线接在PC机的串口1
 		上，则为 /dev/ttyS0，如果连接在串口2上，则为 /dev/ttyS1，依此类推。
 		本实验通过USB转RS232芯片连接串口，设备是 /dev/ttyUSB0。
@@ -366,9 +314,30 @@ V3(rfc1813)、NFS V4(rfc3010)等。
 
 \subsection{使用gcc、g++等工具编译应用程序}
 \definecolor{bg}{rgb}{.85,.85,1}
-\begin{enumerate}\itemsep=-3pt
+\begin{enumerate}
   \item 编写一个简单的独立程序;
-  \item 使用交叉编译工具编译;
+  \item 使用如下的 Makefile
+
+\lstset{language=make}
+\begin{lstlisting}
+CC      = /usr/local/arm-2012q3/bin/arm-none-linux-gnueabi-gcc
+
+CFLAGS  =
+
+TARGET  = hello
+OBJS    = $(TARGET).o
+
+all: $(TARGET)
+
+$(TARGET) : $(TARGET).o
+         $(CC) $(CFLAGS) $^ -o $@
+$(TARGET).o : $(TARGET).c
+         $(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+        rm -f $(OBJS) $(TARGET) *.elf *.gdb
+\end{lstlisting}
+
   \item 将编译生成的可执行程序 hello 拷贝到 NFS 共享目录下，在目标板上
 		运行该程序。
 

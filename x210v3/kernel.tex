@@ -101,7 +101,7 @@ arch/arm/configs/bcm2709\_defconfig 是使用处理器 bcm2709 (著名的树莓�
 文件名，但不会直接被 Makefile包含)。原来的 .config 文件被更名为
 .config.old，以便之后发现当前配置不合适时可以用``make oldconfig''回退。
 
-在嵌入式系统移植是，编译内核的 Makefile 有两个重要的变量：
+在嵌入式系统移植时，编译内核的 Makefile 有两个重要的变量：
 ARCH 和 CROSS\_COMPILE。ARCH 是目标平台的体系架构，必须在执行``make'' 命令
 的时候指定，如：
 \begin{verbatim}

@@ -1,7 +1,7 @@
 \chapter{嵌入式文件系统的构建}{文件}\label{ch-fs}
 
 \section{实验目的}
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 了解嵌入式操作系统中文件系统的类型和作用
   \item 掌握利用 BusyBox 软件制作嵌入式文件系统的方法
   \item 掌握嵌入式 Linux 文件系统的的挂载过程
@@ -12,7 +12,7 @@
 	ext2fs 是 Linux 2.4 版本的标准文件系统, 它已经取代了扩展文件系统(extfs)。
 extfs 支持的文件最大为 2GB, 支持的最大文件名长度为 255 个字符, 且不支持
 索引节点(包括数据修改时间标记)。ext2fs 取代 extfs 具有以下一些优点：
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item ext2fs 支持达 4 TB 的内存；
   \item ext2fs 文件名称最长可以到 1012 个字符；
   \item 在创建文件系统时, 管理员可以根据需要选择存储逻辑块的大小(通常大小
@@ -60,7 +60,7 @@ Red Hat 的 David Woodhouse 进行改进后, 形成了 JFFS2。JFFS2 克服了 J
 这是因为垃圾收集的问题。相对于 ext2fs 而言, JFFS2 在嵌入式设备中更受欢迎。
 
 	嵌入式系统中采用 JFFS2 文件系统有以下优点：
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 支持数据压缩；
   \item 提供``损耗平衡''支持；
   \item 支持多种节点类型；
@@ -122,7 +122,7 @@ mini-vi 编辑器、系统不可或缺的 /sbin/init 程序, 以及其他诸如�
 \subsection{BusyBox 的编译}
 	将下载的 BusyBox 软件包解压缩。进入解压目录, 执行``make menuconfig'', 
 仿照内核配置编译过程：
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 在 Build Option 菜单下, 选择静态库编译方式\footnote{如文件系统带有
 		共享库, 也可以采用动态链接方式}, 并设定交叉编译器；
   \item Installation Options 配置中, 自定义安装路径。编译后的文件系统以这个
@@ -136,7 +136,7 @@ mini-vi 编辑器、系统不可或缺的 /sbin/init 程序, 以及其他诸如�
 都指向 BusyBox。
 
 \subsection{配置文件系统}
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 创建 etc 目录, 在 etc 下建立 inittab、rc、motd三个文件。
 
 	/etc/inittab \\ ==========================================
@@ -302,14 +302,14 @@ BusyBox编译出来的init:
 	在目标板中加载该内核，启动。
 
 \section{实验内容}
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 编译 BusyBox, 以 BusyBox 为基础，构建一个适合的文件系统;
   \item 制作 ramdisk 文件系统映像, 用你的文件系统启动到正常工作状态;
   \item * 研究 NFS 作为根文件系统的启动过程。
 \end{itemize}
 
 \section{实验报告要求}
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 讨论你的嵌入式系统所具备的功能；
   \item 比较 romfs、ext2fs/ext3fs、JFFS2 等文件系统的优缺点；
   \item * 考虑制作一个 YAFFS2 文件系统作为系统的根文件系统。

@@ -1,0 +1,174 @@
+%============================================================================
+%%
+%%       Filename:  course.tex
+%%
+%%    Description:  creative/innovation course
+%%
+%%        Version:  1.0
+%%        Created:  04/27/2017 04:24:48 PM
+%%       Revision:  none
+%%
+%%         Author:  Fang Yuan (yfang@nju.edu.cn)
+%%   Organization:  nju
+%%      Copyright:  Copyright (c) 2017, Fang Yuan
+%%
+%%          Notes:  
+%%                
+%%============================================================================
+\documentclass{article}
+\usepackage[nofonts]{ctex}
+\usepackage[left=1.2in,right=1in,top=3.5cm,bottom=1in]{geometry}
+\usepackage{tabularx}
+
+\setCJKmainfont[BoldFont={WenQuanYi Micro Hei},
+              ItalicFont={STFangsong}]{AR PL SungtiL GB}
+
+%\setmainfont{Times New Roman}
+\setsansfont{Droid Sans}
+\setmonofont{DejaVu Sans Mono}
+
+\renewcommand\thesection{\chinese{section}.} 
+\begin{document}
+\begin{center}
+\LARGE 
+    \textbf{智能系统中的嵌入式应用}
+ \ \\ \ \\
+    \textbf{ Embedded Applications on Intelligent Systems}
+
+\end{center}
+
+\large
+主讲教师：方元
+
+所在单位：电子科学与工程学院
+
+职称及职务：副教授
+
+研究专长：嵌入式系统
+
+联系电邮：yfang@nju.edu.cn
+
+联系电话：18951034108
+
+\normalsize
+\section{教师简介}
+  方元：\textit{1988年毕业于南京大学声学专业，2001年获博士学位，
+  现为南京大学电子科学与工程学院副教授、硕士生导师。主要从事语音信号处理、
+  计算机应用系统研究。参与的教学课程有``微处理器与接口技术''、``数字信号
+  处理器及其应用''、``嵌入式系统及实验''等与计算机系统组成相关的课程。}
+
+\section{课程简介}
+   嵌入式系统应用日益广泛。随着性能的不断提升和硬件成本的不断下降，越来越多
+   的嵌入式应用结合了高性能的操作系统，软件开发环境也在不断完善，
+   许多过去必须由专业人员完成的开发过程，
+   现在只需要通过在图形开发环境下用鼠标拖拉点配一些控件就可实现。
+   这使得嵌入式开发的门槛不断降低。
+
+   本课程基于目前较为常见的板卡式计算机，学习用Python 语言实现计算机的控制。
+   Python 是一种解释性语言，避免了编译的过程。绝大多数 Linux 的发行版都默认
+   安装了 Python语言。Python 语言简单易用，并且是跨平台的，在不同操作系统
+   之间保持了很好的源码兼容性，在计算机系统维护、Internet、数据库编程、
+   图像、人工智能、机器人等领域有越来越多的应用。本课程以 Linux + Python
+   为基础，实现小车寻迹、避障、遥控等等的智能应用系统。
+
+   课程包含以下方面的内容：
+   
+   介绍嵌入式系统及其应用，Linux 操作系统的特点及使用，Python语言开发使用
+   环境，使用 Python 控制简单的I/O接口设备，以寻迹小车为模板实现一种简单的
+   智能控制系统。
+
+\section{课程目标}
+  通过这些知识的学习，了解嵌入式应用领域的发展趋势，学习智能系统的初步开发
+  方法。熟悉嵌入式系统的典型应用及产品设计开发的步骤，
+    初步具备软件与硬件综合测试与调试技能。
+
+\section{教学方式}
+
+以实验教学为主，适当结合相关理论知识和程序设计方法介绍。
+有条件情况下，邀请嵌入式领域专家介绍嵌入式应用及发展趋势。
+根据实验条件，每班选修人数 30人左右为宜。选课学生对计算机系统组成
+结构应有初步了解，具备基本的编程思想。
+
+\section{教学大纲}
+    了解嵌入式系统的软硬件构成，学习用高级语言控制嵌入式系统的工作。
+    在嵌入式系统上实现一种智能化控制系统。
+
+\begin{center}
+    \large
+    教学计划 (每周2课时)
+
+    \newcounter{weeks}
+    \newcommand{\week}{\addtocounter{weeks}{1}\arabic{weeks}}
+    \begin{tabular}{|c|l|l|} \hline
+        周次 & 授课方式 &  \multicolumn{1}{c|}{内容} \\ \hline
+        \week& 课堂教学 &  嵌入式系统简介 \\
+        \week& 实验     &  系统安装和启动过程 \\
+        \week& 实验     &  系统使用和操作方法 \\
+        \week& 课堂教学 &  嵌入式系统资源介绍 \\
+        \week& 实验     &  操作方法训练 \\
+        \week& 实验     &  应用程序的编写和运行 \\
+        \week& 课堂教学 &  Python 语言基础 \\
+        \week& 实验     &  编程练习 \\
+        \week& 实验     &  编程练习 \\
+        \week& 演示实验 &  I/O 端口的控制方法 \\
+        \week& 实验     &  用 GPIO 端口控制 LED \\
+        \week& 方案讨论 &  寻迹小车软件流程 \\
+        \week& 实验     &  用 PWM 实现端口控制 \\
+        \week& 实验     &  面向对象方法的编程练习 \\
+        \week& 实验     &  自动控制、自主实验 \\
+        \week& 实验     &  自动控制、自主实验 \\
+        \week& 课程总结 &  考核、考察、成果展示 \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\section{建议教材及参考资源}
+ \begin{enumerate} \itemsep=-3pt
+    \item 关于嵌入式系统的内容，自编教材
+    \item 关于嵌入式开发板, 使用官方参考文档
+        {\em  Element14 BeagleBone Black System Reference manual}
+         和
+         {\em AM335x and AMIC110 SitaraTM Processors
+         Technical Reference Manual} \\
+         Beagleboard 主页   www.beagleboard.org
+     \item 关于 Python 语言部分，\\
+         {\em Python基础教程(第二版)},
+          作者 Magnus Lie Hetland, 曾军崴、谭颖华、司维译,
+          人民邮电出版社2010.7\\
+          {\em  Programming Python, 2nd Edition}
+          By Mark Lutz. O'Reilly, March 2001 \\
+        Python 主页 www.python.org
+    \item 电子实验中心服务器上的教学视频
+    \item 网络资源: 嵌入式Linux Wiki, www.elinux.org
+ \end{enumerate}
+
+\section{考核方法}
+课程计划以下三个层次的考核方法：
+  \begin{enumerate} \itemsep=-3pt
+    \item 笔试，考察对嵌入式系统软、硬件设计基础知识的了解
+    \item (分组或独立)实现避障/寻迹小车，提交设计报告
+    \item 展示作品，结合设计报告客观评分
+  \end{enumerate}
+
+  在条件具备的情况下尽可能采用第三种方式。
+
+\section{经费预算}
+\begin{center}
+    \large
+    \begin{tabular}{|l|l|l|}\hline
+        \multicolumn{1}{|c|}{支出项目} &
+        \multicolumn{1}{c|}{数量} &
+        \multicolumn{1}{c|}{价格(元)} \\\hline
+        嵌入式开发板 & 32  & 32$\times$300 \\
+        寻迹小车  & 32 & 32$\times$ 50 \\
+        电池    & 32 & 32 $\times $ 50 \\
+        传感器    & 50 & 50$\times$ 100  \\
+        展板        &  4   & 4$\times$ 150 \\
+        教学课件制作及存储   & 1  & 2000 \\\hline
+        合计  &    & 20400.00        \\
+    \hline
+    \end{tabular}
+\end{center}
+
+\section{所在院系或单位意见}
+\end{document}

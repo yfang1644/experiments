@@ -1,53 +1,54 @@
 \chapter{Qt/Embedded移植}{QT}
 
 \section{实验目的}
-\begin{itemize}\itemsep=-3pt
+\begin{itemize}
   \item 了解嵌入式GUI---Qt/E 软件开发平台的构架；
-  \item 学习 Qt/E 移植的基本步骤与方法.
+  \item 学习 Qt/E 移植的基本步骤与方法。
 \end{itemize}
 
 \section{Qt/E 介绍}
-	Qt/Embedded 是跨平台的 c++ 图形用户界面 (GUI)工具包,它是著名的 Qt 开发商
-TrollTech 发布的面向嵌入式系统的Qt版本.Qt 是目前 KDE 等项目使用的 GUI
-支持库,许多基于 Qt 的 X-Window 程序可以非常方便地移植到嵌入式
-~Qt/Embedded 版本上. 自从 Qt/Embedded 发布以来, 有许多嵌入式 Linux 开发商
-利用 Qt/Embedded 进行了嵌入式 GUI 的应用开发.
+Qt/Embedded 是跨平台的 C++ 图形用户界面(GUI)工具包，它是著名的 Qt 开发商
+TrollTech 发布的面向嵌入式系统的 Qt 版本。Qt 是目前 KDE 等项目使用的 GUI
+支持库，许多基于 Qt 的图形界面程序可以非常方便地移植到嵌入式
+Qt/Embedded 版本上。自从 Qt/Embedded 发布以来，有许多嵌入式 Linux 开发商
+利用 Qt/Embedded 进行了嵌入式 GUI 的应用开发。
 
-	Qt/Embedded 注重于能给用户提供精美的图形界面所需的所有元素, 而且其开发过程
-是基于面向对象的编程思想, 并且~Qt/Embedded~支持真正的组件编程.
+Qt/Embedded 注重于能给用户提供精美的图形界面所需的所有元素，而且其开发过程
+是基于面向对象的编程思想，并且 Qt/Embedded 支持真正的组件编程。
 
-	TrollTech~公司所发布的面向嵌入式系统的 QT/E 版本提供源代码. 用户必须针对
-自己的嵌入式硬件平台进行裁剪、编译和移植. 尽管 Qt/Embedded 可以裁剪到630K,
-但它对硬件平台具有较高的要求. 目前 Qt/Embedded 库主要针对手持式信息终端.
+TrollTech 公司所发布的面向嵌入式系统的 Qt/E 版本提供源代码。用户必须针对
+自己的嵌入式硬件平台进行裁剪、编译和移植。尽管 Qt/Embedded 可以裁剪到630KB，
+但它对硬件平台具有较高的要求。目前 Qt/Embedded 库主要针对手持式信息终端。
 
-	本实验主要完成 Qt/Embedded 在嵌入式实验平台上的移植.
+本实验主要完成 Qt/Embedded 在嵌入式实验平台上的移植。
 \subsection{Qt/E软件包结构}
-	Qt/E 系统源码一般包括以下几个软件包:
-\begin{itemize}\itemsep=-3pt
-  \item 触摸屏支持库 tslib.tar.bz2；
-  \item Makefile 生成工具 tmake-1.11.tar.gz, 它主要由一些脚本程序组成；
-  \item 开发平台编译环境库及工具程序 qt-x11-2.3.2.tar.gz；
-  \item 目标平台 Qt/Embedded 核心库. 用户可到 TrollTech 主页上
-		\footnote{ftp://ftp.trolltech.com/qt/source}下载Qt/Embedded的某个
-		版本的源代码. 本实验提供 qt-embedded-2.3.7.tar.gz；
-  \item Qt桌面环境 qtopia-free-1.7.0.tar.gz.
+Qt/E 系统源码一般包括以下几个软件包：
+\begin{itemize}
+    \item 触摸屏支持库 tslib.tar.bz2；
+    \item Makefile 生成工具 tmake-1.11.tar.gz，它主要由一些脚本程序组成；
+    \item 开发平台编译环境库及工具程序 qt-x11-2.3.2.tar.gz；
+    \item 目标平台 Qt/Embedded 核心库。用户可到 TrollTech 主页
+        ftp://ftp.trolltech.com/qt/source 或者 https://www.qt.io
+        下载Qt/Embedded的某个版本的源代码。本实验推荐版本是
+        qt-embedded-2.3.7.tar.gz；
+    \item Qt桌面环境 qtopia-free-1.7.0.tar.gz。
 \end{itemize}
 
 \section{Qt/E 编译}
 \subsection{设置环境}
-	为了以下编译过程顺利进行, 先将上面的压缩文件全部解压. 假设各自被解压到
-下面的目录(一般 Qt/E 的移植过程也是按这个顺序进行操作的):
-\begin{enumerate}\itemsep=-3pt
-  \item ～/work/tslib
-  \item ～/work/tmake-1.11
-  \item ～/work/qt-2.3.2
-  \item ～/work/qt-embedded-2.3.7
-  \item ～/work/qtopia-1.7.0
+为了以下编译过程顺利进行，先将上面的压缩文件全部解压。假设各自被解压到
+下面的目录(一般 Qt/E 的移植过程也是按这个顺序进行操作的)：
+\begin{enumerate}
+    \item \textasciitilde/work/tslib
+    \item \textasciitilde/work/tmake-1.11
+    \item \textasciitilde/work/qt-2.3.2
+    \item \textasciitilde/work/qt-embedded-2.3.7
+    \item \textasciitilde/work/qtopia-1.7.0
 \end{enumerate}
 
-	在编译Qt/Embedded时, 用户在PC机上应对编译时所需的环境变量进行设置, 这些
-设置的主要参数包括:
-\begin{itemize}\itemsep=-3pt
+在编译 Qt/Embedded时，用户在 PC 机上应对编译时所需的环境变量进行设置，这些
+设置的主要参数包括：
+\begin{itemize}
   \item QTDIR --- Qt解压后的所在的目录
   \item LD\_LIBRARY\_PATH --- Qt共享库存放的目录
   \item QPEDIR --- qtopia解压后的所在的目录
@@ -56,99 +57,83 @@ TrollTech 发布的面向嵌入式系统的Qt版本.Qt 是目前 KDE 等项目�
   \item PATH --- 交叉编译工具arm-linux-gcc的路径
 \end{itemize}
 
-	根据上面的解压目录, 环境变量应作如下设置:
-
-\begin{boxedminipage}{.9\textwidth}
+根据上面的解压目录，环境变量应作如下设置：
 \begin{verbatim}
-$ export QTDIR=~/work/qt-embedded-2.3.7
-$ export QPEDIR=~/work/qtopia-1.7.0
-$ export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
-$ export TMAKEDIR=~/work/tmake-1.11
-$ export TMAKEPATH=~/work/tmake-1.11/lib/qws/linux-arm-g++
-$ export PATH=~/work/tmake-1.11/bin:/usr/local/arm-linux/bin:$PATH
+  $ export QTDIR=~/work/qt-embedded-2.3.7
+  $ export QPEDIR=~/work/qtopia-1.7.0
+  $ export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+  $ export TMAKEDIR=~/work/tmake-1.11
+  $ export TMAKEPATH=~/work/tmake-1.11/lib/qws/linux-arm-g++
+  $ export PATH=~/work/tmake-1.11/bin:/usr/local/arm-linux/bin:$PATH
 \end{verbatim}
-\end{boxedminipage}
 
 \subsection{编译过程}
 \subsubsection{编译触摸屏库}
-	Qt/Embedded~支持鼠标和键盘的操作, 但现在许多嵌入式系统都使用触摸屏作为输入
-设备, 所以用户必须将触摸屏的相关操作编译成共享库或静态库.
+Qt/Embedded 支持鼠标和键盘的操作，但现在许多嵌入式系统都使用触摸屏作为输入
+设备，所以用户必须将触摸屏的相关操作编译成共享库或静态库。
 
-	触摸屏库的编译过程可参考第\ref{ch-ts}章内容.
+触摸屏库的编译过程可参考第\ref{ch-ts}章内容。
 
-	将编译完成后的库复制到 qt-embedded-2.3.7目录:
-
-\begin{boxedminipage}{.9\textwidth}
+将编译完成后的库复制到 qt-embedded-2.3.7目录：
 \begin{verbatim}
-$ cp -a src/.libs/* ../qt-embedded-2.3.7/lib
-$ cp -a plugins/.libs/*.so ../qt-embedded-2.3.7/lib
+  $ cp -a src/.libs/* ../qt-embedded-2.3.7/lib
+  $ cp -a plugins/.libs/*.so ../qt-embedded-2.3.7/lib
 \end{verbatim}
-\end{boxedminipage}
 
 \subsubsection{编译qt-x11工具}
-	在～/work/qt-2.3.2 下执行
-
-\begin{boxedminipage}{.9\textwidth}
+在 \textasciitilde/work/qt-2.3.2 下执行：
 \begin{verbatim}
-$ export QTDIR=~/work/qt-2.3.2
-$ export QTEDIR=~/work/qt-embedded-2.3.7
-$ export QPEDIR=~/work/qtopia-free-1.7.0
-$ export PATH=$QTDIR/bin:$PATH
-$ export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
-$ ./configure -no-opengl -no-xft
-$ make
-$ make -C tools/qvfb
-$ mv tools/qvfb/qvfb bin
-$ cp bin/uic $QTEDIR/bin
+  $ export QTDIR=~/work/qt-2.3.2
+  $ export QTEDIR=~/work/qt-embedded-2.3.7
+  $ export QPEDIR=~/work/qtopia-free-1.7.0
+  $ export PATH=$QTDIR/bin:$PATH
+  $ export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+  $ ./configure -no-opengl -no-xft
+  $ make
+  $ make -C tools/qvfb
+  $ mv tools/qvfb/qvfb bin
+  $ cp bin/uic $QTEDIR/bin
 \end{verbatim}
-\end{boxedminipage}
 
-	生成的 uic 和 moc 作为 Qt 应用程序的转换工具, qvfb 是 Qt 开发平台的仿真
-工具.
+生成的 uic 和 moc 作为 Qt 应用程序的转换工具，qvfb 是 Qt 开发平台的仿真
+工具。
 
 \subsubsection{编译 Qt/Embedded}
-	先将补丁文件里的文件替换掉源码包里的对应文件(主要是针对目标平台触摸屏代码
-和编译器的设置), 然后在～/work/qt-embedded-2.3.7目录下执行
+先将补丁文件里的文件替换掉源码包里的对应文件(主要是针对目标平台触摸屏代码
+和编译器的设置)，然后在 \textasciitilde/work/qt-embedded-2.3.7 目录下执行
 
-\begin{boxedminipage}{.9\textwidth}
 \begin{verbatim} 
-$ export QTDIR=~/work/qt-embedded-2.3.7
-$ cp ~/work/qtopia-free-1.7.0/src/qt/qconfig-qpe.h src/tools
-$ ./configure -xplatform linux-arm-g++ -qconfig qpe -depths 16 -no-qvfb
-$ make sub-src
+  $ export QTDIR=~/work/qt-embedded-2.3.7
+  $ cp ~/work/qtopia-free-1.7.0/src/qt/qconfig-qpe.h src/tools
+  $ ./configure -xplatform linux-arm-g++ -qconfig qpe -depths 16 -no-qvfb
+  $ make sub-src
 \end{verbatim}
-\end{boxedminipage}
 
-    这一步完成后, 生成目标平台的 Qt 核心库 libqte.so* 等等.
+这一步完成后，生成目标平台的 Qt 核心库 libqte.so* 等等。
 
 \subsubsection{编译 Qtopia}
-	在 ～/work/qtopia-free-1.7.0/src 下面执行
-
-\begin{boxedminipage}{.9\textwidth}
+在 \textasciitilde/work/qtopia-free-1.7.0/src 下面执行：
 \begin{verbatim} 
-$ ./configure -platform linux-arm-g++
-$ make
+  $ ./configure -platform linux-arm-g++
+  $ make
 \end{verbatim}
-\end{boxedminipage}
 
-	编译完成后会产生 apps、bin、doc、etc、help、include、plugins等目录及
-目录下的文件. 至此, 编译过程基本结束.
+编译完成后会产生 apps、bin、doc、etc、help、include、plugins等目录及
+目录下的文件。至此，编译过程基本结束。
 
 \subsection{Qt/Embedded的安装}
-	准备将待安装的文件放在一个独立的目录下. 新建一个目录～/work/qpe,将
-~qtopia-free-1.7.0/src 下面的 apps、bin、etc、plugins、i18n、lib、pics
-这些目录连同下面的子目录和文件复制到该目录下, 同时将 ~qt-embedded-2.3.7/lib~
-下面的库连同字体目录也复制到 ~qpe/lib~下(注意保持原来的目录结构). 由于字体
-文件比较大, 可适当删除一些不常用的字体库, 保留 *.qpf 文件和 fontdir 文件.
-另外,还要将触摸屏配置文件 ～/work/tslib/etc/ts.conf 复制到 /usr/etc 目录.
+准备将待安装的文件放在一个独立的目录下。新建一个目录
+\textasciitilde/work/qpe，将
+qtopia-free-1.7.0/src 下面的 apps、bin、etc、plugins、i18n、lib、pics
+这些目录连同下面的子目录和文件复制到该目录下，同时将 qt-embedded-2.3.7/lib
+下面的库连同字体目录也复制到 qpe/lib 下(注意保持原来的目录结构)。由于字体
+文件比较大，可适当删除一些不常用的字体库，保留 *.qpf 文件和 fontdir 文件。
+另外，还要将触摸屏配置文件 \textasciitilde/work/tslib/etc/ts.conf
+复制到 etc 目录。
 
-	将整个 qpe 目录复制到目标系统文件系统的 /usr 目录下, 再为 qpe 建立一个
-启动脚本 (/usr/bin/qpe.sh):
-
-\lstset{language=make, frameround=ftft}
-
-\begin{lstlisting}[frame=trBL]
- #!/bin/bash
+将整个 qpe 目录复制到目标系统文件系统的 /usr 目录下，再为 qpe 建立一个
+启动脚本 (/usr/bin/qpe.sh)：
+\begin{verbatim} 
  export QTDIR=/usr/qpe
  export QPEDIR=/usr/qpe
  export LANG=zh_CN
@@ -159,30 +144,30 @@ $ make
  export QWS_MOUSE_PROTO=TPanel:/dev/touchscreen/ucb1x00
  export KDEDIR=/usr/qpe
  /usr/bin/ts_calibrate
- /usr/qpe/bin/qpe > /dev/null &
-\end{lstlisting}
+ /usr/qpe/bin/qpe &> /dev/null
+\end{verbatim}
 
-	将Qt/E 系统与 BusyBox 结合,按第{} \ref{ch-fs}
-章的方法重新制作文件系统映像; 根据需要, 修改启动脚本 inittab(或rc)的启动
-执行步骤.
+将Qt/E 系统与 BusyBox 结合，按第 \ref{ch-fs}
+章的方法重新制作文件系统镜像; 根据需要, 修改启动脚本 inittab(或rc)的启动
+执行步骤，加入上面的脚本命令。
 
 \subsection{Qt-4.8版本编译}
-目前的Qt最新版本是 5.5\footnote{2015年7月}. 新版本支持更多的特性、更好的
-人机交互体验, 例如支持触摸屏的滑动和多点触控等等. 但编译相当耗时.
+目前的 Qt 最新版本是 5.9(2017年7月发布)。新版本支持更多的特性、更好的
+人机交互体验，例如支持触摸屏的滑动和多点触控等等。但编译相当耗时。
 
-实验室提供Qt-4.8.4的 opensource 版本源代码.
+Qt 以商业版权和 LGPL 版权两种版权协议发布。这里以 Qt-4.8.4 的 opensource
+版本为例介绍Qt 的编译移植过程。
 
-与低版本编译顺序类似, 应先编译触摸屏库, 将其安装在指定目录, 并在Qt解压目录下面
-的 mkspecs/qws/linux-arm-g++/qmake.conf 文件中添加如下几行
+与低版本编译顺序类似，应先编译触摸屏库，将其安装在指定目录，并在 Qt
+解压目录下面的 mkspecs/qws/linux-arm-g++/qmake.conf 文件中添加如下几行：
 \begin{verbatim}
 QMAKE_INCDIR    = ~/work/build/include
 QMAKE_LIBDIR    = ~/work/build/lib
 QMAKE_LIBS      = -lpng -lz -lts
 \end{verbatim}
 
-$\sim$work/build 目录为 libpng, libz 和 libts 的交叉编译安装目录. 配置 Qt 编译
-环境如下命令:
-
+\textasciitilde/work/build 目录为 libpng, libz 和 libts 的交叉编译安装目录。
+配置 Qt 编译环境如下命令：
 \begin{verbatim}
  ./configure \
     -prefix ~/work/build \
@@ -215,48 +200,48 @@ $\sim$work/build 目录为 libpng, libz 和 libts 的交叉编译安装目录. �
     -qt-mouse-tslib -qt-mouse-pc -qt-mouse-linuxtp
 \end{verbatim}
 
-编译完成后, 将 $\sim$/work/build 目录平移到目标文件系统,仿照低版本的
-按装方式设置环境变量.
-
+编译完成后，将 \textasciitilde/work/build 目录平移到目标文件系统，仿照低版本的
+按照方式设置环境变量。
 
 \section{实验要求}
-	完成一个 Qt/Embedded 系统的编译和安装.
+完成一个 Qt/Embedded 系统的编译和安装。
+
 \newpage
 \begin{center} ****************** \end{center}
 \tt [附] 编译过程中的一些错误及修正
 
-	由于编译器版本及源代码规范性等方面的原因, 对源码软件编译过程中经常会
-碰到一些编译错误. 对这些编译错误, 最好能根据编译器给出的错误提示, 找到出错
-的地方, 有针对性地加以修正. 下面是在编译Qt/E 过程中可能出现的一些错误及解决
-办法:
-\begin{enumerate}\itemsep=-3pt
+由于编译器版本及源代码规范性等方面的原因，对源码软件编译过程中经常会
+碰到一些编译错误。对这些编译错误，最好能根据编译器给出的错误提示，找到出错
+的地方，有针对性地加以修正。下面是在编译Qt/E 过程中可能出现的一些错误及解决
+办法：
+\begin{enumerate}
   \item {\bf qt-2.3.2}: include/qvaluestack.h:57: 错误......\\
-		修改 include/qvaluestack.h 第 57 行, 将\\
+		修改 include/qvaluestack.h 第 57 行，将\\
 		remove( this-$>$fromLast() ); 改为\\
 		this-$>$remove( this-$>$fromLast() );
   \item {\bf qt-embedded-2.3.7}: include/qwindowsystem\_qws.h:229: error:
 		'QWSInputMethod' has not been declared\\
-		在 include/qwindowsystem\_qws.h 里加上类声明:\\
+		在 include/qwindowsystem\_qws.h 里加上类声明：\\
 		class   QWSInputMethod;\\
 		class   QWSGestureMethod;
   \item {\bf qt-embedded-2.3.7}: *** [allmoc.o] 错误 1\\
-		向前追溯出错位置, 在 include/qsortedlist.h 中, 将第51行改为:\\
+		向前追溯出错位置，在 include/qsortedlist.h 中，将第51行改为：\\
 		$\sim$QSortedList() \{ this-$>$clear(); \}\\
-		同样性质的``错误''还有很多, 取决于编译器版本. 这里不再一一列举.
-  \item {\bf qtopia-free-1.7.0}: Makefile:10: *** 遗漏分隔符. 停止.\\
-		修改 src/3rdparty/libraries/libavcodec/Makefile, 删除 ~10、~14、~18~
+		同样性质的``错误''还有很多，取决于编译器版本。这里不再一一列举。
+  \item {\bf qtopia-free-1.7.0}: Makefile:10: *** 遗漏分隔符 。 停止。\\
+		修改 src/3rdparty/libraries/libavcodec/Makefile，删除 10、14、18
 		行的 --e
   \item {\bf qtopia-free-1.7.0}: libraries/qtopia/backend/event.cpp:404:
 		error: ISO C++ says that these are ambiguous,......\\
-		c++对操作符``$<$=''理解有歧义. 可将局部变量 i 声明为 int.
+		C++对操作符``$<$=''理解有歧义。可将局部变量 i 声明为 int。
   \item {\bf qtopia-free-1.7.0}: libraries/qtopia/qdawg.cpp:243: error:
 		extra qualification 'QDawgPrivate::......\\
-		去掉类定义中的本类声明.
+		去掉类定义中的本类声明。
   \item {\bf qtopia-free-1.7.0}: libavformat/img.c:723: error: static
 		declaration of 'pgm\_iformat' follows non-static declaration\\
-		函数或变量属性声明冲突.
+		函数或变量属性声明冲突。
   \item {\bf qtopia-free-1.7.0}: 对'\_\_cxa\_guard\_release'未定义的引用\\
-		出现在链接阶段. 到编译器路径下找到该函数或变量所属的库(libstdc++.so),
-		在编译 ~qt-embedded-2.3.7~ 时加上库的链接.
+		出现在链接阶段。到编译器路径下找到该函数或变量所属的库(libstdc++.so)，
+		在编译 qt-embedded-2.3.7 时加上库的链接。
 \end{enumerate}
 \rm\normalsize
