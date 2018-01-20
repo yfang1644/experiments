@@ -1,4 +1,8 @@
-main() {
+#include <stdio.h>
+#include <alsa/asoundlib.h>
+
+int main(int argc, char *argv[])
+{
 /*To write a simple PCM application for ALSA we first need a handle for the PCM device. Then we have to specify the direction of the PCM stream, which can be either playback or capture. We also have to provide some information about the configuration we would like to use, like buffer size, sample rate, pcm data format. So, first we declare:
 */
   
@@ -117,8 +121,8 @@ The access type specifies the way in which multichannel data is stored in the bu
       return(-1);
     }
     if (rate != exact_rate) {
-      fprintf(stderr, "The rate %d Hz is not supported by your hardware.\n 
-                       ==> Using %d Hz instead.\n", rate, exact_rate);
+      fprintf(stderr, "The rate %d Hz is not supported by your hardware.\n" 
+                    "==> Using %d Hz instead.\n", rate, exact_rate);
     }
 
     /* Set number of channels */

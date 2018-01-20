@@ -305,7 +305,7 @@ BootLoader 通过 bootargs 向内核传递信息，指示它挂载 RAM Disk 作�
 将生成的文件 ramdisk.cpio.gz 复制到内核源码目录,并在内核配置选项中,
 ``Initial RAM filesystem and RAM disk''下面的``Initramfs source file (s)''
 写上这个文件名。
-\footnote{解压 cpio: cpio -{}-no-absolute-filenames -imdv $<$ foo.cpio。注意
+\footnote{解压 cpio: cpio -i $<$ foo.cpio。注意
     先要将之前压缩的.gz 文件解压成.cpio 文件。}
 
 重新编译内核，将该文件编入内核文件 zImage，并复制到 tftp目录下。
