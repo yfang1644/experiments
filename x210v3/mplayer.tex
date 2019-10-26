@@ -1,72 +1,74 @@
-\chapter{mplayer移植}{移植}
+\chapter{MPlayer移植}{移植}
 
 \section{实验目的}
 \begin{itemize}
-  \item 掌握 Linux 系统中应用软件移植的过程和方法
-  \item 理解软件层次依赖关系
+    \item 掌握 Linux 系统中应用软件移植的过程和方法;
+    \item 理解软件层次依赖关系。
 \end{itemize}
 
 \section{软件介绍}
 
-MPlayer是一款开源的多媒体播放器，支持几乎所有的音频和视频播放, 以GNU
+MPlayer是一款开源的多媒体播放器, 支持几乎所有的音频和视频播放, 以GNU
 通用公共许可证发布, 可在各主流操作系统使用, 是 Linux 系统中最重要的播放器
-之一。MPlayer 中还包含音视频编码工具 mencoder。MPlayer 本身是基于命令行
-界面的程序, 不同操作系统、不同发行版可以为它配置不同的图形界面, 使其外观
-多姿多彩。MPlayer 本身也可以编译成 GUI 方式。
+之一。MPlayer 中还包含音视频编码工具 \verb|mencoder|。MPlayer 本身是基于
+命令行界面的程序, 不同操作系统、不同发行版可以为它配置不同的图形界面,
+使其外观多姿多彩。MPlayer 本身也可以编译成 GUI 方式。
 
 MPlayer 除了可以播放一般的磁盘媒体文件外, 还支持CD、VCD、DVD等多种物理
-介质和多种网络媒体 (rtp://、rtsp://、http://、mms:// 等)。视频播放时, 它还
-支持多种不同格式的外挂字幕。大部分音视频格式
-都能通过 ffmpeg 项目(另一个开源项目, 提供音视频编解码库支持) 的libavcodec
-函数库原生支持。对于那些没有开源解码器的格式，MPlayer使用二进制的函数库。
-它能直接调用Windows的DLL。
+介质和多种网络媒体 (rtp://、rtsp://、http://、mms:// 等)。视频播放时,
+它还支持多种不同格式的外挂字幕。大部分音视频格式
+都能通过 FFMPEG 项目(另一个开源项目, 提供音视频编解码库支持) 的
+libavcodec 函数库原生支持。对于那些没有开源解码器的格式, MPlayer 使用
+二进制的函数库。它能直接调用 Windows 的 DLL (动态链接库)。
 
 \section{编译准备}
 
 下载 MPlayer 源代码 MPlayer-1.0rc2.tar.bz2, libmad-0.15.1b.tar.gz 和
-zlib-1.2.8.tar.bz2, 分别将其解压。
-libmad 是高品质全定点算法的 MPEG 音频解码库。
+zlib-1.2.8.tar.bz2, 分别将其解压。 libmad 是高品质全定点算法的 MPEG 音频
+解码库。
 
-准备一个有操作权限的工作目录, 例如 \textasciitilde/workspace, 作为下面编译结果的
-暂存目录。以后的编译过程中，将编译选项 -{}-prefix 设置为该目录。所有编译完成后
-再将其内容移至开发板适当位置。缺省的安装路径是 /usr/local, 该路径其一需要root
-权限，其二,它是主机系统的一个重要目录, 如果被目标机架构 arm 的代码覆盖, 会影响
-主机的正常工作。
+准备一个有操作权限的工作目录, 例如 \textasciitilde/workspace, 作为下面
+编译结果的暂存目录。以后的编译过程中, 将编译选项 \verb|--prefix| 设置为
+该目录。所有编译完成后再将其内容移至开发板适当位置。缺省的安装路径是
+\verb|/usr/local|, 该路径一方面需要 root 权限, 另一方面, 它是主机系统的
+一个重要目录, 如果被目标机架构 ARM 的代码覆盖, 可能会影响主机的正常工作。
 
-	将交叉编译器路径添加到环境变量 ``PATH'' 中。
+将交叉编译器路径添加到环境变量 ``PATH'' 中。
 
 \section{编译}
 \begin{enumerate}
-  \item 进入 libmad-0.15.1b 目录,配置编译环境:
+    \item 进入 libmad-0.15.1b 目录,配置编译环境:
 
-	./configure -{}-enable-fpm=arm -{}-host=arm-none-linux-gnueabi
-	-{}-disable-debugging -{}-prefix=/home/student/workspace
+\begin{blockcode}
+$ ./configure --enable-fpm=arm --host=arm-linux \
+	--disable-debugging --prefix=/home/student/workspace
+\end{blockcode}
+	选项 \verb|--host| 是编译器前缀。
 
-	选项 ``-{}-host''是编译器前缀。
+    \item 编译及安装:  \verb|make install|
 
-  \item 编译及安装:  make install
+        在编译时会提示错误: cc1: error: unrecognized command line option
+        ``-fforce-mem''。这是因为 gcc3.4 或更高版本已经将 \verb|fforce-mem|
+        选项去除了。只需要在 Makefile 中找到该字符串,将其删除即可。
 
-	在编译时会提示错误: cc1: error: unrecognized command line option
-	``-fforce-mem''。这是因为 gcc3.4 或更高版本已经将 fforce-mem 选项去除了。
-	只需要在 Makefile 中找到该字符串,将其删除即可。
+        编译完成后会将静态库 libmad.a 和动态库 madlib.so 安装到
+        /home/student/workspace/lib 目录下。如果是动态链接,
+        需要将动态链接库复制到目标系统的 \verb|/usr/lib| 目录下。如果不想用
+        动态链接, 可以在上面的编译选项中添加一条 \verb|--disable-shared|。
+        此原则同样适用于下面的 zlib 库。
 
-	编译完成后会将静态库 libmad.a 和动态库 madlib.so 安装到
-	/home/student/workspace/lib 目录下。如果是动态链接，需要将动态链接库复制到
-	目标系统的 /lib 目录下。如果不想用动态链接，可以在上面的编译选项中添加
-	一条 ``-{}-disable-shared''。此原则同样适用于下面的 zlib 库。
+    \item 进入 zlib-1.2.8 解压目录, 按下面的步骤编译安装:
 
-  \item 进入 zlib-1.2.8 解压目录, 按下面的步骤编译安装:
-
-	export CC=arm-none-linux-gnueabi-gcc
-
-	./configure -{}-prefix=/home/student/workspace
-
-        make \&\& make install
+\begin{blockcode}
+$ export CC=arm-none-linux-gnueabi-gcc
+$ ./configure --prefix=/home/student/workspace --host=arm-linux
+$ make && make install
+\end{blockcode}
 
   \item 进入 MPlayer 解压目录, 进行如下配置:
-\begin{verbatim}
-  ./configure \
-    --cc=arm-none-linux-gnueabi-gcc \
+\begin{blockcode}
+$ ./configure \
+    --cc=arm-linux-gcc \
     --target=arm-linux \
     --enable-static \
     --prefix=/home/student/workspace \
@@ -81,18 +83,18 @@ libmad 是高品质全定点算法的 MPEG 音频解码库。
     --enable-ossaudio \
     --extra-cflags='-I/home/student/workspace/include' \
     --extra-ldflags='-L/home/student/workspace/lib'
-    \end{verbatim}
-	上面最后两个选项用到了之前准备的 libmad 和 libz 的头文件及生成的库文件
-	路径。配置正确后，可以用 make 命令编译。如果一切正常，便可在当前目录下
-	生成可执行文件 mplayer。注意最后链接时用到的库。如果是动态链接，这些库需要
-	复制到目标系统的 /lib 目录。
+\end{blockcode}
+        上面最后两个选项用到了之前准备的 libmad 和 libz 的头文件及生成的
+        库文件路径。配置正确后, 可以用 \verb|make| 命令编译。如果一切正常,
+        便可在当前目录下生成可执行文件 \verb|mplayer|。注意最后链接时
+        用到的库。如果是动态链接, 这些库需要复制到目标系统的 lib 目录里。
 \end{enumerate}
 
-	最后，尝试在目标机上播放一些音视频文件。
+最后, 尝试在目标机上播放一些音视频文件。
 
 \section{扩展功能}
 \begin{enumerate}
-  \item 尝试编译具有图形用户界面的 MPlayer 播放器
-  \item 用 -{}-enable-mencoder 选项编译mencoder， 并利用它进行音视频编码、
-	转码。
+    \item 尝试编译具有图形用户界面的 MPlayer 播放器
+    \item 用 \verb|--enable-mencoder| 选项编译 \verb|mencoder|,
+        并利用它进行音视频编码、转码。
 \end{enumerate}

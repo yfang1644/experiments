@@ -1,35 +1,33 @@
 \chapter{实时操作系统RTEMS}{RTOS}
 
 \section{实验目的}
-\begin{itemize}\itemsep=-3pt
-  \item 了解实时操作系统的特性
-\end{itemize}
+了解实时操作系统的特性
 
 \section{实时操作系统RTEMS简介}
-	许多嵌入式应用对任务的响应时间和处理时间都有非常严格的要求。实时操作系统
-(Real-Time Operating Systems)就是基于这样的背景发展起来的，它属于嵌入式操作
-系统的一类。其核心特征是实时性，而实时性的本质是任务处理所化费时间的可预测性，
+许多嵌入式应用对任务的响应时间和处理时间都有非常严格的要求。实时操作系统
+(Real-Time Operating Systems)就是基于这样的背景发展起来的, 它属于嵌入式操作
+系统的一类。其核心特征是实时性, 而实时性的本质是任务处理所化费时间的可预测性,
 即任务需要在规定的时限内完成。
 
-	遵循GNU公共版权协议的开源操作系统 RTEMS(Real-Time Executive for
-Multiprocessor Systems)属于硬实时嵌入式操作系统。该项目最初起于1980年代，
+遵循GNU公共版权协议的开源操作系统 RTEMS(Real-Time Executive for
+Multiprocessor Systems)属于硬实时嵌入式操作系统。该项目最初起于1980年代,
 用于军事目的。其中的字母``M''从导弹(Missile)到军事(Military)演化到现在的
-``多处理器''的概念。它支持包括 POSIX 在内的多种开放 API 标准，移植了包括
+``多处理器''的概念。它支持包括 POSIX 在内的多种开放 API 标准, 移植了包括
 NFS和 FATFS的多种文件系统和 FreeBSD TCP/IP 协议栈。最近的版本4.10.2
 \footnote{2015年7月} 支持包括X86、ARM、MIPS、SPARC, POWERPC, TI-C3X等在内的
 数十种处理器架构。
 
 \section{编译RTEMS}
 \begin{enumerate}
-  \item 下载RTEMS源码(https://www.rtems.org)。
-  \item 编译工具链
-  \item 编译内核
-  \begin{enumerate}
-    \item 进入 rtems 主目录，执行 ./bootstrap
-	\item 进入 c/src/lib/libbsp/arm/beagle，修改与 BeagleBone Black 相关的代码
-	\item 在 rtems 主目录下建立 build 目录，在 build 目录执行编译配置
-\begin{verbatim}
-  ../cofigure --target=arm-rtems4.10 \
+    \item 下载RTEMS源码(\url{https://www.rtems.org})。
+    \item 编译工具链
+    \item 编译内核
+    \begin{enumerate}
+        \item 进入 rtems 主目录, 执行 ./bootstrap
+	    \item 进入 c/src/lib/libbsp/arm/beagle, 修改与 BB--Black 相关的代码
+	    \item 在 rtems 主目录下建立 build 目录, 在 build 目录执行编译配置
+\begin{blockcode}
+$ ../cofigure --target=arm-rtems4.10 \
     --enable-posix
     --enable-itron \
     --enable-networking \
@@ -38,49 +36,50 @@ NFS和 FATFS的多种文件系统和 FreeBSD TCP/IP 协议栈。最近的版本4
     --enable-rtemsbsp="beagleboneblack" \
     --enable-tests=samples \
     --prefix=build_install
-\end{verbatim}
-  \end{enumerate}
+\end{blockcode}
+    \end{enumerate}
 \end{enumerate}
 
-正确完成以上编译后，会在 build\_install 目录下生成 RTEMS 内核的二进制文件
-和一些静态库，在 build 目录下生成可独立运行的二进制文件如 hello.exe、
-ticker.exe等等。他们来自 testsuites/samples 目录下的一些小程序源码，缺省的
-configure 配置下被编译。
+正确完成以上编译后, 会在 \verb|build_install| 目录下生成 RTEMS 内核的
+二进制文件和一些静态库, 在 \verb|build| 目录下生成可独立运行的二进制文件如
+\verb|hello.exe|、\verb|ticker.exe| 等等。他们来自 \verb|testsuites/samples|
+目录下的一些小程序源码, 缺省的 \verb|configure| 配置下被编译。
 
-仿照 Linux 内核镜像的生成过程，制作可执行程序的镜像文件
+仿照 Linux 内核映像的生成过程, 制作可执行程序的映像文件。
 
-\begin{verbatim}
-  arm-rtems4.10-objcopy -O binary --strip-all hello.exe hello.bin
-  gzip -9 hello.bin
-  mkimage -A arm -O rtems -T standalone -a 0x80000000 -e 0x80000000 \
+\begin{blockcode}
+$ arm-rtems4.10-objcopy -O binary --strip-all hello.exe hello.bin
+$ gzip -9 hello.bin
+$ mkimage -A arm -O rtems -T standalone -a 0x80000000 -e 0x80000000 \
 	  -n RTEMS -d hello.bin.gz hello.img
-\end{verbatim}
+\end{blockcode}
 
-将 hello.img 复制到 TF 卡的boot 分区，并在 u--boot 的配置文件中指定加载的
-文件。
+将 \verb|hello.img| 复制到 TF 卡的 boot 分区, 并在 u--boot 的配置文件中
+指定加载的文件。
 
-\section{编译内核镜像 RKI(rtems kernel image)}
-上面编译出的 .exe 文件是孤立的任务，如无人---机接口，不能直观地看到运行结果。
-RKI 可以在 RTEMS 操作系统上创建一个shell，从而实现交互任务。
+\section{编译内核映像 RKI(rtems kernel image)}
+上面编译出的 \verb|.exe| 文件是孤立的任务, 如无人--机接口, 不能直观地看到
+运行结果。RKI 可以在 RTEMS 操作系统上创建一个 shell, 从而实现交互任务。
 
 \begin{enumerate}
-  \item 下载 rki (https://github.com/alanc98/rki.git)
-  \item 编译
+    \item 下载 rki (\url{https://github.com/alanc98/rki})
+    \item 编译
 
-  make ARCH=arm-rtems4.10 BSP=beagleboneblack
-    RTEMS\_BSP\_BASE=rtems/build\_install
+\begin{blockcode}
+$ make ARCH=arm-rtems4.10 BSP=beagleboneblack \
+    RTEMS_BSP_BASE=rtems/build_install
+\end{blockcode}
 
-  其中 rtems/build\_install 是 RTEMS 内核编译后的安装目录(``-{}-prefix''指向
-  的目录)。
+        其中 \verb|rtems/build_install| 是 RTEMS 内核编译后的安装目录
+        (\verb|--prefix| 指向的目录)。
 \end{enumerate}
 
-  正确完成编译后会生成 rki.bin。使用`mkimage''工具制作内核镜像 kernel.img，
-将其复制到 TF 卡 boot 分区并用 u--boot 加载。上电、启动，用串口终端进入 shell。
+正确完成编译后会生成 \verb|rki.bin|。使用 \verb|mkimage| 工具制作内核映像
+\verb|kernel.img|, 将其复制到 TF 卡 boot 分区并用 u--boot 加载。上电、启动,
+用串口终端进入 shell。
 
 \begin{figure}
-\centering\fontsize{10}{10}\selectfont
-\begin{boxedminipage}{.96\textwidth}
-\begin{verbatim}
+\begin{blockcode}
 reading kernel.img                                                              
 367540 bytes read in 37 ms (9.5 MiB/s)                                          
 ## Booting kernel from Legacy Image at 80800000 ...                             
@@ -120,14 +119,13 @@ Starting shell....
 
 RTEMS Shell on /dev/console. Use 'help' to list commands.                       
 [/] # 
-\end{verbatim}
-\end{boxedminipage}
+\end{blockcode}
 \caption{RTEMS 终端}
 \end{figure}
 
 
 \section{实验报告要求}
-\begin{itemize}\itemsep=-3pt
-  \item 总结 RTEMS 移植方法
-  \item 尝试在 RTEMS 系统中编写一个多任务程序
+\begin{itemize}
+    \item 总结 RTEMS 移植方法
+    \item 尝试在 RTEMS 系统中编写一个多任务程序
 \end{itemize}
